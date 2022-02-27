@@ -31,7 +31,10 @@
 		"alefragnani.bookmarks",
 		"formulahendry.auto-rename-tag",
 		"formulahendry.auto-close-tag",
-		"ecmel.vscode-html-css"
+		"ecmel.vscode-html-css",
+		"dbaeumer.vscode-eslint",
+		"visualstudioexptteam.vscodeintellicode",
+		"firsttris.vscode-jest-runner"
 	]
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
