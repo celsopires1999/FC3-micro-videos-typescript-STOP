@@ -1,6 +1,6 @@
 import Category, { CategoryProperties } from './category';
 import { omit } from 'lodash';
-import { validate as uuidValidate } from 'uuid';
+import UniqueEntityId from '../../../@seedwork/domain/unique-entity-id.vo';
 
 describe("Category Unit Test", () => {
     test('constructor of category', () => {
@@ -8,11 +8,6 @@ describe("Category Unit Test", () => {
             name: 'Movie',
         });
         let props = omit(category.props, 'created_at');
-        expect(category.name).toBe('Movie');
-        expect(category.description).toBeNull();
-        expect(category.is_active).toBeTruthy();
-        expect(category.created_at).toBeInstanceOf(Date);
-        expect(category.props.created_at).toBeInstanceOf(Date);
         expect(props).toStrictEqual({
             name: 'Movie',
             description: null,
@@ -28,10 +23,6 @@ describe("Category Unit Test", () => {
             is_active: false,
             created_at
         });
-        expect(category.name).toBe('Movie');
-        expect(category.description).toBe('some description');
-        expect(category.is_active).toBeFalsy();
-        expect(category.created_at).toBe(created_at);
         expect(category.props).toStrictEqual({
             name: 'Movie',
             description: 'some description',
@@ -76,18 +67,18 @@ describe("Category Unit Test", () => {
 
     test('id prop', () => {
         type CategoryData = {
-            props: CategoryProperties, id?: string,
+            props: CategoryProperties, id?: UniqueEntityId,
         }
         const data: CategoryData[] = [
             { props: { name: 'Movie' } },
             { props: { name: 'Movie' }, id: null },
             { props: { name: 'Movie' }, id: undefined },
-            { props: { name: 'Movie' }, id: '2091311b-16b1-4356-9d40-edc0b1d56874' },
+            { props: { name: 'Movie' }, id: new UniqueEntityId() },
         ];
         data.forEach(i => {
-            const category = new Category(i.props, i.id);
+            const category = new Category(i.props, i.id as any);
             expect(category.id).not.toBeNull();
-            expect(uuidValidate(category.id)).toBeTruthy
+            expect(category.id).toBeInstanceOf(UniqueEntityId);
         });
     })
 
