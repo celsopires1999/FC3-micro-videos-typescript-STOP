@@ -2,7 +2,7 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.202.5/containers/docker-existing-docker-compose
 // If you want to run as a non-root user in the container, see .devcontainer/docker-compose.yml.
 {
-	"name": "Existing Docker Compose (Extend)",
+	"name": "Catálogo Vídeos Back-end TypeScript",
 	// Update the 'dockerComposeFile' list if you have more compose files or use different names.
 	// The .devcontainer/docker-compose.yml file contains any overrides you need/want to make.
 	"dockerComposeFile": [
@@ -16,7 +16,9 @@
 	// connected. This is typically a file mount in .devcontainer/docker-compose.yml
 	"workspaceFolder": "/home/node/app",
 	// Set *default* container specific settings.json values on container create.
-	"settings": {},
+	"settings": {
+		"terminal.integrated.defaultProfile.linux": "bash"
+	},
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
 		"humao.rest-client",
@@ -34,7 +36,9 @@
 		"ecmel.vscode-html-css",
 		"dbaeumer.vscode-eslint",
 		"visualstudioexptteam.vscodeintellicode",
-		"firsttris.vscode-jest-runner"
+		"firsttris.vscode-jest-runner",
+		"sonarsource.sonarlint-vscode",
+		"esbenp.prettier-vscode"
 	]
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
