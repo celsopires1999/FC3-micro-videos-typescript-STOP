@@ -23,7 +23,7 @@ describe("object Unit Tests", () => {
     expect(() => {
       (obj as any).prop1 = "not to work";
     }).toThrow(
-      "Cannot assign to read only property 'prop1.' of object '#<Object>'"
+      "Cannot assign to read only property 'prop1' of object '#<Object>'"
     );
 
     expect(() => {
