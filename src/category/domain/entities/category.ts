@@ -44,13 +44,9 @@ export default class Category extends Entity<CategoryProperties> {
     return this.props.created_at;
   }
 
-  update(props: { name?: string; description?: string }) {
-    if (props.name) {
-      this.name = props.name;
-    }
-    if (props.description) {
-      this.description = props.description;
-    }
+  update(name: string, description: string ) {
+      this.name = name;
+      this.description = description;
   }
 
   activate() {

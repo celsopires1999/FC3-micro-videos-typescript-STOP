@@ -75,9 +75,12 @@ describe("Category Unit Test", () => {
     });
   });
 
-  test("getter of name prop", () => {
+  test("getter and setter of name prop", () => {
     const category = new Category({ name: "Movie" });
     expect(category.name).toBe("Movie");
+
+    category["name"] = "Other movie";
+    expect(category.name).toBe("Other movie");
   });
 
   test("getter and setter of description prop", () => {
@@ -150,36 +153,32 @@ describe("Category Unit Test", () => {
     expect(category.created_at).toBeInstanceOf(Date);
   });
 
-  it("should update name and description", () => {
+  it("should update a category", () => {
     const category = new Category({
       name: "Movie",
       description: "Some description",
     });
     const created_at = category.created_at;
 
-    category.update({ name: "Other movie", description: "Other description" });
+    category.update("Other movie", "Other description");
     expect(category.name).toBe("Other movie");
     expect(category.description).toBe("Other description");
-    category.update({ name: "Second movie" });
     expect(category.props).toStrictEqual({
-      name: "Second movie",
+      name: "Other movie",
       description: "Other description",
-      created_at,
-      is_active: true,
-    });
-    category.update({ description: "Second description" });
-    expect(category.props).toStrictEqual({
-      name: "Second movie",
-      description: "Second description",
       created_at,
       is_active: true,
     });
   });
 
-  it("should activate and deactivate a category", () => {
+  it("should activate a category", () => {
     const category = new Category({ name: "Movie", is_active: false });
     category.activate();
     expect(category.is_active).toBeTruthy();
+  });
+
+  it("should deactivate a category", () => {
+    const category = new Category({ name: "Movie", is_active: true });
     category.deactivate();
     expect(category.is_active).toBeFalsy();
   });
