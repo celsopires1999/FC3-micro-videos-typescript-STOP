@@ -1,4 +1,4 @@
-import ValidationError from "../../errors/validation-error";
+import { ValidationError } from "../../errors/validation-error";
 import ValidatorRules from "../../validators/validator-rules";
 
 type Values = {
