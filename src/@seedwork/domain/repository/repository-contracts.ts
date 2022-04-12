@@ -1,4 +1,3 @@
-import { round } from "lodash";
 import Entity from "../entity/entity";
 import UniqueEntityId from "../value-objects/unique-entity-id.vo";
 
@@ -73,7 +72,7 @@ export class SearchParams {
       value === null || value === undefined || value === "" ? null : `${value}`;
   }
 
-  get sort_dir(): string | null {
+  get sort_dir(): SortDirection | null {
     return this._sort_dir;
   }
   private set sort_dir(value: string | null) {
@@ -145,5 +144,6 @@ export interface SerachableRepositoryInterface<
   SearchInput = SearchParams,
   SearchOutput = SearchResult<E, Filter>
 > extends RepositoryInterface<E> {
+  sortableFields: string[];
   search(props: SearchInput): Promise<SearchOutput>;
 }
