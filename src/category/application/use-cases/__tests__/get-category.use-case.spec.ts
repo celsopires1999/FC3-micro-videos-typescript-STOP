@@ -1,31 +1,35 @@
 import CreateCategoryUseCase from "../create-category.use-case";
 import GetCategoryUseCase from "../get-category.use-case";
-import InMememoryCategoryRepository from "../../../infra/repository/category-in-memory.repository";
+import CategoryInMemoryRepository from "../../../infra/repository/category-in-memory.repository";
 import NotFoundError from "../../../../@seedwork/domain/errors/not-found.error";
+
+let repository: CategoryInMemoryRepository;
+let useCase: GetCategoryUseCase;
+
+beforeEach(() => {
+  repository = new CategoryInMemoryRepository();
+  useCase = new GetCategoryUseCase(repository);
+});
 
 describe("GetCategoryUseCase Unit Tests", () => {
   it("should throw an error when id is not found", async () => {
-    const repository = new InMememoryCategoryRepository();
-    const getCategory = new GetCategoryUseCase(repository);
-
-    expect(
-      getCategory.execute({
-        id: "fake-id",
-      })
-    ).rejects.toThrow(new NotFoundError("Entity not found using ID fake-id"));
+    expect(useCase.execute({ id: "fake-id" })).rejects.toThrow(
+      new NotFoundError("Entity not found using ID fake-id")
+    );
   });
 
   it("should get a category", async () => {
-    const repository = new InMememoryCategoryRepository();
+    const createdCategory = await new CreateCategoryUseCase(repository).execute(
+      { name: "Test" }
+    );
 
-    const createCategory = new CreateCategoryUseCase(repository);
-    const outputCreateCategory = await createCategory.execute({ name: "Test" });
-
-    const getCategory = new GetCategoryUseCase(repository);
-    const outputGetCategory = await getCategory.execute({
-      id: outputCreateCategory.id,
+    const spyFindById = jest.spyOn(repository, "findById");
+    useCase = new GetCategoryUseCase(repository);
+    const outputUseCase = await useCase.execute({
+      id: createdCategory.id,
     });
 
-    expect(outputCreateCategory).toStrictEqual(outputGetCategory);
+    expect(spyFindById).toHaveBeenCalledTimes(1);
+    expect(outputUseCase).toStrictEqual(createdCategory);
   });
 });
