@@ -19,3 +19,5 @@ export namespace CategoryRepository {
       SearchResult
     > {}
 }
+
+export default CategoryRepository;

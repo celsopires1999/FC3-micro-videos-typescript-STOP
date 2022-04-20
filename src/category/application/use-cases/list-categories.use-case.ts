@@ -20,7 +20,7 @@ export default class ListCategoriesUseCase implements UseCase<Input, Output> {
   private toOutput(searchResult: CategoryRepository.SearchResult): Output {
     return {
       items: searchResult.items.map((i) => CategoryOutputMapper.toOutput(i)),
-      ...PaginationOutputMapper.toPaginationOutput(searchResult),
+      ...PaginationOutputMapper.toOutput(searchResult),
     };
   }
 }
