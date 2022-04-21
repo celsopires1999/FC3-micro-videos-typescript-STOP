@@ -37,10 +37,11 @@ describe("CategoryInMemoryRepository Unit Tests", () => {
   describe("applySort method", () => {
     it("should not sort items", async () => {
       const items = [new Category({ name: "b" }), new Category({ name: "a" })];
-      let sortedItems = await repository["applySort"](items, null, null);
-      expect(sortedItems).toStrictEqual(items);
-
-      sortedItems = await repository["applySort"](items, "description", "asc");
+      let sortedItems = await repository["applySort"](
+        items,
+        "description",
+        "asc"
+      );
       expect(sortedItems).toStrictEqual(items);
     });
 
@@ -100,12 +101,25 @@ describe("CategoryInMemoryRepository Unit Tests", () => {
       );
     });
 
-    it("should apply paginate and filter", async () => {
+    it("should apply paginate and filter - sort by created_at desc is default", async () => {
+      const created_at = new Date();
       const items = [
-        new Category({ name: "test" }), // 0
-        new Category({ name: "a" }), // 1
-        new Category({ name: "TEST" }), // 2
-        new Category({ name: "TeST" }), // 3
+        new Category({
+          name: "test",
+          created_at: new Date(created_at.getTime() + 400),
+        }), // 0
+        new Category({
+          name: "a",
+          created_at: new Date(created_at.getTime() + 300),
+        }), // 1
+        new Category({
+          name: "TEST",
+          created_at: new Date(created_at.getTime() + 200),
+        }), // 2
+        new Category({
+          name: "TeST",
+          created_at: new Date(created_at.getTime() + 100),
+        }), // 3
       ];
       repository.items = items;
 
