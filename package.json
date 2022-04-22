@@ -3,9 +3,14 @@
   "version": "1.0.0",
   "description": "admin do catalogo de videos",
   "main": "index.js",
+  "imports": {
+    "#seedwork/*": "./dist/@seedwork/*.js",
+    "#category/*": "./dist/category/*.js"
+  },
   "scripts": {
     "ts-node": "ts-node",
     "tsc": "tsc",
+    "tsc:check": "npm run tsc -- --noEmit",
     "clean:tsc": "rm tsconfig.tsbuildinfo",
     "test": "jest",
     "test:cov": "npm run test -- --coverage"

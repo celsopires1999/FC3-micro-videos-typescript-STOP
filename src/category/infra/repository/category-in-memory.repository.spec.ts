@@ -1,5 +1,5 @@
-import Category from "../../../category/domain/entities/category";
-import { CategoryRepository } from "../../domain/repository/category.repository";
+import Category from "#category/domain/entities/category";
+import { CategoryRepository } from "#category/domain/repository/category.repository";
 import CategoryInMemoryRepository from "./category-in-memory.repository";
 
 describe("CategoryInMemoryRepository Unit Tests", () => {

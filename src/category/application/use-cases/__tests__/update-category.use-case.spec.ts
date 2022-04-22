@@ -18,11 +18,26 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
   });
 
   it("should update category", async () => {
+    type Arrange = {
+      input: {
+        id: string;
+        name: string;
+        description?: string | null;
+        is_active?: boolean | null;
+      };
+      expected: {
+        id: string;
+        name: string;
+        description: string;
+        is_active: boolean;
+        created_at: Date;
+      };
+    };
     const spyUpdate = jest.spyOn(repository, "update");
     const entity = new Category({ name: "Movie" });
     repository.items = [entity];
 
-    const arrange = [
+    const arrange: Arrange[] = [
       {
         input: {
           id: entity.id,
