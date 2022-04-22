@@ -9,6 +9,10 @@ export default class CategoryInMemoryRepository
 {
   sortableFields: string[] = ["name", "created_at"];
 
+  async exists(name: string): Promise<boolean> {
+    return this.items.findIndex((item) => item.name === name) != -1;
+  }
+
   protected async applyFilter(
     items: Category[],
     filter: CategoryRepository.Filter

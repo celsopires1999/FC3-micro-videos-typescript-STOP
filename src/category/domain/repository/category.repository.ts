@@ -17,7 +17,9 @@ export namespace CategoryRepository {
       Filter,
       SearchParams,
       SearchResult
-    > {}
+    > {
+    exists(name: string): Promise<boolean>;
+  }
 }
 
 export default CategoryRepository;

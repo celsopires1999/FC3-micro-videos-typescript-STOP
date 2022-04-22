@@ -1,6 +1,7 @@
 import CreateCategoryUseCase from "../create-category.use-case";
 import InMememoryCategoryRepository from "../../../infra/repository/category-in-memory.repository";
 import { EntityValidationError } from "../../../../@seedwork/domain/errors/validation-error";
+import CategoryExistsError from "#category/domain/errors/category-exists.error";
 
 describe("CreateCategoryUseCase Unit Tests", () => {
   let repository: InMememoryCategoryRepository;
@@ -12,10 +13,10 @@ describe("CreateCategoryUseCase Unit Tests", () => {
   });
   it("should create category", async () => {
     const spyInsert = jest.spyOn(repository, "insert");
-    let output = await useCase.execute({ name: "Test" });
+    let output = await useCase.execute({ name: "Test 1" });
     expect(output).toStrictEqual({
       id: repository.items[0].id,
-      name: "Test",
+      name: "Test 1",
       description: null,
       is_active: true,
       created_at: repository.items[0].created_at,
@@ -23,13 +24,13 @@ describe("CreateCategoryUseCase Unit Tests", () => {
     expect(spyInsert).toHaveBeenCalledTimes(1);
 
     output = await useCase.execute({
-      name: "Test",
+      name: "Test 2",
       description: "some description",
       is_active: false,
     });
     expect(output).toStrictEqual({
       id: repository.items[1].id,
-      name: "Test",
+      name: "Test 2",
       description: "some description",
       is_active: false,
       created_at: repository.items[1].created_at,
@@ -44,6 +45,15 @@ describe("CreateCategoryUseCase Unit Tests", () => {
 
     expect(useCase.execute({ name: "" })).rejects.toThrowError(
       EntityValidationError
+    );
+  });
+
+  it("should throw an error when a category exists already", async () => {
+    await useCase.execute({ name: "category 1" });
+    expect(useCase.execute({ name: "category 1" })).rejects.toThrowError(
+      new CategoryExistsError(
+        "category 1 exists already in the categories collection"
+      )
     );
   });
 });

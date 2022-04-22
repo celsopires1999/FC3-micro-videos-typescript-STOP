@@ -1,4 +1,5 @@
 import Category from "#category/domain/entities/category";
+import CategoryExistsError from "#category/domain/errors/category-exists.error";
 import { CategoryRepository } from "#category/domain/repository/category.repository";
 import CategoryInMemoryRepository from "./category-in-memory.repository";
 
@@ -6,6 +7,17 @@ describe("CategoryInMemoryRepository Unit Tests", () => {
   let repository: CategoryInMemoryRepository;
 
   beforeEach(() => (repository = new CategoryInMemoryRepository()));
+
+  describe("exists method", () => {
+    it("should return true when name exists already", async () => {
+      repository.items = [new Category({ name: "movie" })];
+      expect(await repository.exists("movie")).toBeTruthy();
+    });
+    it("should return false when name does not exist", async () => {
+      repository.items = [new Category({ name: "movie" })];
+      expect(await repository.exists("new movie")).toBeFalsy();
+    });
+  });
 
   describe("applyFilter method", () => {
     it("should not filter items when filter param is null", async () => {
