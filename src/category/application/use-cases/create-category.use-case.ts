@@ -1,4 +1,4 @@
-import Category from "../../domain/entities/category";
+import { Category } from "#category/domain";
 import { CategoryRepository } from "../../domain/repository/category.repository";
 import { CategoryOutput, CategoryOutputMapper } from "./dto/category-output";
 import UseCase from "../../../@seedwork/application/use-case";
@@ -8,15 +8,19 @@ export default class CreateCategoryUseCase implements UseCase<Input, Output> {
   constructor(private categoryRepo: CategoryRepository.Repository) {}
 
   async execute(input: Input): Promise<Output> {
-    if (await this.categoryRepo.exists(input.name)) {
-      throw new CategoryExistsError(
-        `${input.name} exists already in the categories collection`
-      );
-    }
+    await this.exists(input.name);
+
     const entity = new Category(input);
     await this.categoryRepo.insert(entity);
 
     return CategoryOutputMapper.toOutput(entity);
+  }
+  private async exists(name: string): Promise<void> {
+    if (await this.categoryRepo.exists(name)) {
+      throw new CategoryExistsError(
+        `${name} exists already in the categories collection`
+      );
+    }
   }
 }
 

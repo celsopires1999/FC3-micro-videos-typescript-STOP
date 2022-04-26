@@ -11,7 +11,7 @@ export interface CategoryProperties {
   created_at?: Date;
 }
 
-export default class Category extends Entity<CategoryProperties> {
+export class Category extends Entity<CategoryProperties> {
   constructor(public readonly props: CategoryProperties, id?: UniqueEntityId) {
     Category.validate(props);
     super(props, id);
@@ -79,3 +79,5 @@ export default class Category extends Entity<CategoryProperties> {
     this.is_active = false;
   }
 }
+
+export default Category;
