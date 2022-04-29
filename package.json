@@ -1,39 +1,47 @@
 {
-  "name": "micro-videos",
-  "version": "1.0.0",
-  "description": "admin do catalogo de videos",
+  "name": "micro-videos-typescript",
+  "version": "0.0.1",
+  "description": "",
   "main": "index.js",
-  "imports": {
-    "#seedwork/*": "./dist/@seedwork/*.js",
-    "#category/*": "./dist/category/*.js"
+  "dependencies": {
+    "class-validator": "^0.13.2",
+    "create-ts-index": "^1.14.0",
+    "dayjs": "^1.11.1",
+    "fast-glob": "^3.2.11",
+    "fastq": "^1.13.0",
+    "fp-ts": "^2.12.0",
+    "glob-parent": "^5.1.2",
+    "is-extglob": "^2.1.1",
+    "is-glob": "^4.0.3",
+    "jest": "^27.5.1",
+    "libphonenumber-js": "^1.9.50",
+    "merge": "^2.1.1",
+    "merge2": "^1.4.1",
+    "my-easy-fp": "^0.9.0",
+    "queue-microtask": "^1.2.3",
+    "reusify": "^1.0.4",
+    "run-parallel": "^1.2.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.2",
+    "uuid": "^8.3.2",
+    "validator": "^13.7.0"
   },
+  "workspaces": [
+    "./src/@core",
+    "./src/nestjs"
+  ],
   "scripts": {
-    "ts-node": "ts-node",
-    "tsc": "tsc",
-    "tsc:check": "npm run tsc -- --noEmit",
-    "clean:tsc": "rm tsconfig.tsbuildinfo",
-    "test": "jest",
-    "test:cov": "npm run test -- --coverage",
-    "cti": "cti",
-    "cti:@core": "sh ./cti.sh"
+    "start:dev": "npm run start:dev -w nestjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/celsopires1999/micro-videos-typescript.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@swc/core": "^1.2.145",
-    "@swc/jest": "^0.2.20",
-    "@types/jest": "^27.4.1",
-    "@types/lodash": "^4.14.179",
-    "@types/node": "14.14.31",
-    "@types/uuid": "^8.3.4",
-    "create-ts-index": "^1.14.0",
-    "jest": "^27.5.1",
-    "ts-node": "^10.5.0",
-    "typescript": "^4.6.2"
+  "bugs": {
+    "url": "https://github.com/celsopires1999/micro-videos-typescript/issues"
   },
-  "dependencies": {
-    "class-validator": "^0.13.2",
-    "uuid": "^8.3.2"
-  }
+  "homepage": "https://github.com/celsopires1999/micro-videos-typescript#readme"
 }

@@ -8,14 +8,14 @@ export default class CreateCategoryUseCase implements UseCase<Input, Output> {
   constructor(private categoryRepo: CategoryRepository.Repository) {}
 
   async execute(input: Input): Promise<Output> {
-    await this.exists(input.name);
+    await this.validateExistsName(input.name);
 
     const entity = new Category(input);
     await this.categoryRepo.insert(entity);
 
     return CategoryOutputMapper.toOutput(entity);
   }
-  private async exists(name: string): Promise<void> {
+  private async validateExistsName(name: string): Promise<void> {
     if (await this.categoryRepo.exists(name)) {
       throw new CategoryExistsError(
         `${name} exists already in the categories collection`
