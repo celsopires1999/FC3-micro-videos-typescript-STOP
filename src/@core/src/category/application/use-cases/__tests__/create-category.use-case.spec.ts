@@ -1,15 +1,15 @@
-import CreateCategoryUseCase from "../create-category.use-case";
+import { CreateCategoryUseCase } from "../create-category.use-case";
 import InMememoryCategoryRepository from "../../../infra/repository/category-in-memory.repository";
 import { EntityValidationError } from "../../../../@seedwork/domain/errors/validation-error";
 import CategoryExistsError from "#category/domain/errors/category-exists.error";
 
 describe("CreateCategoryUseCase Unit Tests", () => {
   let repository: InMememoryCategoryRepository;
-  let useCase: CreateCategoryUseCase;
+  let useCase: CreateCategoryUseCase.UseCase;
 
   beforeEach(() => {
     repository = new InMememoryCategoryRepository();
-    useCase = new CreateCategoryUseCase(repository);
+    useCase = new CreateCategoryUseCase.UseCase(repository);
   });
   it("should create category", async () => {
     const spyInsert = jest.spyOn(repository, "insert");

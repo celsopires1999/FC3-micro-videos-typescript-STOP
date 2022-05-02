@@ -11,6 +11,7 @@ RUN mkdir -p /usr/share/man/man1 && \
     curl \
     wget \
     fonts-powerline \
+    procps \
     gpg \
     gnupg \
     gpg-agent \

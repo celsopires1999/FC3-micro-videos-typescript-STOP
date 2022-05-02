@@ -1,15 +1,15 @@
-import UpdateCategoryUseCase from "../update-category.use-case";
+import { UpdateCategoryUseCase } from "../update-category.use-case";
 import InMememoryCategoryRepository from "../../../infra/repository/category-in-memory.repository";
 import NotFoundError from "../../../../@seedwork/domain/errors/not-found.error";
 import Category from "../../../domain/entities/category";
 
 describe("UpdateCategoryUseCase Unit Tests", () => {
   let repository: InMememoryCategoryRepository;
-  let useCase: UpdateCategoryUseCase;
+  let useCase: UpdateCategoryUseCase.UseCase;
 
   beforeEach(() => {
     repository = new InMememoryCategoryRepository();
-    useCase = new UpdateCategoryUseCase(repository);
+    useCase = new UpdateCategoryUseCase.UseCase(repository);
   });
   it("should throw an error when id is not found", async () => {
     expect(useCase.execute({ id: "fake-id", name: "fake" })).rejects.toThrow(

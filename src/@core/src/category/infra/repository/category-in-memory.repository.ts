@@ -3,7 +3,7 @@ import { CategoryRepository } from "../../domain/repository/category.repository"
 import Category from "../../domain/entities/category";
 import { SortDirection } from "@seedwork/domain/repository/repository-contracts";
 
-export default class CategoryInMemoryRepository
+export class CategoryInMemoryRepository
   extends InMemorySearchableRepository<Category>
   implements CategoryRepository.Repository
 {
@@ -36,3 +36,5 @@ export default class CategoryInMemoryRepository
       : super.applySort(items, sort, sort_dir);
   }
 }
+
+export default CategoryInMemoryRepository;
