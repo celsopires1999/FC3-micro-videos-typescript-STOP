@@ -52,7 +52,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@swc/core": "^1.2.145",
+    "@swc/core": "^1.2.175",
     "@swc/jest": "^0.2.20",
     "@types/jest": "^27.4.1",
     "@types/lodash": "^4.14.179",
