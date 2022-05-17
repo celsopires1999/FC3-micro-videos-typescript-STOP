@@ -1,5 +1,5 @@
 import { CreateCategoryUseCase } from "../create-category.use-case";
-import InMememoryCategoryRepository from "../../../infra/repository/category-in-memory.repository";
+import InMememoryCategoryRepository from "../../../infra/db/in-memory/category-in-memory.repository";
 import { EntityValidationError } from "../../../../@seedwork/domain/errors/validation-error";
 import CategoryExistsError from "#category/domain/errors/category-exists.error";
 
