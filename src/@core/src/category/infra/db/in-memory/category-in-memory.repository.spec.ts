@@ -1,5 +1,4 @@
 import Category from "#category/domain/entities/category";
-import CategoryExistsError from "#category/domain/errors/category-exists.error";
 import { CategoryRepository } from "#category/domain/repository/category.repository";
 import CategoryInMemoryRepository from "./category-in-memory.repository";
 

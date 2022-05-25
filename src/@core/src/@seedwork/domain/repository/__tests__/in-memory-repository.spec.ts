@@ -23,16 +23,16 @@ describe("InMemoryRepository Unit Tests", () => {
   it("should throw an error when entity has already been included", async () => {
     const entity = new StubEntity({ name: "some name", price: 10 });
     await repository.insert(entity);
-    expect(repository.insert(entity)).rejects.toThrowError(
+    await expect(repository.insert(entity)).rejects.toThrowError(
       `Entity has already been included with ID ${entity.id}`
     );
   });
 
   it("should throw an error when entity has not been found", async () => {
-    expect(repository.findById("fake id")).rejects.toThrow(
+    await expect(repository.findById("fake id")).rejects.toThrow(
       new NotFoundError("Entity not found using ID fake id")
     );
-    expect(
+    await expect(
       repository.findById("312cffad-1938-489e-a706-643dc9a3cfd3")
     ).rejects.toThrow(
       new NotFoundError(
@@ -62,7 +62,7 @@ describe("InMemoryRepository Unit Tests", () => {
 
   it("should throw an error on update when entity has not been found", async () => {
     const entity = new StubEntity({ name: "some name", price: 10 });
-    expect(repository.update(entity)).rejects.toThrow(
+    await expect(repository.update(entity)).rejects.toThrow(
       new NotFoundError(`Entity not found using ID ${entity.id}`)
     );
   });
@@ -81,10 +81,10 @@ describe("InMemoryRepository Unit Tests", () => {
   });
 
   it("should throw an error on delete when entity has not been found", async () => {
-    expect(repository.delete("fake id")).rejects.toThrow(
+    await expect(repository.delete("fake id")).rejects.toThrow(
       new NotFoundError("Entity not found using ID fake id")
     );
-    expect(
+    await expect(
       repository.delete("312cffad-1938-489e-a706-643dc9a3cfd3")
     ).rejects.toThrow(
       new NotFoundError(

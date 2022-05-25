@@ -39,18 +39,18 @@ describe("CreateCategoryUseCase Unit Tests", () => {
   });
 
   it("should throw an error when create category without name", async () => {
-    expect(useCase.execute({ name: "" })).rejects.toThrow(
+    await expect(useCase.execute({ name: "" })).rejects.toThrow(
       "Entity Validation Error"
     );
 
-    expect(useCase.execute({ name: "" })).rejects.toThrowError(
+    await expect(useCase.execute({ name: "" })).rejects.toThrowError(
       EntityValidationError
     );
   });
 
   it("should throw an error when a category exists already", async () => {
     await useCase.execute({ name: "category 1" });
-    expect(useCase.execute({ name: "category 1" })).rejects.toThrowError(
+    await expect(useCase.execute({ name: "category 1" })).rejects.toThrowError(
       new CategoryExistsError(
         "category 1 exists already in the categories collection"
       )

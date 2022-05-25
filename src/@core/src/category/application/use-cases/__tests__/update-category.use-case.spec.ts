@@ -12,9 +12,9 @@ describe("UpdateCategoryUseCase Unit Tests", () => {
     useCase = new UpdateCategoryUseCase.UseCase(repository);
   });
   it("should throw an error when id is not found", async () => {
-    expect(useCase.execute({ id: "fake-id", name: "fake" })).rejects.toThrow(
-      new NotFoundError("Entity not found using ID fake-id")
-    );
+    await expect(
+      useCase.execute({ id: "fake-id", name: "fake" })
+    ).rejects.toThrow(new NotFoundError("Entity not found using ID fake-id"));
   });
 
   it("should update category", async () => {

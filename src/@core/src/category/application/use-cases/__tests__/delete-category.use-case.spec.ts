@@ -12,7 +12,7 @@ describe("DeleteCategoryUseCase Unit Tests", () => {
     useCase = new DeleteCategoryUseCase.UseCase(repository);
   });
   it("should throw an error when id is not found", async () => {
-    expect(useCase.execute({ id: "fake-id" })).rejects.toThrow(
+    await expect(useCase.execute({ id: "fake-id" })).rejects.toThrow(
       new NotFoundError("Entity not found using ID fake-id")
     );
   });
