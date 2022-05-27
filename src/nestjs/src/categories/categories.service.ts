@@ -3,8 +3,7 @@ import {
   ListCategoriesUseCase,
 } from '@fc/micro-videos/category/application';
 
-import { Inject, Injectable, Scope } from '@nestjs/common';
-import { CreateCategoryDto } from './dto/create-category.dto';
+import { Inject, Injectable } from '@nestjs/common';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
