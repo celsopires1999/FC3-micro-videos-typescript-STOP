@@ -43,10 +43,10 @@ export class CategoryValidator extends ClassValidatorFields<CategoryRules> {
   }
 }
 
-export class ClassValidatorFactory {
+export class CategoryValidatorFactory {
   static create() {
     return new CategoryValidator();
   }
 }
 
-export default ClassValidatorFactory;
+export default CategoryValidatorFactory;
