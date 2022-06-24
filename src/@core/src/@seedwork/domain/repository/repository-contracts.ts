@@ -128,7 +128,12 @@ export class SearchResult<E extends Entity = Entity, Filter = string> {
 
   toJSON() {
     return {
-      items: this.items,
+      items: this.items.map((item) => {
+        if (typeof item === "object") {
+          return item.toJSON;
+        }
+        return item;
+      }),
       total: this.total,
       current_page: this.current_page,
       per_page: this.per_page,
