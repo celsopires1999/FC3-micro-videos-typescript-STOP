@@ -25,7 +25,7 @@ export class CategorySequelizeRepository
       ...(props.filter && {
         where: { name: { [Op.like]: `%${props.filter}%` } },
       }),
-      ...(props.filter && this.sortableFields.includes(props.sort)
+      ...(props.sort && this.sortableFields.includes(props.sort)
         ? { order: [[props.sort, props.sort_dir]] }
         : { order: [["created_at", "DESC"]] }),
       offset,

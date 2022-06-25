@@ -130,7 +130,7 @@ export class SearchResult<E extends Entity = Entity, Filter = string> {
     return {
       items: this.items.map((item) => {
         if (typeof item === "object") {
-          return item.toJSON;
+          return item.toJSON();
         }
         return item;
       }),
