@@ -45,14 +45,15 @@ describe("ValidatorRules Unit Tests", () => {
     expect(validator["property"]).toBe("field");
   });
 
-  test("required validation rule", () => {
+  describe("required validation rule", () => {
     // invalid cases
     let arrange: Values[] = [
       { value: null, property: "field" },
       { value: undefined, property: "field" },
       { value: "", property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("invalidate %# -> %o", (item) => {
       assertIsInvalid({
         value: item.value,
         property: item.property,
@@ -69,7 +70,8 @@ describe("ValidatorRules Unit Tests", () => {
       { value: false, property: "field" },
       { value: true, property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("validate %# -> %o", (item) => {
       assertIsValid({
         value: item.value,
         property: item.property,
@@ -79,7 +81,7 @@ describe("ValidatorRules Unit Tests", () => {
     });
   });
 
-  test("string validation rule", () => {
+  describe("string validation rule", () => {
     // invalid cases
     let arrange: Values[] = [
       { value: new Date(), property: "field" },
@@ -88,7 +90,8 @@ describe("ValidatorRules Unit Tests", () => {
       { value: { key: "value" }, property: "field" },
       { value: false, property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("validate %# -> %o", (item) => {
       assertIsInvalid({
         value: item.value,
         property: item.property,
@@ -103,7 +106,8 @@ describe("ValidatorRules Unit Tests", () => {
       { value: undefined, property: "field" },
       { value: "test", property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("validate %# -> %o", (item) => {
       assertIsValid({
         value: item.value,
         property: item.property,
@@ -113,10 +117,11 @@ describe("ValidatorRules Unit Tests", () => {
     });
   });
 
-  test("max length validation rule", () => {
+  describe("max length validation rule", () => {
     // invalid cases
     let arrange: Values[] = [{ value: "aaaaaa", property: "field" }];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("invalidate %# %o", (item) => {
       assertIsInvalid({
         value: item.value,
         property: item.property,
@@ -134,7 +139,8 @@ describe("ValidatorRules Unit Tests", () => {
       { value: undefined, property: "field" },
       { value: "aaaaa", property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("validate %# -> %o", (item) => {
       assertIsValid({
         value: item.value,
         property: item.property,
@@ -147,7 +153,7 @@ describe("ValidatorRules Unit Tests", () => {
     });
   });
 
-  test("boolean validation rule", () => {
+  describe("boolean validation rule", () => {
     // invalid cases
     let arrange: Values[] = [
       { value: "true", property: "field" },
@@ -155,7 +161,8 @@ describe("ValidatorRules Unit Tests", () => {
       { value: new Date(), property: "field" },
       { value: 0, property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("invalidate %# %o", (item) => {
       assertIsInvalid({
         value: item.value,
         property: item.property,
@@ -171,7 +178,8 @@ describe("ValidatorRules Unit Tests", () => {
       { value: true, property: "field" },
       { value: false, property: "field" },
     ];
-    arrange.forEach((item) => {
+
+    test.each(arrange)("validate %# %d", (item) => {
       assertIsValid({
         value: item.value,
         property: item.property,

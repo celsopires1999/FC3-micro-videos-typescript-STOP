@@ -3,7 +3,7 @@ import { SearchParams, SearchResult } from "../repository-contracts";
 
 describe("Search Unit Tests", () => {
   describe("SearchParams Unit Tests", () => {
-    test("page prop", () => {
+    describe("page prop", () => {
       const params = new SearchParams();
       expect(params.page).toBe(1);
 
@@ -23,11 +23,14 @@ describe("Search Unit Tests", () => {
         { page: 2, expected: 2 },
       ];
 
-      arrange.forEach((i) => {
-        expect(new SearchParams({ page: i.page as any }).page).toBe(i.expected);
-      });
+      test.each(arrange)(
+        "with page: $page expected: $expected",
+        ({ page, expected }) => {
+          expect(new SearchParams({ page: page as any }).page).toBe(expected);
+        }
+      );
     });
-    test("per_page prop", () => {
+    describe("per_page prop", () => {
       const params = new SearchParams();
       expect(params.per_page).toBe(15);
 
@@ -48,14 +51,17 @@ describe("Search Unit Tests", () => {
         { per_page: 10, expected: 10 },
       ];
 
-      arrange.forEach((i) => {
-        expect(new SearchParams({ per_page: i.per_page as any }).per_page).toBe(
-          i.expected
-        );
-      });
+      test.each(arrange)(
+        "with per_page: $per_page expected: $expected",
+        ({ per_page, expected }) => {
+          expect(new SearchParams({ per_page: per_page as any }).per_page).toBe(
+            expected
+          );
+        }
+      );
     });
 
-    test("sort prop", () => {
+    describe("sort prop", () => {
       const params = new SearchParams();
       expect(params.sort).toBe(null);
 
@@ -72,12 +78,15 @@ describe("Search Unit Tests", () => {
         { sort: "field", expected: "field" },
       ];
 
-      arrange.forEach((i) => {
-        expect(new SearchParams({ sort: i.sort as any }).sort).toBe(i.expected);
-      });
+      test.each(arrange)(
+        "with sort: $sort expected: $expected ",
+        ({ sort, expected }) => {
+          expect(new SearchParams({ sort: sort as any }).sort).toBe(expected);
+        }
+      );
     });
 
-    test("sort_dir prop", () => {
+    describe("sort_dir prop", () => {
       let params = new SearchParams({ sort: null });
       expect(params.sort_dir).toBeNull();
 
@@ -102,15 +111,18 @@ describe("Search Unit Tests", () => {
         { sort_dir: "DESC", expected: "desc" },
       ];
 
-      arrange.forEach((i) => {
-        expect(
-          new SearchParams({ sort: "field", sort_dir: i.sort_dir as any })
-            .sort_dir
-        ).toBe(i.expected);
-      });
+      test.each(arrange)(
+        "with sort_dir: %sort_dir expected: %expected",
+        ({ sort_dir, expected }) => {
+          expect(
+            new SearchParams({ sort: "field", sort_dir: sort_dir as any })
+              .sort_dir
+          ).toBe(expected);
+        }
+      );
     });
 
-    test("filter prop", () => {
+    describe("filter prop", () => {
       const params = new SearchParams();
       expect(params.filter).toBeNull();
 
@@ -128,11 +140,14 @@ describe("Search Unit Tests", () => {
         { filter: "field", expected: "field" },
       ];
 
-      arrange.forEach((i) => {
-        expect(new SearchParams({ filter: i.filter as any }).filter).toBe(
-          i.expected
-        );
-      });
+      test.each(arrange)(
+        "with filter: %filter expected: %expected",
+        ({ filter, expected }) => {
+          expect(new SearchParams({ filter: filter as any }).filter).toBe(
+            expected
+          );
+        }
+      );
     });
   });
 
