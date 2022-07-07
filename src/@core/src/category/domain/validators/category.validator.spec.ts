@@ -99,7 +99,7 @@ describe("CategoryValidator Tests", () => {
     });
   });
 
-  test("valid cases for fields", () => {
+  describe("valid cases for fields", () => {
     const arrange: CategoryProperties[] = [
       { name: "some name" },
       { name: "some name", description: undefined },
@@ -118,15 +118,10 @@ describe("CategoryValidator Tests", () => {
         created_at: new Date(),
       },
     ];
-    arrange.forEach((item) => {
-      try {
-        expect(validator.validate(item)).toBeTruthy();
-        expect(validator.validatedData).toStrictEqual(new CategoryRules(item));
-        expect(validator.errors).toBeNull;
-      } catch (error) {
-        console.log("item failed: ", item);
-        throw error;
-      }
+    test.each(arrange)("validate %# %o", (item) => {
+      expect(validator.validate(item)).toBeTruthy();
+      expect(validator.validatedData).toStrictEqual(new CategoryRules(item));
+      expect(validator.errors).toBeNull;
     });
   });
 });
