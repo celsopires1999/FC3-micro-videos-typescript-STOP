@@ -12,11 +12,6 @@ describe("CategorySequelizeRepository Unit Tests", () => {
   setupSequelize({ models: [CategoryModel] });
 
   let repository: CategorySequelizeRepository;
-  // let chance: Chance.Chance;
-
-  // beforeAll(() => {
-  //   chance = _chance();
-  // });
 
   beforeEach(async () => {
     repository = new CategorySequelizeRepository(CategoryModel);
