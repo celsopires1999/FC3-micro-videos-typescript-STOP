@@ -5,7 +5,7 @@ import { setupSequelize } from "#seedwork/infra";
 
 const { CategoryModel, CategoryModelMapper } = CategorySequelize;
 
-describe("CategoryMapper Unit Test", () => {
+describe("CategoryMapper Integration Test", () => {
   setupSequelize({ models: [CategoryModel] });
 
   it("should throw error when category is invalid", () => {

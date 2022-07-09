@@ -70,7 +70,9 @@ export namespace CategorySequelize {
     constructor(private categoryModel: typeof CategoryModel) {}
 
     async exists(name: string): Promise<boolean> {
-      throw new Error("Method not implemented.");
+      const model = await this.categoryModel.findOne({ where: { name: name } });
+
+      return model ? true : false;
     }
 
     async search(
@@ -116,15 +118,23 @@ export namespace CategorySequelize {
     }
 
     async update(entity: Category): Promise<void> {
-      throw new Error("Method not implemented.");
+      await this._get(entity.id);
+      await this.categoryModel.update(entity.toJSON(), {
+        where: { id: entity.id },
+      });
     }
 
     async delete(id: string | UniqueEntityId): Promise<void> {
-      throw new Error("Method not implemented.");
+      const _id = `${id}`;
+      await this._get(_id);
+
+      await this.categoryModel.destroy({
+        where: { id: _id },
+      });
     }
 
     private async _get(id: string): Promise<CategoryModel> {
-      return await this.categoryModel.findByPk(id, {
+      return this.categoryModel.findByPk(id, {
         rejectOnEmpty: new NotFoundError(`Entity not found using ID ${id}`),
       });
     }

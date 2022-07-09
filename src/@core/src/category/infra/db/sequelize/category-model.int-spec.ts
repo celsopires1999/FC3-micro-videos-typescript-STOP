@@ -4,7 +4,7 @@ import { CategorySequelize } from "#category/infra";
 
 const { CategoryModel } = CategorySequelize;
 
-describe("CategoryModel Unit Tests", () => {
+describe("CategoryModel Integration Tests", () => {
   setupSequelize({ models: [CategoryModel] });
 
   test("mapping attributes", () => {

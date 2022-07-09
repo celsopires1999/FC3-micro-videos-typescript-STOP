@@ -6,13 +6,9 @@ import _chance from "chance";
 
 const chance = _chance();
 
-const {
-  CategoryModel,
-  CategoryModelMapper,
-  CategoryRepository: Local,
-} = CategorySequelize;
+const { CategoryModel, CategoryModelMapper } = CategorySequelize;
 
-describe("CategorySequelizeRepository Unit Tests", () => {
+describe("CategorySequelizeRepository Integration Tests", () => {
   setupSequelize({ models: [CategoryModel] });
 
   let repository: CategorySequelize.CategoryRepository;
@@ -75,6 +71,64 @@ describe("CategorySequelizeRepository Unit Tests", () => {
     const entities = await repository.findAll();
     expect(entities).toHaveLength(1);
     expect(JSON.stringify(entities)).toStrictEqual(JSON.stringify([entity]));
+  });
+
+  it("should throw error on update when category is not found", async () => {
+    const entity = new Category({ name: "some name" });
+    await expect(repository.update(entity)).rejects.toThrow(
+      new NotFoundError(`Entity not found using ID ${entity.id}`)
+    );
+  });
+
+  it("should update a category", async () => {
+    const entity = new Category({ name: "some name" });
+    await repository.insert(entity);
+
+    entity.update("new name", "new description");
+    entity.deactivate();
+    await repository.update(entity);
+    const foundEntity = await repository.findById(entity.id);
+
+    expect(entity.toJSON()).toStrictEqual(foundEntity.toJSON());
+  });
+
+  it("should throw error on delete when category is not found", async () => {
+    await expect(repository.delete("fake id")).rejects.toThrow(
+      new NotFoundError(`Entity not found using ID fake id`)
+    );
+
+    await expect(
+      repository.delete(
+        new UniqueEntityId("e712d467-7625-437c-9803-9ba0c6b499b0")
+      )
+    ).rejects.toThrow(
+      new NotFoundError(
+        `Entity not found using ID e712d467-7625-437c-9803-9ba0c6b499b0`
+      )
+    );
+  });
+
+  it("should delete a category", async () => {
+    const entity = new Category({ name: "some name" });
+    await repository.insert(entity);
+    await repository.delete(entity.id);
+
+    await expect(repository.findById(entity.id)).rejects.toThrow(
+      new NotFoundError(`Entity not found using ID ${entity.id}`)
+    );
+
+    const foundEntity = await CategoryModel.findByPk(entity.id);
+    expect(foundEntity).toBeNull();
+  });
+
+  it("should not find a category by name", async () => {
+    expect(await repository.exists("fake name")).toBeFalsy();
+  });
+
+  it("should find a category by name", async () => {
+    const entity = new Category({ name: "some name" });
+    await repository.insert(entity);
+    expect(await repository.exists("some name")).toBeTruthy;
   });
 
   it("should return search result", async () => {
