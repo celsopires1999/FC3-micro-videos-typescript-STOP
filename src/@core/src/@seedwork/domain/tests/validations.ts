@@ -1,13 +1,15 @@
-import ClassValidatorFields from "../../../@seedwork/domain/validators/class-validator-fields";
-import { FieldsError } from "../../../@seedwork/domain/validators/validator-fields-interface";
-import { objectContaining } from "expect";
-import { EntityValidationError } from "../errors/validation-error";
+import {
+  ClassValidatorFields,
+  FieldsError,
+  EntityValidationError,
+} from "#seedwork/domain";
+import { objectContaining, extend } from "expect";
 
 type Received =
   | { validator: ClassValidatorFields<any>; data: any }
   | (() => any);
 
-expect.extend({
+extend({
   containsErrorMessages(received: Received, expected: FieldsError) {
     if (typeof received === "function") {
       try {
