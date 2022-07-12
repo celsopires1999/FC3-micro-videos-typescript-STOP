@@ -25,6 +25,8 @@
         "tsconfig-paths/register"
       ],
       "sourceMaps": true,
+      "outFiles": ["${workspaceFolder}/**/*.js", "!**/node_modules/**"],
+      "smartStep": true,
       "envFile": "${workspaceFolder}/.env",
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",

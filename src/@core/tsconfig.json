@@ -6,7 +6,8 @@
       "#seedwork/*": ["./@seedwork/*"],
       "#category/*": ["./category/*"]
     },
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "sourceMap": true
   },
   "include": ["src/"]
 }
