@@ -1,7 +1,9 @@
-import { CreateCategoryUseCase } from "../create-category.use-case";
-import { GetCategoryUseCase } from "../get-category.use-case";
-import CategoryInMemoryRepository from "../../../infra/db/in-memory/category-in-memory.repository";
-import NotFoundError from "../../../../@seedwork/domain/errors/not-found.error";
+import {
+  CreateCategoryUseCase,
+  GetCategoryUseCase,
+} from "#category/application";
+import { CategoryInMemoryRepository } from "#category/infra";
+import { NotFoundError } from "#seedwork/domain";
 
 let repository: CategoryInMemoryRepository;
 let useCase: GetCategoryUseCase.UseCase;

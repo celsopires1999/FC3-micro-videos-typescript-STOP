@@ -1,14 +1,14 @@
-import { UpdateCategoryUseCase } from "../update-category.use-case";
-import InMememoryCategoryRepository from "../../../infra/db/in-memory/category-in-memory.repository";
-import NotFoundError from "../../../../@seedwork/domain/errors/not-found.error";
-import Category from "../../../domain/entities/category";
+import { UpdateCategoryUseCase } from "#category/application";
+import { CategoryInMemoryRepository } from "#category/infra";
+import { NotFoundError } from "#seedwork/domain";
+import { Category } from "#category/domain";
 
 describe("UpdateCategoryUseCase Unit Tests", () => {
-  let repository: InMememoryCategoryRepository;
+  let repository: CategoryInMemoryRepository;
   let useCase: UpdateCategoryUseCase.UseCase;
 
   beforeEach(() => {
-    repository = new InMememoryCategoryRepository();
+    repository = new CategoryInMemoryRepository();
     useCase = new UpdateCategoryUseCase.UseCase(repository);
   });
   it("should throw an error when id is not found", async () => {

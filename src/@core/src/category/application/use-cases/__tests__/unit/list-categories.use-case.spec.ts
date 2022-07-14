@@ -1,7 +1,6 @@
-import { ListCategoriesUseCase } from "../list-categories.use-case";
-import CategoryInMemoryRepository from "../../../infra/db/in-memory/category-in-memory.repository";
-import { CategoryRepository } from "../../../domain/repository/category.repository";
-import Category from "../../../domain/entities/category";
+import { ListCategoriesUseCase } from "#category/application";
+import { CategoryInMemoryRepository } from "#category/infra";
+import { CategoryRepository, Category } from "#category/domain";
 
 let repository: CategoryInMemoryRepository;
 let useCase: ListCategoriesUseCase.UseCase;

@@ -1,14 +1,14 @@
-import { CreateCategoryUseCase } from "../create-category.use-case";
-import InMememoryCategoryRepository from "../../../infra/db/in-memory/category-in-memory.repository";
-import { EntityValidationError } from "../../../../@seedwork/domain/errors/validation-error";
-import CategoryExistsError from "#category/domain/errors/category-exists.error";
+import { CreateCategoryUseCase } from "#category/application";
+import { CategoryInMemoryRepository } from "#category/infra";
+import { EntityValidationError } from "#seedwork/domain";
+import { CategoryExistsError } from "#category/domain/";
 
 describe("CreateCategoryUseCase Unit Tests", () => {
-  let repository: InMememoryCategoryRepository;
+  let repository: CategoryInMemoryRepository;
   let useCase: CreateCategoryUseCase.UseCase;
 
   beforeEach(() => {
-    repository = new InMememoryCategoryRepository();
+    repository = new CategoryInMemoryRepository();
     useCase = new CreateCategoryUseCase.UseCase(repository);
   });
   it("should create category", async () => {
