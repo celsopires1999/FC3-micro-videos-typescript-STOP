@@ -2,6 +2,16 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach Nest.js",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "sourceMaps": true,
+      "smartStep": true,
+      "skipFiles": ["${workspaceFolder}/node_modules/**/*.js"]
+    },
+    {
       "name": "Debug Jest Tests",
       "type": "node",
       "request": "launch",
@@ -13,9 +23,9 @@
       "console": "integratedTerminal"
     },
     {
+      "name": "Debug Nest Framework",
       "type": "node",
       "request": "launch",
-      "name": "Debug Nest Framework",
       "args": ["${workspaceFolder}/src/nestjs/src/main.ts"],
       "runtimeArgs": [
         "--nolazy",

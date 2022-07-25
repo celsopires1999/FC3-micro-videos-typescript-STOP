@@ -1,14 +1,14 @@
-import NotFoundError from "../../../../@seedwork/domain/errors/not-found.error";
-import Category from "../../../domain/entities/category";
-import InMememoryCategoryRepository from "../../../infra/db/in-memory/category-in-memory.repository";
-import { DeleteCategoryUseCase } from "../../use-cases/delete-category.use-case";
+import { NotFoundError } from "#seedwork/domain";
+import { Category } from "#category/domain";
+import { CategoryInMemoryRepository } from "#category/infra";
+import { DeleteCategoryUseCase } from "#category/application";
 
 describe("DeleteCategoryUseCase Unit Tests", () => {
-  let repository: InMememoryCategoryRepository;
+  let repository: CategoryInMemoryRepository;
   let useCase: DeleteCategoryUseCase.UseCase;
 
   beforeEach(() => {
-    repository = new InMememoryCategoryRepository();
+    repository = new CategoryInMemoryRepository();
     useCase = new DeleteCategoryUseCase.UseCase(repository);
   });
   it("should throw an error when id is not found", async () => {
