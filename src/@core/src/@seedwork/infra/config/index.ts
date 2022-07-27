@@ -1,14 +1,25 @@
 import { config as readEnv } from "dotenv";
 import { join } from "path";
 
-const envTestinfFile = join(__dirname, "../../../../.env.testing");
-
-readEnv({ path: envTestinfFile });
-
-export const config = {
+export type Config = {
   db: {
-    vendor: process.env.DB_VENDOR as any,
-    host: process.env.DB_HOST,
-    logging: process.env.DB_LOGGING === "true",
-  },
+    vendor: any;
+    host: string;
+    logging: boolean;
+  };
 };
+
+function makeConfig(envFile): Config {
+  const output = readEnv({ path: envFile });
+
+  return {
+    db: {
+      vendor: output.parsed.DB_VENDOR as any,
+      host: output.parsed.DB_HOST,
+      logging: output.parsed.DB_LOGGING === "true",
+    },
+  };
+}
+
+const envTestinfFile = join(__dirname, "../../../../.env.testing");
+export const configTest = makeConfig(envTestinfFile);
