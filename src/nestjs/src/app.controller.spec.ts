@@ -1,23 +1,27 @@
 import { ConfigService } from '@nestjs/config';
+import { ConfigModule } from './config/config.module';
 import { Test, TestingModule } from '@nestjs/testing';
+import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from './config/config.module';
 
 describe('AppController', () => {
   let appController: AppController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
-      imports: [ConfigModule.forRoot()],
+      imports: [
+        ConfigModule.forRoot({
+          envFilePath: join(__dirname, 'envs/.env.testing'),
+        }),
+      ],
       controllers: [AppController],
       providers: [AppService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
-
-    // console.log(app.get(ConfigService).get('DB_VENDOR'));
-    // console.log(app.get(ConfigService).get('DB_LOGGING'));
+    console.log(app.get(ConfigService).get('DB_VENDOR'));
+    console.log(app.get(ConfigService).get('DB_LOGGING'));
   });
 
   describe('root', () => {
