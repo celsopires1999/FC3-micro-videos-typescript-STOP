@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { ConfigModule } from './config/config.module';
+import { ConfigModule, CONFIG_SCHEMA_TYPE } from './config/config.module';
 import { Test, TestingModule } from '@nestjs/testing';
 import { join } from 'path';
 import { AppController } from './app.controller';
@@ -20,8 +20,14 @@ describe('AppController', () => {
     }).compile();
 
     appController = app.get<AppController>(AppController);
-    console.log(app.get(ConfigService).get('DB_VENDOR'));
-    console.log(app.get(ConfigService).get('DB_LOGGING'));
+
+    const configService: ConfigService =
+      app.get<ConfigService<CONFIG_SCHEMA_TYPE>>(ConfigService);
+
+    const db_vendor =
+      configService.get<CONFIG_SCHEMA_TYPE['DB_VENDOR']>('DB_VENDOR');
+
+    console.log(db_vendor);
   });
 
   describe('root', () => {

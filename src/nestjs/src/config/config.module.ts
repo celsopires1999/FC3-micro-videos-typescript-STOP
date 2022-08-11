@@ -6,7 +6,18 @@ import {
 import { join } from 'path';
 import Joi from 'joi';
 
-const DB_SCHEMA = Joi.object({
+type DB_SCHEMA_TYPE = {
+  DB_VENDOR: 'mysql' | 'sqlite';
+  DB_HOST: string;
+  DB_DATABASE: string;
+  DB_USERNAME: string;
+  DB_PASSWORD: string;
+  DB_PORT: number;
+  DB_LOGGING: boolean;
+  DB_AUTO_LOAD_MODELS: boolean;
+};
+
+const DB_SCHEMA: Joi.StrictSchemaMap<DB_SCHEMA_TYPE> = {
   DB_VENDOR: Joi.string().required().valid('mysql', 'sqlite'),
   DB_HOST: Joi.string().required(),
   DB_DATABASE: Joi.string().when('DB_VENDOR', {
@@ -27,7 +38,9 @@ const DB_SCHEMA = Joi.object({
   }),
   DB_LOGGING: Joi.boolean().required(),
   DB_AUTO_LOAD_MODELS: Joi.boolean().required(),
-});
+};
+
+export type CONFIG_SCHEMA_TYPE = DB_SCHEMA_TYPE;
 
 @Module({})
 export class ConfigModule extends NestConfigModule {
@@ -40,7 +53,9 @@ export class ConfigModule extends NestConfigModule {
         join(__dirname, `../envs/.env.${process.env.NODE_ENV}`),
         join(__dirname, '../envs/.env'),
       ],
-      validationSchema: DB_SCHEMA,
+      validationSchema: Joi.object({
+        ...DB_SCHEMA,
+      }),
       ...otherOptions,
     });
   }
