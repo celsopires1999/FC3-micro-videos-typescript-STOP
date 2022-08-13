@@ -159,7 +159,6 @@ describe('Schema Unit Tests', () => {
           { DB_VENDOR: 'mysql', DB_PORT: '10' },
         ];
         arrange.forEach((value) => {
-          console.log(expectValidate(schema, value).not.toContain('DB_PORT'));
           expectValidate(schema, value).not.toContain('DB_PORT');
         });
       });
