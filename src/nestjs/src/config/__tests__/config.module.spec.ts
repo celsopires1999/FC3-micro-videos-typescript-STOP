@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { fail } from 'assert';
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { join } from 'path';
 import { ConfigModule, CONFIG_DB_SCHEMA } from '../config.module';
 
