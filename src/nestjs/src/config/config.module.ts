@@ -48,6 +48,7 @@ export class ConfigModule extends NestConfigModule {
     const { envFilePath, ...otherOptions } = options;
 
     return super.forRoot({
+      isGlobal: true,
       envFilePath: [
         ...(Array.isArray(envFilePath) ? envFilePath : [envFilePath]),
         join(__dirname, `../envs/.env.${process.env.NODE_ENV}`),
