@@ -9,6 +9,12 @@ import { CONFIG_SCHEMA_TYPE } from './../config/config.module';
     SequelizeModule.forRootAsync({
       useFactory: async (config: ConfigService<CONFIG_SCHEMA_TYPE>) => {
         const models = [CategorySequelize.CategoryModel];
+
+        console.log('DB_VENDOR:', config.get('DB_VENDOR'));
+        console.log('DB_HOST:', config.get('DB_HOST'));
+        console.log('DB_AUTO_LOAD_MODELS:', config.get('DB_AUTO_LOAD_MODELS'));
+        console.log('DB_LOGGING:', config.get('DB_LOGGING'));
+
         if (config.get('DB_VENDOR') === 'sqlite') {
           return {
             dialect: 'sqlite',

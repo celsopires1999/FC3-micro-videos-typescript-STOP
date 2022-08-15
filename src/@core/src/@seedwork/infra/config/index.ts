@@ -14,9 +14,9 @@ function makeConfig(envFile): Config {
 
   return {
     db: {
-      vendor: output.parsed.TEST_DB_VENDOR as any,
-      host: output.parsed.TEST_DB_HOST,
-      logging: output.parsed.TEST_DB_LOGGING === "true",
+      vendor: output.parsed.DB_VENDOR as any,
+      host: output.parsed.DB_HOST,
+      logging: output.parsed.DB_LOGGING === "true",
     },
   };
 }
