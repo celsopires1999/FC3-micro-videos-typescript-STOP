@@ -9,7 +9,10 @@
       "restart": true,
       "sourceMaps": true,
       "smartStep": true,
-      "skipFiles": ["${workspaceFolder}/node_modules/**/*.js"]
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**"
+      ]
     },
     {
       "name": "Debug Jest Tests",
@@ -20,7 +23,12 @@
         "${workspaceRoot}/node_modules/.bin/jest",
         "--runInBand"
       ],
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "smartStep": true,
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**"
+      ]
     },
     {
       "name": "Debug Nest Framework",
@@ -37,6 +45,10 @@
       "sourceMaps": true,
       "outFiles": ["${workspaceFolder}/**/*.js", "!**/node_modules/**"],
       "smartStep": true,
+      "skipFiles": [
+        "${workspaceFolder}/node_modules/**/*.js",
+        "<node_internals>/**"
+      ],
       "envFile": "${workspaceFolder}/.env",
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",

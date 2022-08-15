@@ -1,9 +1,10 @@
 import { Sequelize, SequelizeOptions } from "sequelize-typescript";
+import { configTest as config } from "#seedwork/infra";
 
 const sequelizeOptions: SequelizeOptions = {
-  dialect: "sqlite",
-  host: ":memory:",
-  logging: false,
+  dialect: config.db.vendor,
+  host: config.db.host,
+  logging: config.db.logging,
 };
 
 export function setupSequelize(options: SequelizeOptions = {}) {
