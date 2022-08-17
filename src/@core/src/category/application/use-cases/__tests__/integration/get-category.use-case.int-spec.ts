@@ -1,5 +1,5 @@
 import { CategorySequelize } from "#category/infra";
-import { setupSequelize } from "#seedwork/infra";
+import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { GetCategoryUseCase } from "#category/application";
 import { NotFoundError } from "#seedwork/domain";
 

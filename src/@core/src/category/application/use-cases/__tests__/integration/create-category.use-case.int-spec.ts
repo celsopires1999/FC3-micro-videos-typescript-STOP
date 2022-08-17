@@ -1,4 +1,4 @@
-import { setupSequelize } from "#seedwork/infra";
+import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { CategorySequelize } from "#category/infra";
 import { CreateCategoryUseCase } from "#category/application";
 

@@ -1,5 +1,5 @@
 import { CategorySequelize } from "#category/infra";
-import { setupSequelize } from "#seedwork/infra";
+import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { ListCategoriesUseCase } from "#category/application";
 import _chance from "chance";
 
