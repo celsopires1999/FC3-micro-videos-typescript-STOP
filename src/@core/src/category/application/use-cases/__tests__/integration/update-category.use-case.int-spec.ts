@@ -1,6 +1,6 @@
 import { CategorySequelize } from "#category/infra";
 import { NotFoundError } from "#seedwork/domain";
-import { setupSequelize } from "#seedwork/infra";
+import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { UpdateCategoryUseCase } from "#category/application";
 
 const { CategoryModel, CategoryRepository } = CategorySequelize;

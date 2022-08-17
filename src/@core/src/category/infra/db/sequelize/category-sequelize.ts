@@ -6,7 +6,7 @@ import {
   DataType,
 } from "sequelize-typescript";
 
-import { SequelizeModelFactory } from "#seedwork/infra";
+import { SequelizeModelFactory } from "#seedwork/infra/sequelize/sequelize-model-factory";
 
 import {
   Category,

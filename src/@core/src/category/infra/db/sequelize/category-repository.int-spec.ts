@@ -1,6 +1,6 @@
 import { Category, CategoryRepository } from "#category/domain";
 import { NotFoundError, UniqueEntityId } from "#seedwork/domain";
-import { setupSequelize } from "#seedwork/infra";
+import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { CategorySequelize } from "#category/infra";
 import _chance from "chance";
 
