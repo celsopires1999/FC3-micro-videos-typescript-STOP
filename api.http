@@ -11,7 +11,7 @@ POST http://localhost:3000/categories
 Content-Type: application/json
 
 {
-    "name": "Movie"
+    "name": "Movie 1"
 }
 
 ###
