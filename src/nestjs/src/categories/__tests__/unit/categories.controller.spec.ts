@@ -5,9 +5,9 @@ import {
   UpdateCategoryUseCase,
 } from '@fc/micro-videos/category/application';
 import { SortDirection } from '@fc/micro-videos/@seedwork/domain';
-import { CategoriesController } from './categories.controller';
-import { CreateCategoryDto } from './dto/create-category.dto';
-import { UpdateCategoryDto } from './dto/update-category.dto';
+import { CategoriesController } from './../../categories.controller';
+import { CreateCategoryDto } from './../../dto/create-category.dto';
+import { UpdateCategoryDto } from './../../dto/update-category.dto';
 
 describe('CategoriesController Unit Tests', () => {
   let controller: CategoriesController;
