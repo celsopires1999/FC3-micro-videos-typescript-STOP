@@ -5,7 +5,7 @@ import {
   RepositoryInterface,
   SearchParams,
   SearchResult,
-  SerachableRepositoryInterface,
+  SearchableRepositoryInterface,
   SortDirection,
 } from "./repository-contracts";
 
@@ -67,7 +67,7 @@ export abstract class InMemoryRepository<E extends Entity>
 
 export abstract class InMemorySearchableRepository<E extends Entity>
   extends InMemoryRepository<E>
-  implements SerachableRepositoryInterface<E>
+  implements SearchableRepositoryInterface<E>
 {
   sortableFields: string[] = [];
 
