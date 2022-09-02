@@ -1,7 +1,7 @@
 import {
   SearchParams as DefaultSearchParams,
   SearchResult as DefaultSearchResult,
-  SerachableRepositoryInterface,
+  SearchableRepositoryInterface,
 } from "../../../@seedwork/domain/repository/repository-contracts";
 import Category from "../entities/category";
 
@@ -12,7 +12,7 @@ export namespace CategoryRepository {
   export class SearchResult extends DefaultSearchResult<Category, Filter> {}
 
   export interface Repository
-    extends SerachableRepositoryInterface<
+    extends SearchableRepositoryInterface<
       Category,
       Filter,
       SearchParams,

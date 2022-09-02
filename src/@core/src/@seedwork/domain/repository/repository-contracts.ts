@@ -145,7 +145,7 @@ export class SearchResult<E extends Entity = Entity, Filter = string> {
   }
 }
 
-export interface SerachableRepositoryInterface<
+export interface SearchableRepositoryInterface<
   E extends Entity,
   Filter = string,
   SearchInput = SearchParams,
