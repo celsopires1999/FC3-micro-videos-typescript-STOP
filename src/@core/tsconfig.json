@@ -7,7 +7,12 @@
       "#category/*": ["./category/*"]
     },
     "outDir": "./dist",
-    "sourceMap": true
+    "sourceMap": true,
+    "plugins": [
+      { "transform": "typescript-transform-paths" },
+
+      { "transform": "typescript-transform-paths", "afterDeclarations": true }
+    ]
   },
   "include": ["src/"]
 }
