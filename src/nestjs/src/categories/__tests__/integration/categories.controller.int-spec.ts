@@ -1,3 +1,4 @@
+import { NotFoundError } from '@fc/micro-videos/@seedwork/domain';
 import {
   CreateCategoryUseCase,
   DeleteCategoryUseCase,
@@ -224,6 +225,14 @@ describe('CategoriesController Integration Tests', () => {
         expect(presenter.is_active).toBe(expectedPresenter.is_active);
         expect(presenter.created_at).toStrictEqual(entity.created_at);
       },
+    );
+  });
+  it('should delete a category', async () => {
+    const model = await CategorySequelize.CategoryModel.factory().create();
+    const response = await controller.remove(model.id);
+    expect(response).toBeUndefined();
+    expect(repository.findById(model.id)).rejects.toThrowError(
+      new NotFoundError(`Entity not found using ID ${model.id}`),
     );
   });
 });
