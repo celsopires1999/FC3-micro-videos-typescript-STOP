@@ -48,7 +48,7 @@ describe('CategoriesController Unit Tests', () => {
 
   it('should update a category', async () => {
     const id = '312cffad-1938-489e-a706-643dc9a3cfd3';
-    const expectedOutput: UpdateCategoryUseCase.Output = {
+    const output: UpdateCategoryUseCase.Output = {
       id,
       name: 'updated category',
       description: 'updated description',
@@ -56,8 +56,10 @@ describe('CategoriesController Unit Tests', () => {
       created_at: new Date(),
     };
 
+    const expectedPresenter = new CategoryPresenter(output);
+
     const mockUpdateUseCase = {
-      execute: jest.fn().mockReturnValue(Promise.resolve(expectedOutput)),
+      execute: jest.fn().mockReturnValue(Promise.resolve(expectedPresenter)),
     };
 
     //@ts-expect-error mock for testing
@@ -67,9 +69,10 @@ describe('CategoriesController Unit Tests', () => {
       description: 'updated description',
       is_active: true,
     };
-    const output = await controller.update(id, input);
+    const presenter = await controller.update(id, input);
     expect(mockUpdateUseCase.execute).toHaveBeenCalledWith({ id, ...input });
-    expect(output).toStrictEqual(expectedOutput);
+    expect(presenter).toBeInstanceOf(CategoryPresenter);
+    expect(presenter).toStrictEqual(expectedPresenter);
   });
 
   it('should delete a category', async () => {

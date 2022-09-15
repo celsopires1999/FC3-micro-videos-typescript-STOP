@@ -46,14 +46,16 @@ export class CategoriesController {
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.updateUseCase.execute({
+    const output = await this.updateUseCase.execute({
       id,
       ...updateCategoryDto,
     });
+
+    return new CategoryPresenter(output);
   }
 
   @HttpCode(204)
