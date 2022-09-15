@@ -93,7 +93,7 @@ describe('CategoriesController Unit Tests', () => {
 
   it('should list a category', async () => {
     const id = '312cffad-1938-489e-a706-643dc9a3cfd3';
-    const expectedOutput: GetCategoryUseCase.Output = {
+    const output: GetCategoryUseCase.Output = {
       id,
       name: 'some category',
       description: 'some description',
@@ -101,16 +101,18 @@ describe('CategoriesController Unit Tests', () => {
       created_at: new Date(),
     };
 
+    const expectedPresenter = new CategoryPresenter(output);
+
     const mockGetUseCase = {
-      execute: jest.fn().mockReturnValue(Promise.resolve(expectedOutput)),
+      execute: jest.fn().mockReturnValue(Promise.resolve(expectedPresenter)),
     };
 
     //@ts-expect-error mock for testing
     controller['getUseCase'] = mockGetUseCase;
 
-    const output = await controller.findOne(id);
+    const presenter = await controller.findOne(id);
     expect(mockGetUseCase.execute).toHaveBeenCalledWith({ id });
-    expect(output).toStrictEqual(expectedOutput);
+    expect(presenter).toStrictEqual(expectedPresenter);
   });
 
   it('should list all categories', async () => {

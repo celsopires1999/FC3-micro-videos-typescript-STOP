@@ -65,8 +65,9 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.getUseCase.execute({ id });
+  async findOne(@Param('id') id: string) {
+    const output = await this.getUseCase.execute({ id });
+    return new CategoryPresenter(output);
   }
 
   @Get()

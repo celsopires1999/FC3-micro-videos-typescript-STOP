@@ -9,6 +9,7 @@ import {
 import { CategoryRepository } from '@fc/micro-videos/category/domain';
 import { CategorySequelize } from '@fc/micro-videos/category/infra';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CategoryPresenter } from './../../../categories/presenter/category.presenter';
 import { CategoriesModule } from './../../../categories/categories.module';
 import { ConfigModule } from './../../../config/config.module';
 import { DatabaseModule } from './../../../database/database.module';
@@ -234,5 +235,17 @@ describe('CategoriesController Integration Tests', () => {
     expect(repository.findById(model.id)).rejects.toThrowError(
       new NotFoundError(`Entity not found using ID ${model.id}`),
     );
+  });
+
+  it('should find a category', async () => {
+    const model = await CategorySequelize.CategoryModel.factory().create();
+    const expectedPresenter = new CategoryPresenter(model.toJSON());
+    const presenter = await controller.findOne(model.id);
+    expect(presenter).toStrictEqual(expectedPresenter);
+    expect(presenter.id).toBe(model.id);
+    expect(presenter.name).toBe(expectedPresenter.name);
+    expect(presenter.description).toBe(expectedPresenter.description);
+    expect(presenter.is_active).toBe(expectedPresenter.is_active);
+    expect(presenter.created_at).toStrictEqual(model.created_at);
   });
 });
