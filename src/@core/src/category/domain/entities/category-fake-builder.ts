@@ -89,25 +89,6 @@ export class CategoryFakeBuilder<TBuild = any> {
     return this;
   }
 
-  // build(): TBuild {
-  //   const categories = new Array(this.countObjs).fill(undefined).map(
-  //     (_, index) =>
-  //       new Category({
-  //         ...(this.unique_entity_id && {
-  //           unique_entity_id: this.callFactory(this.unique_entity_id, index),
-  //         }),
-  //         name: this.callFactory(this.name, index),
-  //         description: this.callFactory(this.description, index),
-  //         is_active: this.callFactory(this.is_active, index),
-  //         ...(this.created_at && {
-  //           created_at: this.callFactory(this.created_at, index),
-  //         }),
-  //       })
-  //   );
-
-  //   return this.countObjs === 1 ? (categories[0] as any) : categories;
-  // }
-
   build(): TBuild {
     const categories = new Array(this.countObjs).fill(undefined).map(
       (_, index) =>

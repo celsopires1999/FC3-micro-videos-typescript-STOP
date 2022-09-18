@@ -2,6 +2,7 @@ import { CategorySequelize } from "#category/infra";
 import { NotFoundError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { UpdateCategoryUseCase } from "#category/application";
+import { CategoryFakeBuilder } from "#category/domain/entities/category-fake-builder";
 
 const { CategoryModel, CategoryRepository } = CategorySequelize;
 setupSequelize({ models: [CategoryModel] });
@@ -43,115 +44,116 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
       };
     };
 
-    const model = await CategoryModel.factory().create();
+    const entity = CategoryFakeBuilder.aCategory().build();
+    repository.insert(entity);
 
     const arrange: Arrange[] = [
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: "some description",
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: "some description",
           is_active: true,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           is_active: false,
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: null,
           is_active: false,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: null,
           is_active: false,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           is_active: true,
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: null,
           is_active: true,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: null,
           is_active: true,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: "some description",
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: "some description",
           is_active: true,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
       {
         input: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: "some description",
           is_active: false,
         },
         expected: {
-          id: model.id,
+          id: entity.id,
           name: "Test",
           description: "some description",
           is_active: false,
-          created_at: model.created_at,
+          created_at: entity.created_at,
         },
       },
     ];
 
-    let output = await useCase.execute({ id: model.id, name: "Test" });
+    let output = await useCase.execute({ id: entity.id, name: "Test" });
     expect(output).toStrictEqual({
-      id: model.id,
+      id: entity.id,
       name: "Test",
       description: null,
       is_active: true,
-      created_at: model.created_at,
+      created_at: entity.created_at,
     });
 
     for (const i of arrange) {
@@ -162,7 +164,7 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
         is_active: i.input.is_active,
       });
       expect(output).toStrictEqual({
-        id: model.id,
+        id: entity.id,
         name: i.expected.name,
         description: i.expected.description,
         is_active: i.expected.is_active,
