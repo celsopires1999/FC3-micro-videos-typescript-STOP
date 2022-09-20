@@ -191,19 +191,6 @@ describe("CategoryFakeBuilder Unit Tests", () => {
   describe("is_active prop", () => {
     const faker = CategoryFakeBuilder.aCategory();
 
-    it("should throw an error when created_at has not been set", () => {
-      expect(() => faker["getValue"]("created_at")).toThrow(
-        new Error(
-          `Property created_at does not have a factory, use "with" method instead`
-        )
-      );
-      expect(() => faker.created_at).toThrow(
-        new Error(
-          `Property created_at does not have a factory, use "with" method instead`
-        )
-      );
-    });
-
     it("should be a function", () => {
       expect(typeof faker["_is_active"] === "function").toBeTruthy();
     });
@@ -246,6 +233,18 @@ describe("CategoryFakeBuilder Unit Tests", () => {
 
   describe("created_at prop", () => {
     const faker = CategoryFakeBuilder.aCategory();
+    it("should throw an error when created_at has not been set", () => {
+      expect(() => faker["getValue"]("created_at")).toThrow(
+        new Error(
+          `Property created_at does not have a factory, use "with" method instead`
+        )
+      );
+      expect(() => faker.created_at).toThrow(
+        new Error(
+          `Property created_at does not have a factory, use "with" method instead`
+        )
+      );
+    });
 
     it("should be undefined", () => {
       expect(faker["_created_at"]).toBeUndefined();
