@@ -2,6 +2,7 @@ import CategoryValidatorFactory from "../validators/category.validator";
 import Entity from "../../../@seedwork/domain/entity/entity";
 import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 import { EntityValidationError } from "../../../@seedwork/domain/errors/validation-error";
+import { CategoryFakeBuilder } from "./category-fake-builder";
 
 export interface CategoryProperties {
   name: string;
@@ -67,6 +68,10 @@ export class Category extends Entity<CategoryProperties> {
 
   deactivate() {
     this.is_active = false;
+  }
+
+  static fake() {
+    return CategoryFakeBuilder;
   }
 }
 

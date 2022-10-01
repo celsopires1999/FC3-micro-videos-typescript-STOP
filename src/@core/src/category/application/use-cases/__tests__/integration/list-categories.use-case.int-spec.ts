@@ -1,10 +1,7 @@
+import { ListCategoriesUseCase } from "#category/application";
+import { Category } from "#category/domain";
 import { CategorySequelize } from "#category/infra";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
-import { ListCategoriesUseCase } from "#category/application";
-import _chance from "chance";
-import { CategoryFakeBuilder } from "#category/domain/entities/category-fake-builder";
-
-const chance = _chance();
 
 const { CategoryModel, CategoryRepository } = CategorySequelize;
 
@@ -21,36 +18,19 @@ beforeEach(() => {
 describe("ListCategoriesUseCase Integration Tests", () => {
   it("should return output with two categories ordered by created_at when input is empty", async () => {
     const created_at = new Date();
-    const defaultProps = {
-      description: null,
-      is_active: true,
-    };
-
-    const categoriesProps = [
-      {
-        id: chance.guid({ version: 4 }),
-        name: "category1",
-        created_at: created_at,
-        ...defaultProps,
-      },
-      {
-        id: chance.guid({ version: 4 }),
-        name: "category2",
-        created_at: new Date(created_at.getTime() + 100),
-        ...defaultProps,
-      },
+    const entities = [
+      Category.fake().aCategory().withCreatedAt(created_at).build(),
+      Category.fake()
+        .aCategory()
+        .withCreatedAt(new Date(created_at.getTime() + 100))
+        .build(),
     ];
-
-    const models = await CategoryModel.bulkCreate(categoriesProps);
+    repository.bulkInsert(entities);
 
     const output = await useCase.execute({});
 
-    const { CategoryModelMapper } = CategorySequelize;
     expect(output).toMatchObject({
-      items: [
-        CategoryModelMapper.toEntity(models[1]).toJSON(),
-        CategoryModelMapper.toEntity(models[0]).toJSON(),
-      ],
+      items: [entities[1].toJSON(), entities[0].toJSON()],
       total: 2,
       current_page: 1,
       last_page: 1,
@@ -59,7 +39,8 @@ describe("ListCategoriesUseCase Integration Tests", () => {
   });
 
   it("should return output with three categories ordered by created_at when input is empty", async () => {
-    const entities = CategoryFakeBuilder.theCategories(3)
+    const entities = Category.fake()
+      .theCategories(3)
       .withName((index) => `test ${index}`)
       .withCreatedAt((index) => new Date(new Date().getTime() + index))
       .build();
@@ -77,7 +58,7 @@ describe("ListCategoriesUseCase Integration Tests", () => {
   });
 
   it("should return output using paginate, sort and filter", async () => {
-    const faker = CategoryFakeBuilder.aCategory();
+    const faker = Category.fake().aCategory();
 
     const entities = [
       faker.withName("a").build(),

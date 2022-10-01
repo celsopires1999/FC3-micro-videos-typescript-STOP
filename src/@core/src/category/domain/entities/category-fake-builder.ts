@@ -24,7 +24,7 @@ export class CategoryFakeBuilder<TBuild = any> {
 
   private chance: Chance.Chance;
 
-  constructor(countObjs = 1) {
+  private constructor(countObjs = 1) {
     this.countObjs = countObjs;
     this.chance = Chance();
   }

@@ -1,8 +1,8 @@
+import { UpdateCategoryUseCase } from "#category/application";
+import { Category } from "#category/domain";
 import { CategorySequelize } from "#category/infra";
 import { NotFoundError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
-import { UpdateCategoryUseCase } from "#category/application";
-import { CategoryFakeBuilder } from "#category/domain/entities/category-fake-builder";
 
 const { CategoryModel, CategoryRepository } = CategorySequelize;
 setupSequelize({ models: [CategoryModel] });
@@ -44,7 +44,7 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
       };
     };
 
-    const entity = CategoryFakeBuilder.aCategory().build();
+    const entity = Category.fake().aCategory().build();
     repository.insert(entity);
 
     const arrange: Arrange[] = [
