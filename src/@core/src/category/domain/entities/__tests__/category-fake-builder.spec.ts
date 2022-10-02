@@ -273,5 +273,61 @@ describe("CategoryFakeBuilder Unit Tests", () => {
       expect(categories[0].created_at.getTime()).toBe(date.getTime() + 0 + 2);
       expect(categories[1].created_at.getTime()).toBe(date.getTime() + 1 + 2);
     });
+
+    it("should create a category", () => {
+      let category = CategoryFakeBuilder.aCategory().build();
+      expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+      expect(typeof category.name === "string").toBeTruthy();
+      expect(typeof category.description === "string").toBeTruthy();
+      expect(category.is_active).toBeTruthy();
+      expect(category.created_at).toBeInstanceOf(Date);
+
+      const created_at = new Date();
+      const unique_entity_id = new UniqueEntityId();
+      category = CategoryFakeBuilder.aCategory()
+        .withName("some name")
+        .withDescription("some description")
+        .deactivate()
+        .withCreatedAt(created_at)
+        .withUniqueEntityId(unique_entity_id)
+        .build();
+      expect(category.uniqueEntityId).toBe(unique_entity_id);
+      expect(category.id).toBe(unique_entity_id.value);
+      expect(category.name).toBe("some name");
+      expect(category.description).toBe("some description");
+      expect(category.is_active).toBeFalsy();
+      expect(category.created_at).toStrictEqual(created_at);
+    });
+
+    it("should create many categories", () => {
+      let categories = CategoryFakeBuilder.theCategories(2).build();
+
+      categories.forEach((category) => {
+        expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+        expect(typeof category.name === "string").toBeTruthy();
+        expect(typeof category.description === "string").toBeTruthy();
+        expect(category.is_active).toBeTruthy();
+        expect(category.created_at).toBeInstanceOf(Date);
+      });
+
+      const created_at = new Date();
+      const unique_entity_id = new UniqueEntityId();
+      categories = CategoryFakeBuilder.theCategories(2)
+        .withName("some name")
+        .withDescription("some description")
+        .deactivate()
+        .withCreatedAt(created_at)
+        .withUniqueEntityId(unique_entity_id)
+        .build();
+
+      categories.forEach((category) => {
+        expect(category.uniqueEntityId).toBe(unique_entity_id);
+        expect(category.id).toBe(unique_entity_id.value);
+        expect(category.name).toBe("some name");
+        expect(category.description).toBe("some description");
+        expect(category.is_active).toBeFalsy();
+        expect(category.created_at).toStrictEqual(created_at);
+      });
+    });
   });
 });

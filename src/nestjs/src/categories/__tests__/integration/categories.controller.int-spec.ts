@@ -6,11 +6,10 @@ import {
   ListCategoriesUseCase,
   UpdateCategoryUseCase,
 } from '@fc/micro-videos/category/application';
-import { CategoryRepository } from '@fc/micro-videos/category/domain';
-import { CategorySequelize } from '@fc/micro-videos/category/infra';
+import { Category, CategoryRepository } from '@fc/micro-videos/category/domain';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CategoryPresenter } from './../../../categories/presenter/category.presenter';
 import { CategoriesModule } from './../../../categories/categories.module';
+import { CategoryPresenter } from './../../../categories/presenter/category.presenter';
 import { ConfigModule } from './../../../config/config.module';
 import { DatabaseModule } from './../../../database/database.module';
 import { CategoriesController } from './../../categories.controller';
@@ -130,17 +129,8 @@ describe('CategoriesController Integration Tests', () => {
     );
   });
   describe('should update a category', () => {
-    const defaultProps = {
-      id: '37ebfe50-8a89-42d3-9d89-2af4a72e5d58',
-      name: 'initial',
-      description: 'initial',
-      is_active: true,
-      created_at: new Date(),
-      updated_at: new Date(),
-    };
     const arrange = [
       {
-        categoryProps: { ...defaultProps },
         request: { name: 'Movie' },
         expectedPresenter: {
           name: 'Movie',
@@ -149,16 +139,14 @@ describe('CategoriesController Integration Tests', () => {
         },
       },
       {
-        categoryProps: { ...defaultProps, is_active: false },
         request: { name: 'Movie', description: null },
         expectedPresenter: {
           name: 'Movie',
           description: null,
-          is_active: false,
+          is_active: true,
         },
       },
       {
-        categoryProps: { ...defaultProps, is_active: false },
         request: { name: 'Movie', is_active: true },
         expectedPresenter: {
           name: 'Movie',
@@ -167,7 +155,6 @@ describe('CategoriesController Integration Tests', () => {
         },
       },
       {
-        categoryProps: { ...defaultProps, is_active: true },
         request: { name: 'Movie', is_active: true },
         expectedPresenter: {
           name: 'Movie',
@@ -176,7 +163,6 @@ describe('CategoriesController Integration Tests', () => {
         },
       },
       {
-        categoryProps: { ...defaultProps },
         request: {
           name: 'Movie',
           description: 'A good movie',
@@ -189,7 +175,6 @@ describe('CategoriesController Integration Tests', () => {
         },
       },
       {
-        categoryProps: { ...defaultProps },
         request: {
           name: 'Movie',
           description: 'A good movie',
@@ -205,14 +190,13 @@ describe('CategoriesController Integration Tests', () => {
 
     test.each(arrange)(
       'with request $request',
-      async ({ categoryProps, request, expectedPresenter }) => {
-        const model = await CategorySequelize.CategoryModel.create(
-          categoryProps,
-        );
-        const presenter = await controller.update(model.id, request);
-        const entity = await repository.findById(presenter.id);
+      async ({ request, expectedPresenter }) => {
+        const entity = Category.fake().aCategory().build();
+        await repository.insert(entity);
+        const presenter = await controller.update(entity.id, request);
+        const foundEntity = await repository.findById(presenter.id);
 
-        expect(entity).toMatchObject({
+        expect(foundEntity).toMatchObject({
           id: presenter.id,
           name: expectedPresenter.name,
           description: expectedPresenter.description,
@@ -220,32 +204,34 @@ describe('CategoriesController Integration Tests', () => {
           created_at: presenter.created_at,
         });
 
-        expect(presenter.id).toBe(entity.id);
+        expect(presenter.id).toBe(foundEntity.id);
         expect(presenter.name).toBe(expectedPresenter.name);
         expect(presenter.description).toBe(expectedPresenter.description);
         expect(presenter.is_active).toBe(expectedPresenter.is_active);
-        expect(presenter.created_at).toStrictEqual(entity.created_at);
+        expect(presenter.created_at).toStrictEqual(foundEntity.created_at);
       },
     );
   });
   it('should delete a category', async () => {
-    const model = await CategorySequelize.CategoryModel.factory().create();
-    const response = await controller.remove(model.id);
+    const entity = Category.fake().aCategory().build();
+    await repository.insert(entity);
+    const response = await controller.remove(entity.id);
     expect(response).toBeUndefined();
-    expect(repository.findById(model.id)).rejects.toThrowError(
-      new NotFoundError(`Entity not found using ID ${model.id}`),
+    expect(repository.findById(entity.id)).rejects.toThrowError(
+      new NotFoundError(`Entity not found using ID ${entity.id}`),
     );
   });
 
   it('should find a category', async () => {
-    const model = await CategorySequelize.CategoryModel.factory().create();
-    const expectedPresenter = new CategoryPresenter(model.toJSON());
-    const presenter = await controller.findOne(model.id);
+    const entity = Category.fake().aCategory().build();
+    await repository.insert(entity);
+    const expectedPresenter = new CategoryPresenter(entity.toJSON());
+    const presenter = await controller.findOne(entity.id);
     expect(presenter).toStrictEqual(expectedPresenter);
-    expect(presenter.id).toBe(model.id);
+    expect(presenter.id).toBe(entity.id);
     expect(presenter.name).toBe(expectedPresenter.name);
     expect(presenter.description).toBe(expectedPresenter.description);
     expect(presenter.is_active).toBe(expectedPresenter.is_active);
-    expect(presenter.created_at).toStrictEqual(model.created_at);
+    expect(presenter.created_at).toStrictEqual(entity.created_at);
   });
 });
