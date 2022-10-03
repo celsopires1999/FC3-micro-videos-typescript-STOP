@@ -2,7 +2,7 @@ import {
   CategoryOutput,
   ListCategoriesUseCase,
 } from '@fc/micro-videos/category/application';
-import { Transform, Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 
 export class CategoryPresenter {
   id: string;
@@ -63,19 +63,11 @@ export abstract class CollectionPresenter {
 }
 
 export class CategoryCollectionPresenter extends CollectionPresenter {
-  // @Exclude()
-  // protected _data: CategoryPresenter[];
   data: CategoryPresenter[];
 
   constructor(output: ListCategoriesUseCase.Output) {
     const { items, ...paginationProps } = output;
     super(paginationProps);
-    // this._data = items.map((item) => new CategoryPresenter(item));
     this.data = items.map((item) => new CategoryPresenter(item));
   }
-
-  // @Expose({ name: 'data' })
-  // get data() {
-  //   return this._data;
-  // }
 }
