@@ -11,7 +11,7 @@ export default {
   },
   coverageProvider: 'v8',
   collectCoverageFrom: ['**/*.(t|j)s'],
-  coverageDirectory: '<rootDir>/../__coverage/nestjs',
+  coverageDirectory: '../__coverage',
   coverageReporters: ['json', 'html'],
   coverageThreshold: {
     global: {
