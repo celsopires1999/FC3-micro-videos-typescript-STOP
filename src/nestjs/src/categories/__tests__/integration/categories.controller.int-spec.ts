@@ -56,24 +56,18 @@ describe('CategoriesController Integration Tests', () => {
     const arrange = CategoryFixture.arrangeForSave();
 
     test.each(arrange)(
-      'with request $request',
+      'when body is $send_data',
       async ({ send_data, expected }) => {
         const presenter = await controller.create(send_data);
         const entity = await repository.findById(presenter.id);
 
-        expect(entity).toMatchObject({
+        expect(entity.toJSON()).toStrictEqual({
           id: presenter.id,
-          name: expected.name,
-          description: expected.description,
-          is_active: expected.is_active,
           created_at: presenter.created_at,
+          ...expected,
         });
 
-        expect(presenter.id).toBe(entity.id);
-        expect(presenter.name).toBe(expected.name);
-        expect(presenter.description).toBe(expected.description);
-        expect(presenter.is_active).toBe(expected.is_active);
-        expect(presenter.created_at).toStrictEqual(entity.created_at);
+        expect(presenter).toEqual(new CategoryPresenter(entity));
       },
     );
   });
