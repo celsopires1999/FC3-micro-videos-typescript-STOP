@@ -7,15 +7,15 @@ import {
   UpdateCategoryUseCase,
 } from '@fc/micro-videos/category/application';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Inject,
-  Put,
+  Get,
   HttpCode,
+  Inject,
+  Param,
+  Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';

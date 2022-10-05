@@ -1,12 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { CategoryRepository } from '@fc/micro-videos/category/domain';
 import { INestApplication } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import { instanceToPlain } from 'class-transformer';
 import request from 'supertest';
 import { AppModule } from '../../src/app.module';
-import { CategoryRepository } from '@fc/micro-videos/category/domain';
+import { CategoriesController } from '../../src/categories/categories.controller';
 import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { CategoryFixture } from '../../src/categories/fixtures';
-import { CategoriesController } from '../../src/categories/categories.controller';
-import { instanceToPlain } from 'class-transformer';
+import { applyGlobalConfig } from '../../src/global-config';
 
 describe('CategoriesController (e2e)', () => {
   let app: INestApplication;
@@ -21,6 +22,7 @@ describe('CategoriesController (e2e)', () => {
     );
 
     app = moduleFixture.createNestApplication();
+    applyGlobalConfig(app);
     await app.init();
   });
 
