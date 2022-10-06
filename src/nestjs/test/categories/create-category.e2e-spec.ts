@@ -27,42 +27,47 @@ describe('CategoriesController (e2e)', () => {
   });
 
   describe('POST / categories', () => {
-    it('validation', async () => {
-      const res = await request(app.getHttpServer())
-        .post('/categories')
-        .send()
-        .expect(422);
-
-      console.log(res.body);
-    });
-
-    describe('should create a category', () => {
-      const arrange = CategoryFixture.arrangeForSave();
+    describe('should give a response error with 422 when request body is invalid', () => {
+      const arrange = CategoryFixture.arrangeInvalidRequest();
       test.each(arrange)(
-        'when body is $send_data',
+        'body contents: $label',
         async ({ send_data, expected }) => {
-          const res = await request(app.getHttpServer())
+          await request(app.getHttpServer())
             .post('/categories')
             .send(send_data)
-            .expect(201);
-          const keysInResponse = CategoryFixture.keysInResponse();
-          expect(Object.keys(res.body)).toStrictEqual(['data']);
-          expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
-          const id = res.body.data.id;
-          const category = await categoryRepo.findById(id);
-
-          const presenter = CategoriesController.categoryToResponse(
-            category.toJSON(),
-          );
-          const serialized = instanceToPlain(presenter);
-          expect(res.body.data).toMatchObject(serialized);
-          expect(res.body.data).toStrictEqual({
-            id: serialized.id,
-            created_at: serialized.created_at,
-            ...expected,
-          });
+            .expect(422)
+            .expect(expected);
         },
       );
     });
+  });
+
+  describe('should create a category', () => {
+    const arrange = CategoryFixture.arrangeForSave();
+    test.each(arrange)(
+      'when body is $send_data',
+      async ({ send_data, expected }) => {
+        const res = await request(app.getHttpServer())
+          .post('/categories')
+          .send(send_data)
+          .expect(201);
+        const keysInResponse = CategoryFixture.keysInResponse();
+        expect(Object.keys(res.body)).toStrictEqual(['data']);
+        expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
+        const id = res.body.data.id;
+        const category = await categoryRepo.findById(id);
+
+        const presenter = CategoriesController.categoryToResponse(
+          category.toJSON(),
+        );
+        const serialized = instanceToPlain(presenter);
+        expect(res.body.data).toMatchObject(serialized);
+        expect(res.body.data).toStrictEqual({
+          id: serialized.id,
+          created_at: serialized.created_at,
+          ...expected,
+        });
+      },
+    );
   });
 });
