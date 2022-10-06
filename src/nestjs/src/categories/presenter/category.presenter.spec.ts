@@ -1,5 +1,9 @@
-import { CategoryPresenter } from './category.presenter';
 import { instanceToPlain } from 'class-transformer';
+import { PaginationPresenter } from '../../@share/presenters/pagination.presenter';
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from './category.presenter';
 
 describe('CategoryPresenter Unit Tests', () => {
   describe('constructor', () => {
@@ -37,6 +41,100 @@ describe('CategoryPresenter Unit Tests', () => {
         is_active: true,
         created_at: created_at.toISOString(),
       });
+    });
+  });
+});
+
+describe('CategoryCollectionPresenter Unit Tests', () => {
+  describe('constructor', () => {
+    it('should set values', () => {
+      const created_at = new Date();
+      const item = {
+        id: '1c117595-7878-48c6-8e5b-fc525e9fe5ee',
+        name: 'movie',
+        description: 'some description',
+        is_active: true,
+        created_at,
+      };
+      const presenter = new CategoryCollectionPresenter({
+        items: [item],
+        current_page: 1,
+        per_page: 2,
+        last_page: 3,
+        total: 4,
+      });
+
+      expect(presenter.meta).toBeInstanceOf(PaginationPresenter);
+      expect(presenter.meta).toEqual(
+        new PaginationPresenter({
+          current_page: 1,
+          per_page: 2,
+          last_page: 3,
+          total: 4,
+        }),
+      );
+      expect(presenter.data).toStrictEqual([new CategoryPresenter(item)]);
+    });
+  });
+
+  it('should present data', () => {
+    const item = {
+      id: '1c117595-7878-48c6-8e5b-fc525e9fe5ee',
+      name: 'movie',
+      description: 'some description',
+      is_active: true,
+      created_at: new Date(),
+    };
+    let presenter = new CategoryCollectionPresenter({
+      items: [item],
+      current_page: 1,
+      per_page: 2,
+      last_page: 3,
+      total: 4,
+    });
+
+    expect(instanceToPlain(presenter)).toStrictEqual({
+      meta: {
+        current_page: 1,
+        per_page: 2,
+        last_page: 3,
+        total: 4,
+      },
+      data: [
+        {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          is_active: item.is_active,
+          created_at: item.created_at.toISOString(),
+        },
+      ],
+    });
+
+    presenter = new CategoryCollectionPresenter({
+      items: [item],
+      current_page: '1' as any,
+      per_page: '2' as any,
+      last_page: '3' as any,
+      total: '4' as any,
+    });
+
+    expect(instanceToPlain(presenter)).toStrictEqual({
+      meta: {
+        current_page: 1,
+        per_page: 2,
+        last_page: 3,
+        total: 4,
+      },
+      data: [
+        {
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          is_active: item.is_active,
+          created_at: item.created_at.toISOString(),
+        },
+      ],
     });
   });
 });

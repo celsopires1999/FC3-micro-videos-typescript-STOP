@@ -1,4 +1,5 @@
 import {
+  CategoryOutput,
   CreateCategoryUseCase,
   DeleteCategoryUseCase,
   GetCategoryUseCase,
@@ -6,21 +7,26 @@ import {
   UpdateCategoryUseCase,
 } from '@fc/micro-videos/category/application';
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Param,
+  Controller,
   Delete,
-  Inject,
-  Put,
+  Get,
   HttpCode,
+  Inject,
+  Param,
+  Post,
+  Put,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SearchCategoryDto } from './dto/search-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { CategoryPresenter } from './presenter/category.presenter';
+import {
+  CategoryCollectionPresenter,
+  CategoryPresenter,
+} from './presenter/category.presenter';
 
 @Controller('categories')
 export class CategoriesController {
@@ -42,18 +48,20 @@ export class CategoriesController {
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     const output = await this.createUseCase.execute(createCategoryDto);
-    return new CategoryPresenter(output);
+    return CategoriesController.categoryToResponse(output);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    return this.updateUseCase.execute({
+    const output = await this.updateUseCase.execute({
       id,
       ...updateCategoryDto,
     });
+
+    return CategoriesController.categoryToResponse(output);
   }
 
   @HttpCode(204)
@@ -63,12 +71,18 @@ export class CategoriesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.getUseCase.execute({ id });
+  async findOne(@Param('id') id: string) {
+    const output = await this.getUseCase.execute({ id });
+    return CategoriesController.categoryToResponse(output);
   }
 
   @Get()
-  search(@Query() searchParams: SearchCategoryDto) {
-    return this.listUseCase.execute(searchParams);
+  async search(@Query() searchParams: SearchCategoryDto) {
+    const output = await this.listUseCase.execute(searchParams);
+    return new CategoryCollectionPresenter(output);
+  }
+
+  static categoryToResponse(output: CategoryOutput) {
+    return new CategoryPresenter(output);
   }
 }

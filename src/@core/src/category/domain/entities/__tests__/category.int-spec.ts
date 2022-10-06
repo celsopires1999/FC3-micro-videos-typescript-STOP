@@ -1,5 +1,4 @@
-// import { ValidationError } from "../../../@seedwork/domain/errors/validation-error";
-import Category from "./category";
+import Category from "./../category";
 
 describe("Category Integration Tests", () => {
   describe("create method", () => {
