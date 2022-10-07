@@ -53,16 +53,13 @@ describe('CategoriesController (e2e)', () => {
     describe('should give a response error with 422 when request body is invalid', () => {
       const app = startApp();
       const arrange = CategoryFixture.arrangeInvalidRequest();
-      test.each(arrange)(
-        'body contents: $label',
-        async ({ send_data, expected }) => {
-          await request(app.app.getHttpServer())
-            .post('/categories')
-            .send(send_data)
-            .expect(422)
-            .expect(expected);
-        },
-      );
+      test.each(arrange)('body contents: $label', ({ send_data, expected }) => {
+        return request(app.app.getHttpServer())
+          .post('/categories')
+          .send(send_data)
+          .expect(422)
+          .expect(expected);
+      });
     });
 
     describe('should give a response error with 422 when throw EntityValidationError', () => {
