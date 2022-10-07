@@ -9,6 +9,29 @@ import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { CategoryFixture } from '../../src/categories/fixtures';
 import { applyGlobalConfig } from '../../src/global-config';
 
+function startApp({
+  beforeInit,
+}: { beforeInit?: (app: INestApplication) => void } = {}) {
+  let _app: INestApplication;
+
+  beforeEach(async () => {
+    const moduleFixture: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    _app = moduleFixture.createNestApplication();
+    applyGlobalConfig(_app);
+    beforeInit && beforeInit(_app);
+    await _app.init();
+  });
+
+  return {
+    get app() {
+      return _app;
+    },
+  };
+}
+
 describe('CategoriesController (e2e)', () => {
   let app: INestApplication;
   let categoryRepo: CategoryRepository.Repository;
@@ -28,11 +51,31 @@ describe('CategoriesController (e2e)', () => {
 
   describe('POST / categories', () => {
     describe('should give a response error with 422 when request body is invalid', () => {
+      const app = startApp();
       const arrange = CategoryFixture.arrangeInvalidRequest();
       test.each(arrange)(
         'body contents: $label',
         async ({ send_data, expected }) => {
-          await request(app.getHttpServer())
+          await request(app.app.getHttpServer())
+            .post('/categories')
+            .send(send_data)
+            .expect(422)
+            .expect(expected);
+        },
+      );
+    });
+
+    describe('should give a response error with 422 when throw EntityValidationError', () => {
+      const app = startApp({
+        beforeInit: (app) => {
+          app['config'].globalPipes = [];
+        },
+      });
+      const arrange = CategoryFixture.arrangeInvalidRequest();
+      test.each(arrange)(
+        'body contents: $label',
+        async ({ send_data, expected }) => {
+          await request(app.app.getHttpServer())
             .post('/categories')
             .send(send_data)
             .expect(422)
@@ -43,11 +86,17 @@ describe('CategoriesController (e2e)', () => {
   });
 
   describe('should create a category', () => {
+    const app = startApp();
     const arrange = CategoryFixture.arrangeForSave();
+    beforeEach(() => {
+      categoryRepo = app.app.get<CategoryRepository.Repository>(
+        CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
+      );
+    });
     test.each(arrange)(
       'when body is $send_data',
       async ({ send_data, expected }) => {
-        const res = await request(app.getHttpServer())
+        const res = await request(app.app.getHttpServer())
           .post('/categories')
           .send(send_data)
           .expect(201);

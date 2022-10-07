@@ -158,4 +158,18 @@ export class CategoryFixture {
       },
     ];
   }
+
+  static arrangeInvalidEntityValidationError() {
+    return [
+      {
+        label: 'NAME TOO LONG',
+        send_data: {
+          name: Category.fake().aCategory().withInvalidNameTooLong().name,
+        },
+        expected: {
+          message: ['xxx'],
+        },
+      },
+    ];
+  }
 }
