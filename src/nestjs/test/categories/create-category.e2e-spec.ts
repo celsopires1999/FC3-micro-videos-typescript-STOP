@@ -68,17 +68,14 @@ describe('CategoriesController (e2e)', () => {
           app['config'].globalPipes = [];
         },
       });
-      const arrange = CategoryFixture.arrangeInvalidRequest();
-      test.each(arrange)(
-        'body contents: $label',
-        async ({ send_data, expected }) => {
-          await request(app.app.getHttpServer())
-            .post('/categories')
-            .send(send_data)
-            .expect(422)
-            .expect(expected);
-        },
-      );
+      const arrange = CategoryFixture.arrangeForEntityValidationError();
+      test.each(arrange)('body contents: $label', ({ send_data, expected }) => {
+        return request(app.app.getHttpServer())
+          .post('/categories')
+          .send(send_data)
+          .expect(422)
+          .expect(expected);
+      });
     });
   });
 

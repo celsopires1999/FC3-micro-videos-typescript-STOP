@@ -159,15 +159,117 @@ export class CategoryFixture {
     ];
   }
 
-  static arrangeInvalidEntityValidationError() {
+  static arrangeForEntityValidationError() {
+    const faker = Category.fake().aCategory();
+    const defaultExpected = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+    };
+
     return [
+      {
+        label: 'EMPTY',
+        send_data: {},
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME UNDEFINED',
+        send_data: {
+          name: faker.withInvalidNameEmpty(undefined).name,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME NULL',
+        send_data: {
+          name: faker.withInvalidNameEmpty(null).name,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME EMPTY',
+        send_data: {
+          name: faker.withInvalidNameEmpty('').name,
+        },
+        expected: {
+          message: ['name should not be empty'],
+          ...defaultExpected,
+        },
+      },
       {
         label: 'NAME TOO LONG',
         send_data: {
-          name: Category.fake().aCategory().withInvalidNameTooLong().name,
+          name: faker.withInvalidNameTooLong().name,
         },
         expected: {
-          message: ['xxx'],
+          message: ['name must be shorter than or equal to 255 characters'],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'DESCRIPTION NOT A STRING',
+        send_data: {
+          description: faker.withInvalidDescriptionNotAString().description,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+            'description must be a string',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'IS_ACTIVE EMPTY',
+        send_data: {
+          is_active: faker.withInvalidIsActiveEmpty('').is_active,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+            'is_active must be a boolean value',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'IS_ACTIVE NOT A BOOLEAN',
+        send_data: {
+          is_active: faker.withInvalidIsActiveNotABoolean().is_active,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+            'is_active must be a boolean value',
+          ],
+          ...defaultExpected,
         },
       },
     ];
