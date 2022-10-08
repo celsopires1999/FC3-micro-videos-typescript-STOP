@@ -1,4 +1,4 @@
-import { of, throwError } from 'rxjs';
+import { lastValueFrom, of } from 'rxjs';
 import { WrapperDataInterceptor } from './wrapper-data.interceptor';
 
 describe('WrapperDataInterceptor Unit Tests', () => {
@@ -7,36 +7,25 @@ describe('WrapperDataInterceptor Unit Tests', () => {
   beforeEach(() => {
     interceptor = new WrapperDataInterceptor();
   });
-  it('should wrapper with data key', (done) => {
-    expect(interceptor).toBeDefined();
+
+  it('should wrapper with data key', async () => {
+    const interceptor = new WrapperDataInterceptor();
     const obs$ = interceptor.intercept({} as any, {
       handle: () => of({ name: 'test' }),
     });
-    obs$
-      .subscribe({
-        next: (value) => {
-          expect(value).toStrictEqual({ data: { name: 'test' } });
-        },
-      })
-      .add(() => {
-        return done();
-      });
+
+    expect(await lastValueFrom(obs$)).toStrictEqual({
+      data: { name: 'test' },
+    });
   });
 
-  it('should not wrapper when meta key is present', (done) => {
+  it('should not wrapper when meta key is present', async () => {
     expect(interceptor).toBeDefined();
     const result = { data: [{ name: 'test' }], meta: { total: 1 } };
     const obs$ = interceptor.intercept({} as any, {
       handle: () => of(result),
     });
-    obs$
-      .subscribe({
-        next: (value) => {
-          expect(value).toEqual({ ...result });
-        },
-      })
-      .add(() => {
-        return done();
-      });
+
+    expect(await lastValueFrom(obs$)).toStrictEqual({ ...result });
   });
 });
