@@ -6,64 +6,52 @@ export class CategoryFixture {
   }
 
   static arrangeForSave() {
-    const name = 'Movie';
-    const description = 'A good movie';
+    const faker = Category.fake()
+      .aCategory()
+      .withName('Movie')
+      .withDescription('A good movie')
+      .build();
     return [
       {
-        send_data: { name: name },
+        send_data: { name: faker.name },
         expected: {
-          name: name,
           description: null,
           is_active: true,
         },
       },
       {
-        send_data: { name: name, description: null },
+        send_data: { name: faker.name, description: null },
         expected: {
-          name: name,
-          description: null,
           is_active: true,
         },
       },
       {
-        send_data: { name: name, is_active: true },
+        send_data: { name: faker.name, is_active: true },
         expected: {
-          name: name,
           description: null,
-          is_active: true,
         },
       },
       {
-        send_data: { name: name, is_active: false },
+        send_data: { name: faker.name, is_active: false },
         expected: {
-          name: name,
           description: null,
-          is_active: false,
         },
       },
       {
         send_data: {
-          name: name,
-          description: description,
+          name: faker.name,
+          description: faker.description,
           is_active: true,
         },
-        expected: {
-          name: name,
-          description: description,
-          is_active: true,
-        },
+        expected: {},
       },
       {
         send_data: {
-          name: name,
-          description: description,
+          name: faker.name,
+          description: faker.description,
           is_active: false,
         },
-        expected: {
-          name: name,
-          description: description,
-          is_active: false,
-        },
+        expected: {},
       },
     ];
   }
@@ -273,5 +261,48 @@ export class CategoryFixture {
         },
       },
     ];
+  }
+}
+
+export class CreateCategoryFixture {
+  static keysInResponse() {
+    return CategoryFixture.keysInResponse();
+  }
+
+  static arrangeForSave() {
+    return CategoryFixture.arrangeForSave();
+  }
+
+  static arrangeInvalidRequest() {
+    return CategoryFixture.arrangeInvalidRequest();
+  }
+
+  static arrangeForEntityValidationError() {
+    return CategoryFixture.arrangeForEntityValidationError();
+  }
+}
+
+export class UpdateCategoryFixture {
+  static keysInResponse() {
+    return CategoryFixture.keysInResponse();
+  }
+
+  static arrangeForSave() {
+    return CategoryFixture.arrangeForSave();
+  }
+
+  static arrangeInvalidRequest() {
+    return CategoryFixture.arrangeInvalidRequest();
+  }
+
+  static arrangeForEntityValidationError() {
+    const removeTests = ['IS_ACTIVE EMPTY', 'IS_ACTIVE NOT A BOOLEAN'];
+    const tests = CategoryFixture.arrangeForEntityValidationError();
+
+    return tests.filter((test) => {
+      if (!removeTests.includes(test.label)) {
+        return test;
+      }
+    });
   }
 }
