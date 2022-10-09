@@ -37,10 +37,10 @@ describe('CategoriesController (e2e)', () => {
 
   describe('PUT / categories:id', () => {
     describe('should give a response error with 422 when request body is invalid', () => {
-      const app = startApp();
+      const nestApp = startApp();
       const arrange = UpdateCategoryFixture.arrangeInvalidRequest();
       test.each(arrange)('body contents: $label', ({ send_data, expected }) => {
-        return request(app.app.getHttpServer())
+        return request(nestApp.app.getHttpServer())
           .put(`/categories/${uuid}`)
           .send(send_data)
           .expect(422)
@@ -49,7 +49,7 @@ describe('CategoriesController (e2e)', () => {
     });
 
     describe('should give a response error with 422 when throw EntityValidationError', () => {
-      const app = startApp({
+      const nestApp = startApp({
         beforeInit: (app) => {
           app['config'].globalPipes = [];
         },
@@ -58,7 +58,7 @@ describe('CategoriesController (e2e)', () => {
       let categoryRepo: CategoryRepository.Repository;
 
       beforeEach(() => {
-        categoryRepo = app.app.get<CategoryRepository.Repository>(
+        categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
       });
@@ -66,51 +66,79 @@ describe('CategoriesController (e2e)', () => {
       test.each(arrange)('body contents: $label', ({ send_data, expected }) => {
         const category = Category.fake().aCategory().build();
         categoryRepo.insert(category);
-        return request(app.app.getHttpServer())
+        return request(nestApp.app.getHttpServer())
           .put(`/categories/${category.id}`)
           .send(send_data)
           .expect(422)
           .expect(expected);
       });
     });
-  });
 
-  describe('should update a category', () => {
-    const app = startApp();
-    const arrange = UpdateCategoryFixture.arrangeForSave();
-    let categoryRepo: CategoryRepository.Repository;
-    beforeEach(() => {
-      categoryRepo = app.app.get<CategoryRepository.Repository>(
-        CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
+    describe('should give a response error with 404 when id is invalid or not found', () => {
+      const nestApp = startApp();
+      const faker = Category.fake().aCategory();
+      const arrange = [
+        {
+          label: 'NOT FOUND',
+          id: 'd0ba5077-fb6d-406f-bd05-8c521ba9425a',
+          send_data: { name: faker.name },
+          expected: {
+            statusCode: 404,
+            error: 'Not Found',
+            message:
+              'Entity not found using ID d0ba5077-fb6d-406f-bd05-8c521ba9425a',
+          },
+        },
+      ];
+      test.each(arrange)(
+        'id contents: $label',
+        ({ id, send_data, expected }) => {
+          return request(nestApp.app.getHttpServer())
+            .put(`/categories/${id}`)
+            .send(send_data)
+            .expect(expected.statusCode)
+            .expect(expected);
+        },
       );
     });
-    test.each(arrange)(
-      'when body is $send_data',
-      async ({ send_data, expected }) => {
-        const createdCategory = Category.fake().aCategory().build();
-        categoryRepo.insert(createdCategory);
-        const res = await request(app.app.getHttpServer())
-          .put(`/categories/${createdCategory.id}`)
-          .send(send_data)
-          .expect(200);
-        const keysInResponse = UpdateCategoryFixture.keysInResponse();
-        expect(Object.keys(res.body)).toStrictEqual(['data']);
-        expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
-        const id = res.body.data.id;
-        const updatedCategory = await categoryRepo.findById(id);
 
-        const presenter = CategoriesController.categoryToResponse(
-          updatedCategory.toJSON(),
+    describe('should update a category', () => {
+      const nestApp = startApp();
+      const arrange = UpdateCategoryFixture.arrangeForSave();
+      let categoryRepo: CategoryRepository.Repository;
+      beforeEach(() => {
+        categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
+          CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
-        const serialized = instanceToPlain(presenter);
-        expect(res.body.data).toMatchObject(serialized);
-        expect(res.body.data).toStrictEqual({
-          id: serialized.id,
-          created_at: serialized.created_at,
-          ...send_data,
-          ...expected,
-        });
-      },
-    );
+      });
+      test.each(arrange)(
+        'when body is $send_data',
+        async ({ send_data, expected }) => {
+          const createdCategory = Category.fake().aCategory().build();
+          categoryRepo.insert(createdCategory);
+          const res = await request(nestApp.app.getHttpServer())
+            .put(`/categories/${createdCategory.id}`)
+            .send(send_data)
+            .expect(200);
+          const keysInResponse = UpdateCategoryFixture.keysInResponse();
+          expect(Object.keys(res.body)).toStrictEqual(['data']);
+          expect(Object.keys(res.body.data)).toStrictEqual(keysInResponse);
+          const id = res.body.data.id;
+          const updatedCategory = await categoryRepo.findById(id);
+
+          const presenter = CategoriesController.categoryToResponse(
+            updatedCategory.toJSON(),
+          );
+          const serialized = instanceToPlain(presenter);
+          expect(res.body.data).toMatchObject(serialized);
+          expect(res.body.data).toStrictEqual({
+            id: serialized.id,
+            created_at: serialized.created_at,
+            ...send_data,
+            ...expected,
+          });
+        },
+      );
+    });
   });
 });
