@@ -64,6 +64,7 @@ describe('CategoriesController Integration Tests', () => {
         expect(entity.toJSON()).toStrictEqual({
           id: presenter.id,
           created_at: presenter.created_at,
+          ...send_data,
           ...expected,
         });
 

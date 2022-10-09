@@ -9,9 +9,8 @@ export namespace CreateCategoryUseCase {
     constructor(private categoryRepo: CategoryRepository.Repository) {}
 
     async execute(input: Input): Promise<Output> {
-      await this.validateExistsName(input.name);
-
       const entity = new Category(input);
+      await this.validateExistsName(input.name);
       await this.categoryRepo.insert(entity);
 
       return CategoryOutputMapper.toOutput(entity);
