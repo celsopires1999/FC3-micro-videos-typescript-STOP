@@ -14,11 +14,10 @@ import {
   HttpCode,
   Inject,
   Param,
+  ParseUUIDPipe,
   Post,
   Put,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { SearchCategoryDto } from './dto/search-category.dto';
@@ -53,7 +52,8 @@ export class CategoriesController {
 
   @Put(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422, version: '4' }))
+    id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
     const output = await this.updateUseCase.execute({
@@ -66,12 +66,18 @@ export class CategoriesController {
 
   @HttpCode(204)
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422, version: '4' }))
+    id: string,
+  ) {
     return this.deleteUseCase.execute({ id });
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(
+    @Param('id', new ParseUUIDPipe({ errorHttpStatusCode: 422, version: '4' }))
+    id: string,
+  ) {
     const output = await this.getUseCase.execute({ id });
     return CategoriesController.categoryToResponse(output);
   }

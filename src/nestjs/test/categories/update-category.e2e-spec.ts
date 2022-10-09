@@ -74,10 +74,20 @@ describe('CategoriesController (e2e)', () => {
       });
     });
 
-    describe('should give a response error with 404 when id is invalid or not found', () => {
+    describe('should give a response error with 422/404 when id is invalid or not found', () => {
       const nestApp = startApp();
       const faker = Category.fake().aCategory();
       const arrange = [
+        {
+          label: 'INVALID',
+          id: 'fake id',
+          send_data: { name: faker.name },
+          expected: {
+            statusCode: 422,
+            error: 'Unprocessable Entity',
+            message: 'Validation failed (uuid v4 is expected)',
+          },
+        },
         {
           label: 'NOT FOUND',
           id: 'd0ba5077-fb6d-406f-bd05-8c521ba9425a',
