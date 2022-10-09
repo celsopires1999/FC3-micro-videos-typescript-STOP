@@ -13,8 +13,17 @@ services:
   db:
     image: mysql:8.0.30-debian
     container_name: micro-videos-typescript-db
+    profiles:
+      - dev
     environment:
       - MYSQL_DATABASE=micro_videos
       - MYSQL_ROOT_PASSWORD=root
     volumes:
       - ./.docker/dbdata:/var/lib/mysql:delegated
+
+  db_test:
+    image: mysql:8.0.30-debian
+    container_name: micro-videos-typescript-db-test
+    environment:
+      - MYSQL_DATABASE=micro_videos
+      - MYSQL_ROOT_PASSWORD=root
