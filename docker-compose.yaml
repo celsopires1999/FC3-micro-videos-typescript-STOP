@@ -25,5 +25,7 @@ services:
     image: mysql:8.0.30-debian
     container_name: micro-videos-typescript-db-test
     environment:
-      - MYSQL_DATABASE=micro_videos
+      - MYSQL_DATABASE=micro_videos_test
       - MYSQL_ROOT_PASSWORD=root
+    tmpfs:
+      - /var/lib/mysql

@@ -1,5 +1,6 @@
 import { CategoryRepository } from '@fc/micro-videos/category/domain';
 import { INestApplication } from '@nestjs/common';
+import { getConnectionToken } from '@nestjs/sequelize';
 import { Test, TestingModule } from '@nestjs/testing';
 import { instanceToPlain } from 'class-transformer';
 import request from 'supertest';
@@ -67,7 +68,9 @@ describe('CategoriesController (e2e)', () => {
       const arrange = CreateCategoryFixture.arrangeForSave();
       let categoryRepo: CategoryRepository.Repository;
 
-      beforeEach(() => {
+      beforeEach(async () => {
+        const sequelize = nestApp.app.get(getConnectionToken());
+        await sequelize.sync({ force: true });
         categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
