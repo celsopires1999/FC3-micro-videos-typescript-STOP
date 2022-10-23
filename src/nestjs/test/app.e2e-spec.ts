@@ -14,6 +14,17 @@ describe('AppController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
   });
+  // it('/ (GET)', async () => {
+  //   const res = await request(app.getHttpServer())
+  //     .get('/')
+  //     .expect(200)
+  //     .expect('Hello World!');
+
+  //   console.log('statusCode:', res.statusCode);
+  //   console.log('res.text: ', res.text);
+  //   console.log('body:', res.body);
+  //   console.log('headers: ', res.headers);
+  // });
 
   it('/ (GET)', (done) => {
     request(app.getHttpServer())
@@ -21,14 +32,8 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .expect('Hello World!')
       .end((err, res) => {
-        if (err) {
-          console.log('err: ', err);
-          console.log('statusCode:', res.statusCode);
-          console.log('res.text: ', res.text);
-          console.log('body:', res.body);
-          console.log('headers: ', res.headers);
-          return done(err);
-        }
+        console.log(err, res.body, res.status, 'aaaaaaa');
+        if (err) return done(err);
         return done();
       });
   });
