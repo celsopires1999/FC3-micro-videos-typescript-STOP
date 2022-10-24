@@ -17,7 +17,7 @@ export class Category extends Entity<CategoryProperties> {
     super(props, id);
     this.description = this.props.description;
     this.is_active = this.props.is_active;
-    this.props.created_at = this.props.created_at ?? new Date();
+    this.created_at = this.props.created_at;
   }
 
   get name(): string {
@@ -46,6 +46,12 @@ export class Category extends Entity<CategoryProperties> {
 
   get created_at(): Date {
     return this.props.created_at;
+  }
+
+  private set created_at(value: Date) {
+    const date = value ?? new Date();
+    date.setMilliseconds(0);
+    this.props.created_at = date;
   }
 
   update(name: string, description: string) {

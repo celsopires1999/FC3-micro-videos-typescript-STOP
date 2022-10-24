@@ -22,7 +22,7 @@ describe("ListCategoriesUseCase Integration Tests", () => {
       Category.fake().aCategory().withCreatedAt(created_at).build(),
       Category.fake()
         .aCategory()
-        .withCreatedAt(new Date(created_at.getTime() + 100))
+        .withCreatedAt(new Date(created_at.getTime() + 1000))
         .build(),
     ];
     repository.bulkInsert(entities);
@@ -42,7 +42,7 @@ describe("ListCategoriesUseCase Integration Tests", () => {
     const entities = Category.fake()
       .theCategories(3)
       .withName((index) => `test ${index}`)
-      .withCreatedAt((index) => new Date(new Date().getTime() + index))
+      .withCreatedAt((index) => new Date(new Date().getTime() + index * 1000))
       .build();
     await repository.bulkInsert(entities);
 

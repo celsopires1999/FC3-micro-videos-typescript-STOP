@@ -63,11 +63,11 @@ describe("CategoryInMemoryRepository Unit Tests", () => {
         new Category({ name: "test", created_at: created_at }),
         new Category({
           name: "TEST",
-          created_at: new Date(created_at.getTime() + 100),
+          created_at: new Date(created_at.getTime() + 1000),
         }),
         new Category({
           name: "fake",
-          created_at: new Date(created_at.getTime() + 200),
+          created_at: new Date(created_at.getTime() + 2000),
         }),
       ];
       const sortedItems = await repository["applySort"](items, null, null);

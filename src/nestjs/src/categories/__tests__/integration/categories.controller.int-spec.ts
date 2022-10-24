@@ -182,7 +182,7 @@ describe('CategoriesController Integration Tests', () => {
       const entities = Category.fake()
         .theCategories(4)
         .withName((index) => `teste ${index}`)
-        .withCreatedAt((index) => new Date(new Date().getTime() + index))
+        .withCreatedAt((index) => new Date(new Date().getTime() + index * 1000))
         .build();
 
       await repository.bulkInsert(entities);

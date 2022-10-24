@@ -56,7 +56,7 @@ export namespace CategorySequelize {
           name: chance.word(),
           description: chance.paragraph(),
           is_active: true,
-          created_at: chance.date(),
+          created_at: new Date(chance.date().setMilliseconds(0)),
         })
       );
     }

@@ -263,15 +263,24 @@ describe("CategoryFakeBuilder Unit Tests", () => {
 
     it("should pass index to created_at factory", () => {
       const date = new Date();
-      faker.withCreatedAt((index) => new Date(date.getTime() + index + 2));
+      date.setMilliseconds(0);
+      faker.withCreatedAt(
+        (index) => new Date(date.getTime() + (index + 2) * 1000)
+      );
       const category = faker.build();
-      expect(category.created_at.getTime()).toBe(date.getTime() + 2);
+      expect(category.created_at.getTime()).toBe(date.getTime() + 2 * 1000);
 
       const fakerMany = CategoryFakeBuilder.theCategories(2);
-      fakerMany.withCreatedAt((index) => new Date(date.getTime() + index + 2));
+      fakerMany.withCreatedAt(
+        (index) => new Date(date.getTime() + (index + 2) * 1000)
+      );
       const categories = fakerMany.build();
-      expect(categories[0].created_at.getTime()).toBe(date.getTime() + 0 + 2);
-      expect(categories[1].created_at.getTime()).toBe(date.getTime() + 1 + 2);
+      expect(categories[0].created_at.getTime()).toBe(
+        date.getTime() + (0 + 2) * 1000
+      );
+      expect(categories[1].created_at.getTime()).toBe(
+        date.getTime() + (1 + 2) * 1000
+      );
     });
 
     it("should create a category", () => {

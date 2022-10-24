@@ -60,7 +60,7 @@ describe("ListCategoriesUseCase Unit Tests", () => {
     });
     const entity2 = new Category({
       name: "category2",
-      created_at: new Date(created_at.getTime() + 100),
+      created_at: new Date(created_at.getTime() + 1000),
     });
 
     repository.items = [entity1, entity2];
@@ -81,11 +81,11 @@ describe("ListCategoriesUseCase Unit Tests", () => {
       new Category({ name: "teste 1" }),
       new Category({
         name: "teste 2",
-        created_at: new Date(new Date().getTime() + 100),
+        created_at: new Date(new Date().getTime() + 1000),
       }),
       new Category({
         name: "teste 3",
-        created_at: new Date(new Date().getTime() + 200),
+        created_at: new Date(new Date().getTime() + 2000),
       }),
     ];
     repository.items = items;
