@@ -7,6 +7,7 @@ export default {
   rootDir: './',
   testRegex: ['.*\\.e2e-spec\\.ts$'],
   maxWorkers: 1,
+  setupFiles: ['<rootDir>/setup-test.ts'],
   moduleNameMapper: {
     '@fc/micro\\-videos/(.*)$':
       '<rootDir>/../../../node_modules/@fc/micro-videos/dist/$1',
