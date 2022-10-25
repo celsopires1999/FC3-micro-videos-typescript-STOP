@@ -66,10 +66,10 @@ describe('CategoriesController (e2e)', () => {
             category.toJSON(),
           );
           const serialized = instanceToPlain(presenter);
-          // expect(res.body.data).toMatchObject(serialized);
-          expect(res.body.data).toMatchObject({
+          expect(res.body.data).toMatchObject(serialized);
+          expect(res.body.data).toStrictEqual({
             id: serialized.id,
-            // created_at: serialized.created_at,
+            created_at: serialized.created_at,
             ...send_data,
             ...expected,
           });
