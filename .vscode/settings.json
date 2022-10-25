@@ -40,5 +40,5 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "jest.jestCommandLine": "npm run test -- --runInBand"
+  "jest.jestCommandLine": "npm run test -- --runInBand --detectOpenHandles --forceExit"
 }
