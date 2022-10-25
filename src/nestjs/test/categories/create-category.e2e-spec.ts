@@ -8,7 +8,7 @@ import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { CreateCategoryFixture } from '../../src/categories/fixtures';
 
 describe('CategoriesController (e2e)', () => {
-  describe('POST / categories', () => {
+  describe('/categories (POST)', () => {
     describe('should give a response error with 422 when request body is invalid', () => {
       const nestApp = startApp();
       const arrange = CreateCategoryFixture.arrangeInvalidRequest();
@@ -43,11 +43,11 @@ describe('CategoriesController (e2e)', () => {
       let categoryRepo: CategoryRepository.Repository;
 
       beforeEach(async () => {
-        const sequelize = nestApp.app.get(getConnectionToken());
-        await sequelize.sync({ force: true });
         categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
+        const sequelize = nestApp.app.get(getConnectionToken());
+        await sequelize.sync({ force: true });
       });
       test.each(arrange)(
         'when body is $send_data',
@@ -66,7 +66,7 @@ describe('CategoriesController (e2e)', () => {
             category.toJSON(),
           );
           const serialized = instanceToPlain(presenter);
-          expect(res.body.data).toMatchObject(serialized);
+          expect(res.body.data).toStrictEqual(serialized);
           expect(res.body.data).toStrictEqual({
             id: serialized.id,
             created_at: serialized.created_at,

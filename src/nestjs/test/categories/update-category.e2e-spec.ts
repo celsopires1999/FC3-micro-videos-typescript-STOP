@@ -1,7 +1,8 @@
 import { Category, CategoryRepository } from '@fc/micro-videos/category/domain';
+import { getConnectionToken } from '@nestjs/sequelize';
 import { instanceToPlain } from 'class-transformer';
-import { startApp } from '../../src/@share/testing/helpers';
 import request from 'supertest';
+import { startApp } from '../../src/@share/testing/helpers';
 import { CategoriesController } from '../../src/categories/categories.controller';
 import { CATEGORY_PROVIDERS } from '../../src/categories/category.providers';
 import { UpdateCategoryFixture } from '../../src/categories/fixtures';
@@ -9,7 +10,7 @@ import { UpdateCategoryFixture } from '../../src/categories/fixtures';
 describe('CategoriesController (e2e)', () => {
   const uuid = '4b1f1c5e-67d8-4142-a286-fae0b1d6032a';
 
-  describe('PUT / categories:id', () => {
+  describe('/categories:id (PUT)', () => {
     describe('should give a response error with 422 when request body is invalid', () => {
       const nestApp = startApp();
       const arrange = UpdateCategoryFixture.arrangeInvalidRequest();
@@ -31,10 +32,12 @@ describe('CategoriesController (e2e)', () => {
       const arrange = UpdateCategoryFixture.arrangeForEntityValidationError();
       let categoryRepo: CategoryRepository.Repository;
 
-      beforeEach(() => {
+      beforeEach(async () => {
         categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
+        const sequelize = nestApp.app.get(getConnectionToken());
+        await sequelize.sync({ force: true });
       });
 
       test.each(arrange)('body contents: $label', ({ send_data, expected }) => {
@@ -90,10 +93,12 @@ describe('CategoriesController (e2e)', () => {
       const nestApp = startApp();
       const arrange = UpdateCategoryFixture.arrangeForSave();
       let categoryRepo: CategoryRepository.Repository;
-      beforeEach(() => {
+      beforeEach(async () => {
         categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
+        const sequelize = nestApp.app.get(getConnectionToken());
+        await sequelize.sync({ force: true });
       });
       test.each(arrange)(
         'when body is $send_data',
@@ -114,7 +119,7 @@ describe('CategoriesController (e2e)', () => {
             updatedCategory.toJSON(),
           );
           const serialized = instanceToPlain(presenter);
-          expect(res.body.data).toMatchObject(serialized);
+          expect(res.body.data).toStrictEqual(serialized);
           expect(res.body.data).toStrictEqual({
             id: serialized.id,
             created_at: serialized.created_at,
