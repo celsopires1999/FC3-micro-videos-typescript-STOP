@@ -50,7 +50,6 @@ export class Category extends Entity<CategoryProperties> {
 
   private set created_at(value: Date) {
     const date = value ?? new Date();
-    date.setMilliseconds(0);
     this.props.created_at = date;
   }
 

@@ -44,7 +44,7 @@ export namespace CategorySequelize {
     @Column({ allowNull: false, type: DataType.BOOLEAN })
     declare is_active: boolean;
 
-    @Column({ allowNull: false, type: DataType.DATE })
+    @Column({ allowNull: false, type: DataType.DATE(3) })
     declare created_at: Date;
 
     static factory() {
@@ -56,7 +56,7 @@ export namespace CategorySequelize {
           name: chance.word(),
           description: chance.paragraph(),
           is_active: true,
-          created_at: new Date(chance.date().setMilliseconds(0)),
+          created_at: chance.date(),
         })
       );
     }

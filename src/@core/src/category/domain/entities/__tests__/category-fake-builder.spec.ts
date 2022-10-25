@@ -263,7 +263,6 @@ describe("CategoryFakeBuilder Unit Tests", () => {
 
     it("should pass index to created_at factory", () => {
       const date = new Date();
-      date.setMilliseconds(0);
       faker.withCreatedAt(
         (index) => new Date(date.getTime() + (index + 2) * 1000)
       );
