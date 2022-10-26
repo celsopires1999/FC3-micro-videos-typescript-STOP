@@ -1,5 +1,4 @@
 import { Category, CategoryRepository } from '@fc/micro-videos/category/domain';
-import { getConnectionToken } from '@nestjs/sequelize';
 import { instanceToPlain } from 'class-transformer';
 import request from 'supertest';
 import { startApp } from '../../src/@share/testing/helpers';
@@ -36,8 +35,6 @@ describe('CategoriesController (e2e)', () => {
         categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
-        const sequelize = nestApp.app.get(getConnectionToken());
-        await sequelize.sync({ force: true });
       });
 
       test.each(arrange)('body contents: $label', ({ send_data, expected }) => {
@@ -97,8 +94,6 @@ describe('CategoriesController (e2e)', () => {
         categoryRepo = nestApp.app.get<CategoryRepository.Repository>(
           CATEGORY_PROVIDERS.REPOSITORIES.CATEGORY_REPOSITORY.provide,
         );
-        const sequelize = nestApp.app.get(getConnectionToken());
-        await sequelize.sync({ force: true });
       });
       test.each(arrange)(
         'when body is $send_data',
