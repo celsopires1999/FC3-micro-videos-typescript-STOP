@@ -44,16 +44,17 @@
     }
   },
   "scripts": {
-    "ts-node": "ts-node",
-    "tsc": "tsc",
-    "tsc:check": "npm run tsc -- --noEmit",
-    "build": "ttsc -b ./tsconfig.json",
     "build:w": "ttsc -b ./tsconfig.json -w",
+    "build": "ttsc -b ./tsconfig.json",
     "clean:tsc": "rm tsconfig.tsbuildinfo",
-    "test": "jest",
-    "test:cov": "npm run test -- --coverage",
+    "cti:make": "sh ./cti.sh",
     "cti": "cti",
-    "cti:make": "sh ./cti.sh"
+    "migrate": "node -r ts-node/register/transpile-only ./src/@seedwork/infra/sequelize/migrator-cli.ts",
+    "test:cov": "npm run test -- --coverage",
+    "test": "jest",
+    "ts-node": "ts-node",
+    "tsc:check": "npm run tsc -- --noEmit",
+    "tsc": "tsc"
   },
   "keywords": [],
   "author": "",
