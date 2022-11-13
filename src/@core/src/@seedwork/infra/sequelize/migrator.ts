@@ -10,7 +10,10 @@ export const migrator = (
     migrations: {
       glob: [
         "*/infra/db/sequelize/migrations/*.{js,ts}",
-        { cwd: join(__dirname, "../../.."), ignore: ["*.d.ts"] },
+        {
+          cwd: join(__dirname, "../../.."),
+          ignore: ["**/*.d.ts", "**/index.ts", "**/index.js"],
+        },
       ],
     },
     context: sequelize,
