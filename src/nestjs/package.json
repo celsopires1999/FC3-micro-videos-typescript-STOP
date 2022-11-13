@@ -6,19 +6,20 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "nest start",
-    "start:dev": "nest start --watch",
-    "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "migrate": "node -r ts-node/register/transpile-only ./src/migrate.ts",
+    "prebuild": "rimraf dist",
+    "start:debug": "nest start --debug --watch",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main",
+    "start": "nest start",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --detectOpenHandles --forceExit --config ./test/jest.config.ts"
+    "test:e2e": "jest --detectOpenHandles --forceExit --config ./test/jest.config.ts",
+    "test:watch": "jest --watch",
+    "test": "jest"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
