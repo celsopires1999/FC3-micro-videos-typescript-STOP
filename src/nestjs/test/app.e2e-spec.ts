@@ -26,7 +26,7 @@ describe('AppController (e2e)', () => {
   //   console.log('headers: ', res.headers);
   // });
 
-  it('/ (GET)', (done) => {
+  it.skip('/ (GET)', (done) => {
     request(app.getHttpServer())
       .get('/')
       .expect(200)
