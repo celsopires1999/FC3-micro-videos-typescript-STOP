@@ -14,6 +14,10 @@ export abstract class Entity<
     return this.uniqueEntityId.value;
   }
 
+  equals(obj: this): boolean {
+    return this.id === obj.id;
+  }
+
   abstract toJSON(): JsonProps;
 }
 

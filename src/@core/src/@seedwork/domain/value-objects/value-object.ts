@@ -12,7 +12,7 @@ export abstract class ValueObject<Value = any> {
     return this._value;
   }
 
-  public equals(obj: this): boolean {
+  equals(obj: this): boolean {
     if (obj === null || obj === undefined) {
       return false;
     }

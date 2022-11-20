@@ -46,4 +46,20 @@ describe("Entity Unit Tests", () => {
       ...arrange,
     });
   });
+
+  it("should not be equal", () => {
+    const arrange = { prop1: "prop1 value", prop2: 123 };
+    const uniqueEntityId = new UniqueEntityId();
+    const entity = new StubEntity(arrange, uniqueEntityId);
+    const otherEntity = new StubEntity(arrange);
+    expect(entity.equals(otherEntity)).toBeFalsy();
+  });
+
+  it("should be equal", () => {
+    const arrange = { prop1: "prop1 value", prop2: 123 };
+    const uniqueEntityId = new UniqueEntityId();
+    const entity = new StubEntity(arrange, uniqueEntityId);
+    const otherEntity = new StubEntity(arrange, uniqueEntityId);
+    expect(entity.equals(otherEntity)).toBeTruthy();
+  });
 });

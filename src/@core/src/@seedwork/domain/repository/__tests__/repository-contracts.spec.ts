@@ -232,6 +232,13 @@ describe("Search Unit Tests", () => {
         ) {
           super({});
         }
+        toJSON(): Required<any> {
+          return {
+            id: this.id.toString(),
+            name: this.name,
+            price: this.price,
+          };
+        }
       }
       type FakeFilter = {
         name: string;
