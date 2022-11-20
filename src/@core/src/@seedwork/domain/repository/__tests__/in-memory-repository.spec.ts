@@ -7,7 +7,17 @@ type StubEntityProps = {
   price: number;
 };
 
-class StubEntity extends Entity<StubEntityProps> {}
+type StubEntityJsonProps = Required<{ id: string } & StubEntityProps>;
+
+class StubEntity extends Entity<StubEntityProps, StubEntityJsonProps> {
+  toJSON(): StubEntityJsonProps {
+    return {
+      id: this.id.toString(),
+      name: this.props.name,
+      price: this.props.price,
+    };
+  }
+}
 class StubInMemoryRepository extends InMemoryRepository<StubEntity> {}
 
 describe("InMemoryRepository Unit Tests", () => {

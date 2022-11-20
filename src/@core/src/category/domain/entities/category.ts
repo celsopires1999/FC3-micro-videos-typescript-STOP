@@ -1,17 +1,19 @@
-import CategoryValidatorFactory from "../validators/category.validator";
 import Entity from "../../../@seedwork/domain/entity/entity";
-import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 import { EntityValidationError } from "../../../@seedwork/domain/errors/validation-error";
+import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
+import CategoryValidatorFactory from "../validators/category.validator";
 import { CategoryFakeBuilder } from "./category-fake-builder";
 
-export interface CategoryProperties {
+export type CategoryProperties = {
   name: string;
   description?: string;
   is_active?: boolean;
   created_at?: Date;
-}
+};
 
-export class Category extends Entity<CategoryProperties> {
+export type CategoryPropsJson = Required<{ id: string } & CategoryProperties>;
+
+export class Category extends Entity<CategoryProperties, CategoryPropsJson> {
   constructor(public readonly props: CategoryProperties, id?: UniqueEntityId) {
     Category.validate(props);
     super(props, id);
@@ -73,6 +75,16 @@ export class Category extends Entity<CategoryProperties> {
 
   deactivate() {
     this.is_active = false;
+  }
+
+  toJSON(): CategoryPropsJson {
+    return {
+      id: this.id.toString(),
+      name: this.name,
+      description: this.description,
+      is_active: this.is_active,
+      created_at: this.created_at,
+    };
   }
 
   static fake() {

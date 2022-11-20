@@ -1,7 +1,7 @@
 import { Category, CategoryRepository } from "#category/domain";
+import { CategorySequelize } from "#category/infra";
 import { NotFoundError, UniqueEntityId } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
-import { CategorySequelize } from "#category/infra";
 import _chance from "chance";
 
 const chance = _chance();
@@ -425,8 +425,14 @@ describe("CategorySequelizeRepository Integration Tests", () => {
 
           search_result: new CategoryRepository.SearchResult({
             items: [
-              new Category(categoriesProps[2]),
-              new Category(categoriesProps[4]),
+              new Category(
+                categoriesProps[2],
+                new UniqueEntityId(categoriesProps[2].id)
+              ),
+              new Category(
+                categoriesProps[4],
+                new UniqueEntityId(categoriesProps[4].id)
+              ),
             ],
             total: 3,
             current_page: 1,
@@ -445,7 +451,12 @@ describe("CategorySequelizeRepository Integration Tests", () => {
             filter: "TEST",
           }),
           search_result: new CategoryRepository.SearchResult({
-            items: [new Category(categoriesProps[0])],
+            items: [
+              new Category(
+                categoriesProps[0],
+                new UniqueEntityId(categoriesProps[0].id)
+              ),
+            ],
             total: 3,
             current_page: 2,
             per_page: 2,
