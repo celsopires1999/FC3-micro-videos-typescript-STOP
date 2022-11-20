@@ -69,4 +69,47 @@ describe("ValueObject Unit Tests", () => {
 
     expect(vo.value.deep.prop3).toBeInstanceOf(Date);
   });
+
+  describe("should not be equal", () => {
+    class StubOtherValueObject extends ValueObject {}
+
+    const vo = new StubValueObject({
+      prop1: "value1",
+      deep: { prop2: "value2", prop3: new Date() },
+    });
+
+    const arrange = [
+      null,
+      undefined,
+      new StubValueObject({}),
+      new StubValueObject({ undefined }),
+      new StubOtherValueObject({
+        prop1: "value1",
+        deep: { prop2: "value2", prop3: new Date() },
+      }),
+      new StubValueObject({
+        prop1: "value1",
+        deep: { prop2: "value2", prop3: new Date(new Date().getTime() + 1000) },
+      }),
+    ];
+
+    test.each(arrange)("test %# -> %o", (item) => {
+      expect(vo.equals(item)).toBeFalsy();
+    });
+  });
+
+  it("should be equal", () => {
+    const date = new Date();
+    const vo = new StubValueObject({
+      prop1: "value1",
+      deep: { prop2: "value2", prop3: date },
+    });
+
+    const voOther = new StubValueObject({
+      prop1: "value1",
+      deep: { prop2: "value2", prop3: date },
+    });
+
+    expect(vo.equals(voOther)).toBeTruthy();
+  });
 });
