@@ -3,9 +3,9 @@ import NotFoundError from "../errors/not-found.error";
 import uniqueEntityId from "../value-objects/unique-entity-id.vo";
 import {
   RepositoryInterface,
+  SearchableRepositoryInterface,
   SearchParams,
   SearchResult,
-  SearchableRepositoryInterface,
   SortDirection,
 } from "./repository-contracts";
 
@@ -69,13 +69,16 @@ export abstract class InMemoryRepository<E extends Entity>
   }
 }
 
-export abstract class InMemorySearchableRepository<E extends Entity>
+export abstract class InMemorySearchableRepository<
+    E extends Entity,
+    Filter = string
+  >
   extends InMemoryRepository<E>
-  implements SearchableRepositoryInterface<E>
+  implements SearchableRepositoryInterface<E, Filter>
 {
   sortableFields: string[] = [];
 
-  async search(props: SearchParams): Promise<SearchResult<E>> {
+  async search(props: SearchParams<Filter>): Promise<SearchResult<E, Filter>> {
     const itemsFiltered = await this.applyFilter(this.items, props.filter);
 
     const itemsSorted = await this.applySort(
@@ -103,7 +106,7 @@ export abstract class InMemorySearchableRepository<E extends Entity>
 
   protected abstract applyFilter(
     items: E[],
-    filter: string | null
+    filter: Filter | null
   ): Promise<E[]>;
 
   protected async applySort(

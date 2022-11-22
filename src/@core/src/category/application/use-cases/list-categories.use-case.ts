@@ -19,10 +19,9 @@ export namespace ListCategoriesUseCase {
     }
 
     private toOutput(searchResult: CategoryRepository.SearchResult): Output {
-      return {
-        items: searchResult.items.map((i) => CategoryOutputMapper.toOutput(i)),
-        ...PaginationOutputMapper.toOutput(searchResult),
-      };
+      const { items: _items, filter, sort, ...otherProps } = searchResult;
+      const items = _items.map((i) => CategoryOutputMapper.toOutput(i));
+      return PaginationOutputMapper.toOutput({ items, ...otherProps });
     }
   }
 
