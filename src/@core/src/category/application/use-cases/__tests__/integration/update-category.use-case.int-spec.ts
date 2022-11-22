@@ -163,7 +163,17 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
         description: i.input.description,
         is_active: i.input.is_active,
       });
+      const updatedEntity = await repository.findById(entity.id);
+
       expect(output).toStrictEqual({
+        id: entity.id,
+        name: i.expected.name,
+        description: i.expected.description,
+        is_active: i.expected.is_active,
+        created_at: i.expected.created_at,
+      });
+
+      expect(updatedEntity.toJSON()).toStrictEqual({
         id: entity.id,
         name: i.expected.name,
         description: i.expected.description,
