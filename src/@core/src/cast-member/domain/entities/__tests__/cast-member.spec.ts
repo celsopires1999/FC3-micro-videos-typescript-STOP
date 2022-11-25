@@ -102,4 +102,18 @@ describe("CastMember Unit Test", () => {
       created_at,
     });
   });
+
+  it("should converte to JSON", () => {
+    const castMember = new CastMember({
+      name: "John Doe",
+      type: CastMemberType.createActor(),
+    });
+
+    expect(castMember.toJSON()).toEqual({
+      id: castMember.id,
+      name: castMember.name,
+      type: castMember.type.code,
+      created_at: castMember.created_at,
+    });
+  });
 });

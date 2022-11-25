@@ -4,7 +4,8 @@
     "baseUrl": "./src",
     "paths": {
       "#seedwork/*": ["./@seedwork/*"],
-      "#category/*": ["./category/*"]
+      "#category/*": ["./category/*"],
+      "#cast-member/*": ["./cast-member/*"]
     },
     "outDir": "./dist",
     "sourceMap": true,

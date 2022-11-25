@@ -11,9 +11,12 @@ export type CastMemberProperties = {
   created_at?: Date;
 };
 
-export type CastMemberPropsJson = Required<
-  { id: string } & CastMemberProperties
->;
+export type CastMemberPropsJson = {
+  id: string;
+  name: string;
+  type: number;
+  created_at: Date;
+};
 
 export class CastMember extends Entity<
   CastMemberProperties,
@@ -72,7 +75,7 @@ export class CastMember extends Entity<
     return {
       id: this.id.toString(),
       name: this.name,
-      type: this.type,
+      type: this.type.code,
       created_at: this.created_at,
     };
   }
