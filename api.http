@@ -37,3 +37,50 @@ Content-Type: application/json
 ###
 DELETE http://localhost:3000/categories/51dde939-d315-44b6-a321-6795550527af
 Content-Type: application/json
+
+
+
+###### Cast Members ######
+
+### Listar ###
+GET http://localhost:3000/cast-members
+
+### Ler 1 ###
+GET http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
+
+### Ler inexistente ###
+GET http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab999
+
+### Id inválido ###
+GET http://localhost:3000/cast-members/fake-id
+
+### criar ###
+POST http://localhost:3000/cast-members
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "type": 1
+}
+
+### alterar ###
+PUT http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
+Content-Type: application/json
+
+{
+    "name": "Mary Doe",
+    "type": 2
+}
+
+### alterar id inválido ###
+PUT http://localhost:3000/cast-members/fake-id
+Content-Type: application/json
+
+{
+    "name": "Error"
+}
+
+### excluir ###
+DELETE http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
+Content-Type: application/json
+

@@ -30,7 +30,7 @@ export namespace CastMemberSequelize {
     created_at: Date;
   };
 
-  @Table({ tableName: "cast-members", timestamps: false })
+  @Table({ tableName: "cast_members", timestamps: false })
   export class CastMemberModel extends Model<CastMemberModelProps> {
     @PrimaryKey
     @Column({ type: DataType.UUID })
