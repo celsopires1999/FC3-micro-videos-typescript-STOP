@@ -2,6 +2,7 @@ import { ListCastMembersUseCase } from "#cast-member/application";
 import {
   CastMemberFakeBuilder,
   CastMemberRepository,
+  CastMemberType,
 } from "#cast-member/domain";
 import { CastMemberInMemoryRepository } from "#cast-member/infra";
 
@@ -103,11 +104,11 @@ describe("ListCastMembersUseCase Unit Tests", () => {
     const faker = CastMemberFakeBuilder.aCastMember();
 
     const entities = [
-      faker.withName("a").build(),
-      faker.withName("AAA").build(),
-      faker.withName("AaA").build(),
-      faker.withName("b").build(),
-      faker.withName("c").build(),
+      faker.withName("a").withType(CastMemberType.createByCode(2)).build(),
+      faker.withName("AAA").withType(CastMemberType.createByCode(1)).build(),
+      faker.withName("AaA").withType(CastMemberType.createByCode(1)).build(),
+      faker.withName("b").withType(CastMemberType.createByCode(2)).build(),
+      faker.withName("c").withType(CastMemberType.createByCode(2)).build(),
     ];
 
     await repository.bulkInsert(entities);
@@ -116,7 +117,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       page: 1,
       per_page: 2,
       sort: "name",
-      filter: "a",
+      filter: { name: "a" },
     });
     expect(output).toStrictEqual({
       items: [entities[1].toJSON(), entities[2].toJSON()],
@@ -130,7 +131,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       page: 2,
       per_page: 2,
       sort: "name",
-      filter: "a",
+      filter: { name: "a" },
     });
     expect(output).toStrictEqual({
       items: [entities[0].toJSON()],
@@ -145,13 +146,41 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       per_page: 2,
       sort: "name",
       sort_dir: "desc",
-      filter: "a",
+      filter: { name: "a" },
     });
     expect(output).toStrictEqual({
       items: [entities[0].toJSON(), entities[2].toJSON()],
       total: 3,
       current_page: 1,
       last_page: 2,
+      per_page: 2,
+    });
+    output = await useCase.execute({
+      page: 1,
+      per_page: 2,
+      sort: "name",
+      sort_dir: "desc",
+      filter: { type: 2 },
+    });
+    expect(output).toStrictEqual({
+      items: [entities[4].toJSON(), entities[3].toJSON()],
+      total: 3,
+      current_page: 1,
+      last_page: 2,
+      per_page: 2,
+    });
+    output = await useCase.execute({
+      page: 1,
+      per_page: 2,
+      sort: "name",
+      sort_dir: "desc",
+      filter: { name: "aa", type: 1 },
+    });
+    expect(output).toStrictEqual({
+      items: [entities[2].toJSON(), entities[1].toJSON()],
+      total: 2,
+      current_page: 1,
+      last_page: 1,
       per_page: 2,
     });
   });

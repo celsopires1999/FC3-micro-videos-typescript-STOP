@@ -28,7 +28,7 @@ export namespace ListCastMembersUseCase {
     }
   }
 
-  export type Input = SearchInputDto;
+  export type Input = SearchInputDto<CastMemberRepository.Filter>;
 
   export type Output = PaginationOutputDto<CastMemberOutput>;
 }

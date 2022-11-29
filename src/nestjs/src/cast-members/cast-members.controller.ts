@@ -23,6 +23,7 @@ import {
 import { CreateCastMemberDto } from './dto/create-cast-member.dto';
 import { SearchCastMemberDto } from './dto/search-cast-member.dto';
 import { UpdateCastMemberDto } from './dto/update-cast-member.dto';
+import { ParseCastMemberSearchPipe } from './pipes/parse-cast-member-search-pipe';
 import {
   CastMemberCollectionPresenter,
   CastMemberPresenter,
@@ -84,7 +85,10 @@ export class CastMembersController {
   }
 
   @Get()
-  async search(@Query() searchParams: SearchCastMemberDto) {
+  async search(
+    @Query(ParseCastMemberSearchPipe)
+    searchParams: SearchCastMemberDto,
+  ) {
     const output = await this.listUseCase.execute(searchParams);
     return new CastMemberCollectionPresenter(output);
   }

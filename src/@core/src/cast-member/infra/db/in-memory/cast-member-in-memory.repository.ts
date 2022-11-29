@@ -4,7 +4,7 @@ import CastMember from "../../../domain/entities/cast-member";
 import { SortDirection } from "@seedwork/domain/repository/repository-contracts";
 
 export class CastMemberInMemoryRepository
-  extends InMemorySearchableRepository<CastMember>
+  extends InMemorySearchableRepository<CastMember, CastMemberRepository.Filter>
   implements CastMemberRepository.Repository
 {
   sortableFields: string[] = ["name", "created_at"];
@@ -21,9 +21,24 @@ export class CastMemberInMemoryRepository
       return items;
     }
 
+    items = this.applyFilterName(items, filter.name);
+    return this.applyFilterType(items, filter.type);
+  }
+
+  private applyFilterName(items: CastMember[], name: string): CastMember[] {
+    if (!name) {
+      return items;
+    }
     return items.filter((i) => {
-      return i.props.name.toLowerCase().includes(filter.toLowerCase());
+      return i.props.name.toLowerCase().includes(name.toLowerCase());
     });
+  }
+
+  private applyFilterType(items: CastMember[], type: number): CastMember[] {
+    if (!type) {
+      return items;
+    }
+    return items.filter((i) => i.props.type.code === type);
   }
 
   protected async applySort(

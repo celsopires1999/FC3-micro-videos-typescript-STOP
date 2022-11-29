@@ -6,7 +6,10 @@ import {
 import { CastMember } from "#cast-member/domain";
 
 export namespace CastMemberRepository {
-  export type Filter = string;
+  export type Filter = {
+    name?: string;
+    type?: number;
+  };
 
   export class SearchParams extends DefaultSearchParams<Filter> {}
   export class SearchResult extends DefaultSearchResult<CastMember, Filter> {}

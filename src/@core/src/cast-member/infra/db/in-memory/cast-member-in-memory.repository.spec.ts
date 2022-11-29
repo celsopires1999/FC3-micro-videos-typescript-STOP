@@ -2,6 +2,7 @@ import {
   CastMember,
   CastMemberFakeBuilder,
   CastMemberRepository,
+  CastMemberType,
 } from "#cast-member/domain";
 import { CastMemberInMemoryRepository } from "#cast-member/infra";
 
@@ -37,19 +38,36 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
     it("should filter using a filter param", async () => {
       const faker = CastMember.fake().aCastMember();
       const items = [
-        faker.withName("test").build(),
-        faker.withName("TEST").build(),
-        faker.withName("fake").build(),
+        faker.withName("test").withType(CastMemberType.createByCode(1)).build(),
+        faker.withName("TEST").withType(CastMemberType.createByCode(2)).build(),
+        faker.withName("fake").withType(CastMemberType.createByCode(1)).build(),
       ];
       const spyFilterMethod = jest.spyOn(items, "filter" as any);
 
-      let filteredItems = await repository["applyFilter"](items, "TEST");
-      expect(filteredItems).toStrictEqual([filteredItems[0], filteredItems[1]]);
+      let filteredItems = await repository["applyFilter"](items, {
+        name: "TEST",
+      });
+      expect(filteredItems).toStrictEqual([items[0], items[1]]);
       expect(spyFilterMethod).toHaveBeenCalledTimes(1);
 
-      filteredItems = await repository["applyFilter"](items, "no-filter");
-      expect(filteredItems).toHaveLength(0);
+      filteredItems = await repository["applyFilter"](items, {
+        type: 1,
+      });
+      expect(filteredItems).toStrictEqual([items[0], items[2]]);
       expect(spyFilterMethod).toHaveBeenCalledTimes(2);
+
+      filteredItems = await repository["applyFilter"](items, {
+        name: "test",
+        type: 2,
+      });
+      expect(filteredItems).toStrictEqual([items[1]]);
+      expect(spyFilterMethod).toHaveBeenCalledTimes(3);
+
+      filteredItems = await repository["applyFilter"](items, {
+        name: "no-filter",
+      });
+      expect(filteredItems).toHaveLength(0);
+      expect(spyFilterMethod).toHaveBeenCalledTimes(4);
     });
   });
 
@@ -148,7 +166,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
 
       const result = await repository.search(
         new CastMemberRepository.SearchParams({
-          filter: "TEST",
+          filter: { name: "TEST" },
           page: 1,
           per_page: 2,
         })
@@ -162,7 +180,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
             per_page: 2,
             sort: null,
             sort_dir: null,
-            filter: "TEST",
+            filter: { name: "TEST" },
           })
         )
       );
@@ -274,7 +292,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
           result: new CastMemberRepository.SearchResult({
             items: [items[2], items[4]],
@@ -283,7 +301,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
         },
         {
@@ -292,7 +310,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
           result: new CastMemberRepository.SearchResult({
             items: [items[0]],
@@ -301,7 +319,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
         },
       ];

@@ -45,8 +45,11 @@ Content-Type: application/json
 ### Listar ###
 GET http://localhost:3000/cast-members
 
+### Listar com search ###
+GET http://localhost:3000/cast-members?type=2&page=1&per_page=15
+
 ### Ler 1 ###
-GET http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
+GET http://localhost:3000/cast-members?name=MaRiA&type=1&page=1&per_page=15
 
 ### Ler inexistente ###
 GET http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab999
@@ -59,7 +62,7 @@ POST http://localhost:3000/cast-members
 Content-Type: application/json
 
 {
-    "name": "John Doe",
+    "name": "Maria Doe",
     "type": 1
 }
 

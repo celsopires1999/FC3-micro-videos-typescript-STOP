@@ -80,7 +80,6 @@ describe('CastMembersController Integration Tests', () => {
     );
   });
 
-  //
   describe('should update a cast member', () => {
     const arrange = UpdateCastMemberFixture.arrangeForSave();
     test.each(arrange)(
@@ -104,7 +103,6 @@ describe('CastMembersController Integration Tests', () => {
       },
     );
   });
-  //
 
   it('should delete a cast member', async () => {
     const entity = CastMember.fake().aCastMember().build();

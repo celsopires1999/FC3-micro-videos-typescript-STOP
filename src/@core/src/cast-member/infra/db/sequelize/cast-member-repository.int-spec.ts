@@ -153,7 +153,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
         per_page: 2,
         sort: "name",
         sort_dir: "asc",
-        filter: "Doe",
+        filter: { name: "Doe" },
       })
     );
     expect(result.items).toHaveLength(1);
@@ -274,7 +274,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
 
       let searchOutputActual = await repository.search(
         new CastMemberRepository.SearchParams({
-          filter: "TEST",
+          filter: { name: "TEST" },
           page: 1,
           per_page: 2,
         })
@@ -287,7 +287,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
         per_page: 2,
         sort: null,
         sort_dir: null,
-        filter: "TEST",
+        filter: { name: "TEST" },
       });
 
       expect(searchOutputActual.toJSON()).toMatchObject(
@@ -296,7 +296,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
 
       searchOutputActual = await repository.search(
         new CastMemberRepository.SearchParams({
-          filter: "TEST",
+          filter: { name: "TEST" },
           page: 2,
           per_page: 2,
         })
@@ -309,7 +309,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
         per_page: 2,
         sort: null,
         sort_dir: null,
-        filter: "TEST",
+        filter: { name: "TEST" },
       });
 
       expect(searchOutputActual.toJSON()).toMatchObject(
@@ -407,11 +407,31 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
 
     describe("should search using filter, sort and paginate", () => {
       const castMembers = [
-        CastMember.fake().aCastMember().withName("test").build(),
-        CastMember.fake().aCastMember().withName("a").build(),
-        CastMember.fake().aCastMember().withName("TEST").build(),
-        CastMember.fake().aCastMember().withName("e").build(),
-        CastMember.fake().aCastMember().withName("TeSt").build(),
+        CastMember.fake()
+          .aCastMember()
+          .withName("test")
+          .withType(CastMemberType.createByCode(1))
+          .build(),
+        CastMember.fake()
+          .aCastMember()
+          .withName("a")
+          .withType(CastMemberType.createByCode(2))
+          .build(),
+        CastMember.fake()
+          .aCastMember()
+          .withName("TEST")
+          .withType(CastMemberType.createByCode(1))
+          .build(),
+        CastMember.fake()
+          .aCastMember()
+          .withName("e")
+          .withType(CastMemberType.createByCode(2))
+          .build(),
+        CastMember.fake()
+          .aCastMember()
+          .withName("TeSt")
+          .withType(CastMemberType.createByCode(2))
+          .build(),
       ];
 
       beforeEach(async () => {
@@ -425,7 +445,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
 
           search_result: new CastMemberRepository.SearchResult({
@@ -435,7 +455,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
         },
         {
@@ -444,7 +464,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
           }),
           search_result: new CastMemberRepository.SearchResult({
             items: [castMembers[0]],
@@ -453,7 +473,43 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
             per_page: 2,
             sort: "name",
             sort_dir: "asc",
-            filter: "TEST",
+            filter: { name: "TEST" },
+          }),
+        },
+        {
+          search_params: new CastMemberRepository.SearchParams({
+            page: 1,
+            per_page: 2,
+            sort: "name",
+            sort_dir: "asc",
+            filter: { type: 1 },
+          }),
+          search_result: new CastMemberRepository.SearchResult({
+            items: [castMembers[2], castMembers[0]],
+            total: 2,
+            current_page: 1,
+            per_page: 2,
+            sort: "name",
+            sort_dir: "asc",
+            filter: { type: 1 },
+          }),
+        },
+        {
+          search_params: new CastMemberRepository.SearchParams({
+            page: 1,
+            per_page: 2,
+            sort: "name",
+            sort_dir: "asc",
+            filter: { name: "TEST", type: 1 },
+          }),
+          search_result: new CastMemberRepository.SearchResult({
+            items: [castMembers[2], castMembers[0]],
+            total: 2,
+            current_page: 1,
+            per_page: 2,
+            sort: "name",
+            sort_dir: "asc",
+            filter: { name: "TEST", type: 1 },
           }),
         },
       ];

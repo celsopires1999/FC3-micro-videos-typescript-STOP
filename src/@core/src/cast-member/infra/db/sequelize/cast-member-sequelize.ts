@@ -83,25 +83,30 @@ export namespace CastMemberSequelize {
       const offset = (props.page - 1) * props.per_page;
       const limit = props.per_page;
 
-      const { rows: models, count } = await this.categoryModel.findAndCountAll({
-        ...(props.filter && {
-          where: { name: { [Op.like]: `%${props.filter}%` } },
-        }),
-        ...(props.sort && this.sortableFields.includes(props.sort)
-          ? { order: this.formatSort(props.sort, props.sort_dir) }
-          : { order: [["created_at", "DESC"]] }),
-        offset,
-        limit,
-      });
-      return new CastMemberRepositoryContract.SearchResult({
-        items: models.map((m) => CastMemberModelMapper.toEntity(m)),
-        current_page: props.page,
-        per_page: props.per_page,
-        total: count,
-        sort: props.sort,
-        sort_dir: props.sort_dir,
-        filter: props.filter,
-      });
+      try {
+        const { rows: models, count } =
+          await this.categoryModel.findAndCountAll({
+            ...this.formatFilter(props.filter),
+            ...(props.sort && this.sortableFields.includes(props.sort)
+              ? { order: this.formatSort(props.sort, props.sort_dir) }
+              : { order: [["created_at", "DESC"]] }),
+            offset,
+            limit,
+          });
+
+        return new CastMemberRepositoryContract.SearchResult({
+          items: models.map((m) => CastMemberModelMapper.toEntity(m)),
+          current_page: props.page,
+          per_page: props.per_page,
+          total: count,
+          sort: props.sort,
+          sort_dir: props.sort_dir,
+          filter: props.filter,
+        });
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
     }
 
     private formatSort(sort: string, sort_dir: SortDirection) {
@@ -110,6 +115,26 @@ export namespace CastMemberSequelize {
         return this.orderBy[dialect][sort](sort_dir);
       }
       return [[sort, sort_dir]];
+    }
+
+    private formatFilter(filter: { name?: string; type?: number }) {
+      if (filter?.name && filter?.type) {
+        return {
+          where: {
+            [Op.and]: [
+              { name: { [Op.like]: `%${filter.name}%` } },
+              { type: { [Op.eq]: filter.type } },
+            ],
+          },
+        };
+      }
+      if (filter?.name) {
+        return { where: { name: { [Op.like]: `%${filter.name}%` } } };
+      }
+      if (filter?.type) {
+        return { where: { type: { [Op.eq]: filter.type } } };
+      }
+      return null;
     }
 
     async insert(entity: CastMember): Promise<void> {

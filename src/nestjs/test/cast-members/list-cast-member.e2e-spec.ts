@@ -53,7 +53,16 @@ describe('CastMembersController (e2e)', () => {
       test.each(arrange)(
         'with send data: $send_data',
         async ({ send_data, expected }) => {
-          const queryParams = new URLSearchParams(send_data as any).toString();
+          const params = {
+            ...(send_data?.page && { page: send_data.page }),
+            ...(send_data?.per_page && { per_page: send_data.per_page }),
+            ...(send_data?.sort && { sort: send_data.sort }),
+            ...(send_data?.sort_dir && { sort_dir: send_data.sort_dir }),
+            ...(send_data?.filter?.name && { name: send_data.filter.name }),
+            ...(send_data?.filter?.type && { type: send_data.filter.type }),
+          };
+
+          const queryParams = new URLSearchParams(params as any).toString();
           const res = await request(nestApp.app.getHttpServer())
             .get(`/cast-members?${queryParams}`)
             .expect(200);

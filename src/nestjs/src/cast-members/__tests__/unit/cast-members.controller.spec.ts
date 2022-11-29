@@ -113,7 +113,7 @@ describe('CastMembersController Unit Tests', () => {
     expect(presenter).toStrictEqual(expectedPresenter);
   });
 
-  it('should list all cast members', async () => {
+  it('should list cast members', async () => {
     const id = '312cffad-1938-489e-a706-643dc9a3cfd3';
     const output: ListCastMembersUseCase.Output = {
       items: [
@@ -140,7 +140,7 @@ describe('CastMembersController Unit Tests', () => {
       page: 1,
       per_page: 2,
       sort_dir: 'desc' as SortDirection,
-      filter: 'test',
+      filter: { name: 'John Doe', type: 1 },
     };
 
     const presenter = await controller.search(searchParams);

@@ -273,11 +273,17 @@ export class ListCastMembersFixture {
     const faker = CastMember.fake().aCastMember();
 
     const entitiesMap = {
-      a: faker.withName('a').build(),
-      AAA: faker.withName('AAA').build(),
-      AaA: faker.withName('AaA').build(),
-      b: faker.withName('b').build(),
-      c: faker.withName('c').build(),
+      a: faker.withName('a').withType(CastMemberType.createByCode(2)).build(),
+      AAA: faker
+        .withName('AAA')
+        .withType(CastMemberType.createByCode(1))
+        .build(),
+      AaA: faker
+        .withName('AaA')
+        .withType(CastMemberType.createByCode(1))
+        .build(),
+      b: faker.withName('b').withType(CastMemberType.createByCode(2)).build(),
+      c: faker.withName('c').withType(CastMemberType.createByCode(2)).build(),
     };
 
     const arrange = [
@@ -286,7 +292,7 @@ export class ListCastMembersFixture {
           page: 1,
           per_page: 2,
           sort: 'name',
-          filter: 'a',
+          filter: { name: 'a' },
         },
         expected: {
           items: [entitiesMap.AAA.toJSON(), entitiesMap.AaA.toJSON()],
@@ -301,7 +307,7 @@ export class ListCastMembersFixture {
           page: 2,
           per_page: 2,
           sort: 'name',
-          filter: 'a',
+          filter: { name: 'a' },
         },
         expected: {
           items: [entitiesMap.a.toJSON()],
@@ -317,7 +323,7 @@ export class ListCastMembersFixture {
           per_page: 2,
           sort: 'name',
           sort_dir: 'desc' as SortDirection,
-          filter: 'a',
+          filter: { name: 'a' },
         },
         expected: {
           items: [entitiesMap.a.toJSON(), entitiesMap.AaA.toJSON()],
@@ -333,7 +339,7 @@ export class ListCastMembersFixture {
           per_page: 2,
           sort: 'name',
           sort_dir: 'desc' as SortDirection,
-          filter: 'a',
+          filter: { name: 'a' },
         },
         expected: {
           items: [entitiesMap.AAA.toJSON()],
@@ -343,6 +349,41 @@ export class ListCastMembersFixture {
           per_page: 2,
         },
       },
+      //
+      {
+        send_data: {
+          page: 1,
+          per_page: 2,
+          sort: 'name',
+          sort_dir: 'desc' as SortDirection,
+          filter: { type: 2 },
+        },
+        expected: {
+          items: [entitiesMap.c.toJSON(), entitiesMap.b.toJSON()],
+          total: 3,
+          current_page: 1,
+          last_page: 2,
+          per_page: 2,
+        },
+      },
+      //
+      {
+        send_data: {
+          page: 1,
+          per_page: 2,
+          sort: 'name',
+          sort_dir: 'desc' as SortDirection,
+          filter: { name: 'aa', type: 1 },
+        },
+        expected: {
+          items: [entitiesMap.AaA.toJSON(), entitiesMap.AAA.toJSON()],
+          total: 2,
+          current_page: 1,
+          last_page: 1,
+          per_page: 2,
+        },
+      },
+      //
     ];
 
     return { arrange, entitiesMap };

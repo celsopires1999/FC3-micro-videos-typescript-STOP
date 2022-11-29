@@ -131,19 +131,19 @@ describe("Search Unit Tests", () => {
         { filter: undefined, expected: null },
         { filter: "", expected: null },
         { filter: "fake", expected: "fake" },
-        { filter: 0, expected: "0" },
-        { filter: -1, expected: "-1" },
-        { filter: 2.1, expected: "2.1" },
-        { filter: true, expected: "true" },
-        { filter: false, expected: "false" },
-        { filter: {}, expected: "[object Object]" },
+        { filter: 0, expected: 0 },
+        { filter: -1, expected: -1 },
+        { filter: 2.1, expected: 2.1 },
+        { filter: true, expected: true },
+        { filter: false, expected: false },
+        { filter: {}, expected: {} },
         { filter: "field", expected: "field" },
       ];
 
       test.each(arrange)(
         "with filter: %filter expected: %expected",
         ({ filter, expected }) => {
-          expect(new SearchParams({ filter: filter as any }).filter).toBe(
+          expect(new SearchParams({ filter: filter as any }).filter).toEqual(
             expected
           );
         }
