@@ -1,15 +1,15 @@
+###### Categories ######
+
+### Listar ###
 GET http://localhost:3000/categories
 
-###
-
+### Ler uma category ###
 GET http://localhost:3000/categories/390102bf-c294-4290-aacf-18107718ad9b
 
-###
-
+### Ler inválido ### 
 GET http://localhost:3000/categories/fake-id
 
-###
-
+### Criar uma categoria ###
 POST http://localhost:3000/categories
 Content-Type: application/json
 
@@ -17,8 +17,7 @@ Content-Type: application/json
     "name": "Movie 1"
 }
 
-###
-
+### Alterar uma categoria ###
 PUT http://localhost:3000/categories/390102bf-c294-4290-aacf-18107718ad9b
 Content-Type: application/json
 
@@ -26,7 +25,7 @@ Content-Type: application/json
     "name": "Movie1111"
 }
 
-###
+### Erro na atualização - fake-id ###
 PUT http://localhost:3000/categories/fake-id
 Content-Type: application/json
 
@@ -34,7 +33,7 @@ Content-Type: application/json
     "name": "Movie1111"
 }
 
-###
+### Exclusão de categoria ###
 DELETE http://localhost:3000/categories/51dde939-d315-44b6-a321-6795550527af
 Content-Type: application/json
 
@@ -45,19 +44,19 @@ Content-Type: application/json
 ### Listar ###
 GET http://localhost:3000/cast-members
 
-### Listar com search ###
+### Buscar por type ###
 GET http://localhost:3000/cast-members?type=2&page=1&per_page=15
 
-### Ler 1 ###
+### Buscar por name e type ###
 GET http://localhost:3000/cast-members?name=MaRiA&type=1&page=1&per_page=15
 
-### Ler inexistente ###
+### Ler inexistente com id válido ###
 GET http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab999
 
 ### Id inválido ###
 GET http://localhost:3000/cast-members/fake-id
 
-### criar ###
+### criar cast member ###
 POST http://localhost:3000/cast-members
 Content-Type: application/json
 
@@ -66,7 +65,7 @@ Content-Type: application/json
     "type": 1
 }
 
-### alterar ###
+### alterar cast member ###
 PUT http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
 Content-Type: application/json
 
@@ -86,4 +85,3 @@ Content-Type: application/json
 ### excluir ###
 DELETE http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
 Content-Type: application/json
-
