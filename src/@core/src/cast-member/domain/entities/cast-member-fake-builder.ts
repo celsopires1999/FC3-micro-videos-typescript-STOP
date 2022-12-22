@@ -1,7 +1,7 @@
 import { UniqueEntityId } from "#seedwork/domain";
 import { Chance } from "chance";
+import { CastMemberType, Types } from "../value-objects/cast-member-type.vo";
 import { CastMember } from "./cast-member";
-import CastMemberType from "./cast-member-type.vo";
 
 type PropOrFactory<T> = T | ((index: number) => T);
 
@@ -9,7 +9,9 @@ export class CastMemberFakeBuilder<TBuild = any> {
   private _unique_entity_id = undefined; // auto generated in entity
   private _name: PropOrFactory<string> = (index) => this.chance.word();
   private _type: PropOrFactory<CastMemberType> = (index) =>
-    CastMemberType.createByCode(this.chance.integer({ min: 1, max: 2 }));
+    CastMemberType.create(
+      this.chance.integer({ min: 1, max: 2 }) as Types
+    ).getOk();
   private _created_at = undefined; // auto generated in entity
 
   private countObjs: number;

@@ -2,8 +2,8 @@ import Entity from "../../../@seedwork/domain/entity/entity";
 import { EntityValidationError } from "../../../@seedwork/domain/errors/validation-error";
 import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 import CastMemberValidatorFactory from "../validators/cast-member.validator";
+import { CastMemberType, Types } from "../value-objects/cast-member-type.vo";
 import { CastMemberFakeBuilder } from "./cast-member-fake-builder";
-import CastMemberType from "./cast-member-type.vo";
 
 export type CastMemberProperties = {
   name: string;
@@ -11,12 +11,9 @@ export type CastMemberProperties = {
   created_at?: Date;
 };
 
-export type CastMemberPropsJson = {
-  id: string;
-  name: string;
-  type: number;
-  created_at: Date;
-};
+export type CastMemberPropsJson = Required<
+  { id: string } & Omit<CastMemberProperties, "type">
+> & { type: Types };
 
 export class CastMember extends Entity<
   CastMemberProperties,
@@ -74,10 +71,9 @@ export class CastMember extends Entity<
   toJSON(): CastMemberPropsJson {
     return {
       id: this.id.toString(),
-      name: this.name,
-      type: this.type.code,
-      created_at: this.created_at,
-    };
+      ...this.props,
+      type: this.type.value,
+    } as CastMemberPropsJson;
   }
 
   static fake() {

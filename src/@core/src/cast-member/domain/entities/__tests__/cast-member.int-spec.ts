@@ -1,4 +1,4 @@
-import CastMemberType from "../cast-member-type.vo";
+import { CastMemberType } from "../../value-objects/cast-member-type.vo";
 import CastMember from "./../cast-member";
 
 describe("CastMember Integration Tests", () => {
@@ -45,7 +45,7 @@ describe("CastMember Integration Tests", () => {
 
     it("should create a cast member with valid attributes", () => {
       expect.assertions(0);
-      const type = CastMemberType.createActor();
+      const type = CastMemberType.createAnActor();
       new CastMember({ name: "John Doe", type }); // NOSONAR
       new CastMember({ name: "John Doe", type, created_at: new Date() }); // NOSONAR
       /* NOSONAR */ new CastMember({
@@ -59,7 +59,7 @@ describe("CastMember Integration Tests", () => {
     it("should throw an error when name is invalid", () => {
       const castMember = new CastMember({
         name: "John Doe",
-        type: CastMemberType.createActor(),
+        type: CastMemberType.createAnActor(),
       });
       expect(() => castMember.update(null, null)).containsErrorMessages({
         name: [
@@ -90,7 +90,7 @@ describe("CastMember Integration Tests", () => {
     it("should throw an error when type is invalid", () => {
       const castMember = new CastMember({
         name: "John Doe",
-        type: CastMemberType.createActor(),
+        type: CastMemberType.createAnActor(),
       });
 
       expect(() =>
@@ -134,9 +134,9 @@ describe("CastMember Integration Tests", () => {
       expect.assertions(0);
       const castMember = new CastMember({
         name: "John Doe",
-        type: CastMemberType.createActor(),
+        type: CastMemberType.createAnActor(),
       });
-      const type = CastMemberType.createDirector();
+      const type = CastMemberType.createADirector();
       castMember.update("Mary Doe", type);
     });
   });

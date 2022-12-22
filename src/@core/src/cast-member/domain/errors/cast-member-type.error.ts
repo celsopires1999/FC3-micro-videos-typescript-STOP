@@ -1,6 +1,6 @@
 export class InvalidCastMemberTypeError extends Error {
-  constructor(message?: string) {
-    super(message || `Invalid params to CastMemberType`);
+  constructor(invalidType: any) {
+    super(`Invalid cast member type: ${invalidType}`);
     this.name = "InvalidCastMemberTypeError";
   }
 }
