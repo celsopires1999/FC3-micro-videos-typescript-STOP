@@ -1,6 +1,7 @@
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { DataType } from "sequelize-typescript";
 import { CastMemberSequelize } from "#cast-member/infra";
+import { CastMemberType } from "#cast-member/domain";
 
 const { CastMemberModel } = CastMemberSequelize;
 
@@ -46,7 +47,7 @@ describe("CastMemberModel Integration Tests", () => {
     const arrange = {
       id: "312cffad-1938-489e-a706-643dc9a3cfd3",
       name: "John Doe",
-      type: 1,
+      type: CastMemberType.createADirector().value,
       created_at: new Date(),
     };
 

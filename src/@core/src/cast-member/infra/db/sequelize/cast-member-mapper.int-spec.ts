@@ -28,6 +28,23 @@ describe("CastMemberMapper Integration Test", () => {
     }
   });
 
+  it("should throw error when cast member type is invalid", () => {
+    const model = CastMemberModel.build({
+      id: "312cffad-1938-489e-a706-643dc9a3cfd3",
+      name: "John Doe",
+      type: 3 as any,
+    });
+    try {
+      CastMemberModelMapper.toEntity(model);
+      fail("The cast member has not thrown a LoadEntityError");
+    } catch (e) {
+      expect(e).toBeInstanceOf(LoadEntityError);
+      expect(e.error).toMatchObject({
+        type: ["Invalid cast member type: 3"],
+      });
+    }
+  });
+
   it("should throw a generic error", () => {
     const model = CastMemberModel.build({
       id: "312cffad-1938-489e-a706-643dc9a3cfd3",
@@ -62,7 +79,7 @@ describe("CastMemberMapper Integration Test", () => {
       new CastMember(
         {
           name: "John Doe",
-          type: CastMemberType.createByCode(1),
+          type: CastMemberType.createADirector(),
           created_at,
         },
         new UniqueEntityId("312cffad-1938-489e-a706-643dc9a3cfd3")
