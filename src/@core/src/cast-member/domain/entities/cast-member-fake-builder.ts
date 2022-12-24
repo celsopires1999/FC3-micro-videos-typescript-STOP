@@ -95,19 +95,19 @@ export class CastMemberFakeBuilder<TBuild = any> {
     return this.countObjs === 1 ? (categories[0] as any) : categories;
   }
 
-  get unique_entity_id() {
+  get unique_entity_id(): UniqueEntityId {
     return this.getValue("unique_entity_id");
   }
 
-  get name() {
+  get name(): string {
     return this.getValue("name");
   }
 
-  get type() {
+  get type(): CastMemberType {
     return this.getValue("type");
   }
 
-  get created_at() {
+  get created_at(): Date {
     return this.getValue("created_at");
   }
 

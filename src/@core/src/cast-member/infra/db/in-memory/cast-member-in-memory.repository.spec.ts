@@ -38,9 +38,12 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
     it("should filter using a filter param", async () => {
       const faker = CastMember.fake().aCastMember();
       const items = [
-        faker.withName("test").withType(CastMemberType.createByCode(1)).build(),
-        faker.withName("TEST").withType(CastMemberType.createByCode(2)).build(),
-        faker.withName("fake").withType(CastMemberType.createByCode(1)).build(),
+        faker
+          .withName("test")
+          .withType(CastMemberType.createADirector())
+          .build(),
+        faker.withName("TEST").withType(CastMemberType.createAnActor).build(),
+        faker.withName("fake").withType(CastMemberType.createADirector).build(),
       ];
       const spyFilterMethod = jest.spyOn(items, "filter" as any);
 
@@ -51,14 +54,14 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
       expect(spyFilterMethod).toHaveBeenCalledTimes(1);
 
       filteredItems = await repository["applyFilter"](items, {
-        type: 1,
+        type: CastMemberType.createADirector(),
       });
       expect(filteredItems).toStrictEqual([items[0], items[2]]);
       expect(spyFilterMethod).toHaveBeenCalledTimes(2);
 
       filteredItems = await repository["applyFilter"](items, {
         name: "test",
-        type: 2,
+        type: CastMemberType.createAnActor(),
       });
       expect(filteredItems).toStrictEqual([items[1]]);
       expect(spyFilterMethod).toHaveBeenCalledTimes(3);
@@ -123,7 +126,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
       repository.items = items;
 
       const result = await repository.search(
-        new CastMemberRepository.SearchParams()
+        CastMemberRepository.SearchParams.create()
       );
 
       expect(JSON.stringify(result)).toStrictEqual(
@@ -165,7 +168,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
       repository.items = items;
 
       const result = await repository.search(
-        new CastMemberRepository.SearchParams({
+        CastMemberRepository.SearchParams.create({
           filter: { name: "TEST" },
           page: 1,
           per_page: 2,
@@ -199,7 +202,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
 
       const arrange = [
         {
-          params: new CastMemberRepository.SearchParams({
+          params: CastMemberRepository.SearchParams.create({
             page: 1,
             per_page: 2,
             sort: "name",
@@ -216,7 +219,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
           }),
         },
         {
-          params: new CastMemberRepository.SearchParams({
+          params: CastMemberRepository.SearchParams.create({
             page: 2,
             per_page: 2,
             sort: "name",
@@ -233,7 +236,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
           }),
         },
         {
-          params: new CastMemberRepository.SearchParams({
+          params: CastMemberRepository.SearchParams.create({
             page: 1,
             per_page: 2,
             sort: "name",
@@ -250,7 +253,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
           }),
         },
         {
-          params: new CastMemberRepository.SearchParams({
+          params: CastMemberRepository.SearchParams.create({
             page: 2,
             per_page: 2,
             sort: "name",
@@ -287,7 +290,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
 
       const arrange = [
         {
-          params: new CastMemberRepository.SearchParams({
+          params: CastMemberRepository.SearchParams.create({
             page: 1,
             per_page: 2,
             sort: "name",
@@ -305,7 +308,7 @@ describe("CastMemberInMemoryRepository Unit Tests", () => {
           }),
         },
         {
-          params: new CastMemberRepository.SearchParams({
+          params: CastMemberRepository.SearchParams.create({
             page: 2,
             per_page: 2,
             sort: "name",

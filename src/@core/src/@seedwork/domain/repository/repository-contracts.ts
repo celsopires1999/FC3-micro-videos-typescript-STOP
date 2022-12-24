@@ -127,7 +127,7 @@ export class SearchResult<E extends Entity = Entity, Filter = string> {
     this.filter = props.filter;
   }
 
-  toJSON() {
+  toJSON(): any {
     return {
       items: this.items.map((item) => {
         if (typeof item === "object") {

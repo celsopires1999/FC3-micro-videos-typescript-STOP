@@ -73,7 +73,7 @@ export namespace CastMemberRepository {
           ? {
               ...(props.filter.name && { name: props.filter.name }),
               ...(props.filter.type && {
-                type: props.filter.type.value as any,
+                type: props.filter.type.value,
               }),
             }
           : null,
