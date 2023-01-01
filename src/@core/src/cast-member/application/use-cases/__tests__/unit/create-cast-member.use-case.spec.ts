@@ -65,7 +65,6 @@ describe("CreateCastMemberUseCase Unit Tests", () => {
       jest.spyOn(CastMember, "validate").mockImplementation(() => {
         throw expectedError;
       });
-      jest.spyOn(repository, "insert").mockRejectedValue(expectedError);
       const spyHandleError = jest.spyOn(useCase, "handleError" as any);
       // Act & Assert
       await expect(

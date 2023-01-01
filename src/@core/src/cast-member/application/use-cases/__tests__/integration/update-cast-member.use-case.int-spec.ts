@@ -1,7 +1,7 @@
 import { UpdateCastMemberUseCase } from "#cast-member/application";
-import { CastMember } from "#cast-member/domain";
+import { CastMember, Types } from "#cast-member/domain";
 import { CastMemberSequelize } from "#cast-member/infra";
-import { NotFoundError } from "#seedwork/domain";
+import { EntityValidationError, NotFoundError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 
 const { CastMemberModel, CastMemberRepository } = CastMemberSequelize;
@@ -28,17 +28,52 @@ describe("UpdateCastMemberUseCase Integration Tests", () => {
     );
   });
 
+  it("should throw a generic error", async () => {
+    const entity = CastMember.fake().aCastMember().build();
+    await repository.insert(entity);
+    const error = new Error("Generic Error");
+    jest.spyOn(repository, "update").mockRejectedValue(error);
+    await expect(
+      useCase.execute({
+        id: entity.id,
+        name: "Mary Doe",
+        type: 2 as Types,
+      })
+    ).rejects.toThrowError(error);
+  });
+
+  it("should throw an entity validation error", async () => {
+    const entity = CastMember.fake().aCastMember().build();
+    await repository.insert(entity);
+    try {
+      await useCase.execute({
+        id: entity.id,
+      } as any);
+      fail("should throw an entity validation error");
+    } catch (e) {
+      expect(e).toBeInstanceOf(EntityValidationError);
+      expect(e.error).toStrictEqual({
+        name: [
+          "name should not be empty",
+          "name must be a string",
+          "name must be shorter than or equal to 255 characters",
+        ],
+        type: ["Invalid cast member type: undefined"],
+      });
+    }
+  });
+
   it("should update cast member", async () => {
     type Arrange = {
       input: {
         id: string;
         name: string;
-        type: number;
+        type: Types;
       };
       expected: {
         id: string;
         name: string;
-        type: number;
+        type: Types;
         created_at: Date;
       };
     };

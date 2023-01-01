@@ -1,5 +1,10 @@
-import { CastMemberRepository, CastMemberType } from "#cast-member/domain";
+import {
+  CastMemberRepository,
+  CastMemberType,
+  Types,
+} from "#cast-member/domain";
 import { default as DefaultUseCase } from "#seedwork/application/use-case";
+import { EntityValidationError } from "#seedwork/domain";
 import {
   CastMemberOutput,
   CastMemberOutputMapper,
@@ -11,18 +16,31 @@ export namespace UpdateCastMemberUseCase {
 
     async execute(input: Input): Promise<Output> {
       const entity = await this.castMemberRepo.findById(input.id);
-      entity.update(input.name, CastMemberType.createByCode(input.type));
 
-      await this.castMemberRepo.update(entity);
+      const [type, errorCastMemberType] = CastMemberType.create(input.type);
 
-      return CastMemberOutputMapper.toOutput(entity);
+      try {
+        entity.update(input.name, type);
+        await this.castMemberRepo.update(entity);
+        return CastMemberOutputMapper.toOutput(entity);
+      } catch (e) {
+        this.handleError(e, errorCastMemberType);
+      }
+    }
+
+    private handleError(e: Error, errorCastMemberType: Error | undefined) {
+      if (e instanceof EntityValidationError) {
+        e.setFromError("type", errorCastMemberType);
+      }
+
+      throw e;
     }
   }
 
   export type Input = {
     id: string;
     name: string;
-    type: number;
+    type: Types;
   };
 
   export type Output = CastMemberOutput;

@@ -1,9 +1,9 @@
-import { CastMember } from "#cast-member/domain";
+import { CastMember, Types } from "#cast-member/domain";
 
 export type CastMemberOutput = {
   id: string;
   name: string;
-  type: number;
+  type: Types;
   created_at: Date;
 };
 
