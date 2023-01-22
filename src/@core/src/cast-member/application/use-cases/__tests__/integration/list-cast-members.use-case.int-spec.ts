@@ -1,5 +1,8 @@
-import { ListCastMembersUseCase } from "#cast-member/application";
-import { CastMember, CastMemberType } from "#cast-member/domain";
+import {
+  CastMemberOutputMapper,
+  ListCastMembersUseCase,
+} from "#cast-member/application";
+import { CastMember } from "#cast-member/domain";
 import { CastMemberSequelize } from "#cast-member/infra";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 
@@ -30,7 +33,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
     const output = await useCase.execute({});
 
     expect(output).toMatchObject({
-      items: [entities[1].toJSON(), entities[0].toJSON()],
+      items: [entities[1], entities[0]].map(CastMemberOutputMapper.toOutput),
       total: 2,
       current_page: 1,
       last_page: 1,
@@ -49,7 +52,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
     const output = await useCase.execute({});
 
     expect(output).toMatchObject({
-      items: [...entities].reverse().map((i) => i.toJSON()),
+      items: [...entities].reverse().map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 1,
@@ -61,11 +64,11 @@ describe("ListCastMembersUseCase Integration Tests", () => {
     const faker = CastMember.fake().aCastMember();
 
     const entities = [
-      faker.withName("a").withType(CastMemberType.createByCode(2)).build(),
-      faker.withName("AAA").withType(CastMemberType.createByCode(1)).build(),
-      faker.withName("AaA").withType(CastMemberType.createByCode(1)).build(),
-      faker.withName("b").withType(CastMemberType.createByCode(2)).build(),
-      faker.withName("c").withType(CastMemberType.createByCode(2)).build(),
+      CastMember.fake().anActor().withName("a").build(),
+      CastMember.fake().aDirector().withName("AAA").build(),
+      CastMember.fake().aDirector().withName("AaA").build(),
+      CastMember.fake().anActor().withName("b").build(),
+      CastMember.fake().anActor().withName("c").build(),
     ];
     await repository.bulkInsert(entities);
 
@@ -76,7 +79,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
       filter: { name: "a" },
     });
     expect(output).toMatchObject({
-      items: [entities[1], entities[2]].map((i) => i.toJSON()),
+      items: [entities[1], entities[2]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 2,
@@ -90,7 +93,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
       filter: { name: "a" },
     });
     expect(output).toMatchObject({
-      items: [entities[0]].map((m) => m.toJSON()),
+      items: [entities[0]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 2,
       last_page: 2,
@@ -105,7 +108,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
       filter: { name: "a" },
     });
     expect(output).toMatchObject({
-      items: [entities[0], entities[2]].map((m) => m.toJSON()),
+      items: [entities[0], entities[2]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 2,
@@ -120,7 +123,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
       filter: { type: 2 },
     });
     expect(output).toMatchObject({
-      items: [entities[4], entities[3]].map((m) => m.toJSON()),
+      items: [entities[4], entities[3]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 2,
@@ -135,7 +138,7 @@ describe("ListCastMembersUseCase Integration Tests", () => {
       filter: { name: "aa", type: 1 },
     });
     expect(output).toMatchObject({
-      items: [entities[2], entities[1]].map((m) => m.toJSON()),
+      items: [entities[2], entities[1]].map(CastMemberOutputMapper.toOutput),
       total: 2,
       current_page: 1,
       last_page: 1,

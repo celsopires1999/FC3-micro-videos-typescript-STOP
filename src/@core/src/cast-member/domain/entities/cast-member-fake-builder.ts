@@ -24,6 +24,18 @@ export class CastMemberFakeBuilder<TBuild = any> {
     return new CastMemberFakeBuilder<CastMember[]>(countObjs);
   }
 
+  static anActor() {
+    return CastMemberFakeBuilder.aCastMember().withType(
+      CastMemberType.createAnActor()
+    );
+  }
+
+  static aDirector() {
+    return CastMemberFakeBuilder.aCastMember().withType(
+      CastMemberType.createADirector()
+    );
+  }
+
   private chance: Chance.Chance;
 
   private constructor(countObjs = 1) {

@@ -1,8 +1,11 @@
-import { ListCastMembersUseCase } from "#cast-member/application";
 import {
+  CastMemberOutputMapper,
+  ListCastMembersUseCase,
+} from "#cast-member/application";
+import {
+  CastMember,
   CastMemberFakeBuilder,
   CastMemberRepository,
-  CastMemberType,
   Types,
 } from "#cast-member/domain";
 import { CastMemberInMemoryRepository } from "#cast-member/infra";
@@ -49,7 +52,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
 
     output = useCase["toOutput"](result);
     expect(output).toStrictEqual({
-      items: [entity.toJSON()],
+      items: [CastMemberOutputMapper.toOutput(entity)],
       total: 1,
       current_page: 1,
       last_page: 1,
@@ -71,7 +74,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
     const output = await useCase.execute({});
 
     expect(output).toStrictEqual({
-      items: [entities[1].toJSON(), entities[0].toJSON()],
+      items: [entities[1], entities[0]].map(CastMemberOutputMapper.toOutput),
       total: 2,
       current_page: 1,
       last_page: 1,
@@ -93,7 +96,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
 
     const output = await useCase.execute({});
     expect(output).toStrictEqual({
-      items: [...entities].reverse().map((i) => i.toJSON()),
+      items: [...entities].reverse().map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 1,
@@ -102,14 +105,12 @@ describe("ListCastMembersUseCase Unit Tests", () => {
   });
 
   it("should return output using paginate, sort and filter", async () => {
-    const faker = CastMemberFakeBuilder.aCastMember();
-
     const entities = [
-      faker.withName("a").withType(CastMemberType.createAnActor()).build(),
-      faker.withName("AAA").withType(CastMemberType.createADirector()).build(),
-      faker.withName("AaA").withType(CastMemberType.createADirector()).build(),
-      faker.withName("b").withType(CastMemberType.createAnActor()).build(),
-      faker.withName("c").withType(CastMemberType.createAnActor()).build(),
+      CastMember.fake().anActor().withName("a").build(),
+      CastMember.fake().aDirector().withName("AAA").build(),
+      CastMember.fake().aDirector().withName("AaA").build(),
+      CastMember.fake().anActor().withName("b").build(),
+      CastMember.fake().anActor().withName("c").build(),
     ];
 
     await repository.bulkInsert(entities);
@@ -121,7 +122,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       filter: { name: "a" },
     });
     expect(output).toStrictEqual({
-      items: [entities[1].toJSON(), entities[2].toJSON()],
+      items: [entities[1], entities[2]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 2,
@@ -135,7 +136,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       filter: { name: "a" },
     });
     expect(output).toStrictEqual({
-      items: [entities[0].toJSON()],
+      items: [entities[0]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 2,
       last_page: 2,
@@ -150,7 +151,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       filter: { name: "a" },
     });
     expect(output).toStrictEqual({
-      items: [entities[0].toJSON(), entities[2].toJSON()],
+      items: [entities[0], entities[2]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 2,
@@ -164,7 +165,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       filter: { type: Types.ACTOR },
     });
     expect(output).toStrictEqual({
-      items: [entities[4].toJSON(), entities[3].toJSON()],
+      items: [entities[4], entities[3]].map(CastMemberOutputMapper.toOutput),
       total: 3,
       current_page: 1,
       last_page: 2,
@@ -178,7 +179,7 @@ describe("ListCastMembersUseCase Unit Tests", () => {
       filter: { name: "aa", type: Types.DIRECTOR },
     });
     expect(output).toStrictEqual({
-      items: [entities[2].toJSON(), entities[1].toJSON()],
+      items: [entities[2], entities[1]].map(CastMemberOutputMapper.toOutput),
       total: 2,
       current_page: 1,
       last_page: 1,
