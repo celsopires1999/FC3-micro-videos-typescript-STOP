@@ -5,6 +5,7 @@ import {
   ListCastMembersUseCase,
   UpdateCastMemberUseCase,
 } from '@fc/micro-videos/cast-member/application';
+import { Types } from '@fc/micro-videos/cast-member/domain';
 import { CastMembersController } from './../../cast-members.controller';
 import { CreateCastMemberDto } from './../../dto/create-cast-member.dto';
 import { UpdateCastMemberDto } from './../../dto/update-cast-member.dto';
@@ -23,12 +24,13 @@ describe('CastMembersController Unit Tests', () => {
   it('should create a cast member', async () => {
     const output: CreateCastMemberUseCase.Output = {
       id: '312cffad-1938-489e-a706-643dc9a3cfd3',
-      name: 'new category',
-      type: 1,
+      name: 'John Doe',
+      type: Types.DIRECTOR,
       created_at: new Date(),
     };
 
-    const expectedPresenter = new CastMemberPresenter(output);
+    const expectedPresenter =
+      CastMembersController.castMemberToResponse(output);
 
     const mockCreateUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(expectedPresenter)),
@@ -38,7 +40,7 @@ describe('CastMembersController Unit Tests', () => {
     controller['createUseCase'] = mockCreateUseCase;
     const input: CreateCastMemberDto = {
       name: 'John Doe',
-      type: 1,
+      type: Types.DIRECTOR,
     };
 
     const presenter = await controller.create(input);
@@ -52,11 +54,12 @@ describe('CastMembersController Unit Tests', () => {
     const output: UpdateCastMemberUseCase.Output = {
       id,
       name: 'updated category',
-      type: 1,
+      type: Types.DIRECTOR,
       created_at: new Date(),
     };
 
-    const expectedPresenter = new CastMemberPresenter(output);
+    const expectedPresenter =
+      CastMembersController.castMemberToResponse(output);
 
     const mockUpdateUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(expectedPresenter)),
@@ -66,7 +69,7 @@ describe('CastMembersController Unit Tests', () => {
     controller['updateUseCase'] = mockUpdateUseCase;
     const input: UpdateCastMemberDto = {
       name: 'Mary Doe',
-      type: 2,
+      type: Types.ACTOR,
     };
     const presenter = await controller.update(id, input);
     expect(mockUpdateUseCase.execute).toHaveBeenCalledWith({ id, ...input });
@@ -95,11 +98,12 @@ describe('CastMembersController Unit Tests', () => {
     const output: GetCastMemberUseCase.Output = {
       id,
       name: 'John Doe',
-      type: 1,
+      type: Types.DIRECTOR,
       created_at: new Date(),
     };
 
-    const expectedPresenter = new CastMemberPresenter(output);
+    const expectedPresenter =
+      CastMembersController.castMemberToResponse(output);
 
     const mockGetUseCase = {
       execute: jest.fn().mockReturnValue(Promise.resolve(expectedPresenter)),
@@ -120,7 +124,7 @@ describe('CastMembersController Unit Tests', () => {
         {
           id,
           name: 'John Doe',
-          type: 1,
+          type: Types.DIRECTOR,
           created_at: new Date(),
         },
       ],
@@ -140,7 +144,7 @@ describe('CastMembersController Unit Tests', () => {
       page: 1,
       per_page: 2,
       sort_dir: 'desc' as SortDirection,
-      filter: { name: 'John Doe', type: 1 },
+      filter: { name: 'John Doe', type: Types.DIRECTOR },
     };
 
     const presenter = await controller.search(searchParams);

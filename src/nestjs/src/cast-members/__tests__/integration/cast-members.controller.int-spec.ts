@@ -71,7 +71,6 @@ describe('CastMembersController Integration Tests', () => {
         expect(entity.toJSON()).toStrictEqual({
           id: presenter.id,
           created_at: presenter.created_at,
-          ...send_data,
           ...expected,
         });
 
@@ -94,11 +93,12 @@ describe('CastMembersController Integration Tests', () => {
         expect(foundEntity.toJSON()).toMatchObject({
           id: presenter.id,
           created_at: presenter.created_at,
-          ...send_data,
           ...expected,
         });
 
-        const expectedPresenter = new CastMemberPresenter(foundEntity.toJSON());
+        const expectedPresenter = CastMembersController.castMemberToResponse(
+          foundEntity.toJSON(),
+        );
         expect(presenter).toEqual(expectedPresenter);
       },
     );
@@ -116,7 +116,9 @@ describe('CastMembersController Integration Tests', () => {
   it('should find a cast member', async () => {
     const entity = CastMember.fake().aCastMember().build();
     await repository.insert(entity);
-    const expectedPresenter = new CastMemberPresenter(entity.toJSON());
+    const expectedPresenter = CastMembersController.castMemberToResponse(
+      entity.toJSON(),
+    );
     const presenter = await controller.findOne(entity.id);
     expect(presenter).toStrictEqual(expectedPresenter);
     expect(presenter.id).toBe(entity.id);
@@ -150,7 +152,7 @@ describe('CastMembersController Integration Tests', () => {
         'with send data: $send_data',
         async ({ send_data, expected }) => {
           await repository.bulkInsert(items);
-          const presenter = await controller.search(send_data);
+          const presenter = await controller.search(send_data as any);
           expect(presenter).toEqual(
             new CastMemberCollectionPresenter(expected),
           );

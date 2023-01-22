@@ -45,3 +45,24 @@ http://localhost:3000/cast-members
 ```
 
 - Exemplos de utilização da API podem ser encontrados no arquivo `api.http` na raiz do projeto
+
+# Extras
+
+- Criar os indices no core
+
+```bash
+npm run cti:make -w @fc/micro-videos
+```
+
+- Rodar os testes somente em um workspace
+
+```bash
+npm run test:cov -w @fc/micro-videos
+npm run test:cov -w nestjs
+```
+
+- Fazer o build do core
+
+```bash
+npm run build -w @fc/micro-videos
+```

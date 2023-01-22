@@ -1,8 +1,5 @@
 import { SortDirection } from '@fc/micro-videos/@seedwork/domain';
-import {
-  CastMember,
-  CastMemberType,
-} from '@fc/micro-videos/cast-member/domain';
+import { CastMember, Types } from '@fc/micro-videos/cast-member/domain';
 
 export class CastMemberFixture {
   static keysInResponse() {
@@ -10,15 +7,14 @@ export class CastMemberFixture {
   }
 
   static arrangeForSave() {
-    const faker = CastMember.fake()
-      .aCastMember()
-      .withName('John Doe')
-      .withType(CastMemberType.createDirector())
-      .build();
     return [
       {
-        send_data: { name: faker.name, type: faker.type.code },
-        expected: {},
+        send_data: { name: 'John Doe', type: Types.DIRECTOR },
+        expected: { name: 'John Doe', type: Types.DIRECTOR },
+      },
+      {
+        send_data: { name: 'Mary Doe', type: Types.ACTOR },
+        expected: { name: 'Mary Doe', type: Types.ACTOR },
       },
     ];
   }
@@ -33,7 +29,7 @@ export class CastMemberFixture {
     return [
       {
         label: 'EMPTY',
-        send_data: { type: faker.type.code },
+        send_data: { type: faker.type.value },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
           ...defaultExpected,
@@ -43,7 +39,7 @@ export class CastMemberFixture {
         label: 'NAME UNDEFINED',
         send_data: {
           name: faker.withInvalidNameEmpty(undefined).name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
@@ -54,7 +50,7 @@ export class CastMemberFixture {
         label: 'NAME NULL',
         send_data: {
           name: faker.withInvalidNameEmpty(null).name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
@@ -65,7 +61,7 @@ export class CastMemberFixture {
         label: 'NAME EMPTY',
         send_data: {
           name: faker.withInvalidNameEmpty('').name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: ['name should not be empty'],
@@ -85,7 +81,7 @@ export class CastMemberFixture {
     return [
       {
         label: 'EMPTY',
-        send_data: { type: faker.type.code },
+        send_data: { type: faker.type.value },
         expected: {
           message: [
             'name should not be empty',
@@ -99,7 +95,7 @@ export class CastMemberFixture {
         label: 'NAME UNDEFINED',
         send_data: {
           name: faker.withInvalidNameEmpty(undefined).name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: [
@@ -114,7 +110,7 @@ export class CastMemberFixture {
         label: 'NAME NULL',
         send_data: {
           name: faker.withInvalidNameEmpty(null).name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: [
@@ -129,7 +125,7 @@ export class CastMemberFixture {
         label: 'NAME EMPTY',
         send_data: {
           name: faker.withInvalidNameEmpty('').name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: ['name should not be empty'],
@@ -140,7 +136,7 @@ export class CastMemberFixture {
         label: 'NAME TOO LONG',
         send_data: {
           name: faker.withInvalidNameTooLong().name,
-          type: faker.type.code,
+          type: faker.type.value,
         },
         expected: {
           message: ['name must be shorter than or equal to 255 characters'],
@@ -270,20 +266,12 @@ export class ListCastMembersFixture {
   }
 
   static arrangeUnsorted() {
-    const faker = CastMember.fake().aCastMember();
-
     const entitiesMap = {
-      a: faker.withName('a').withType(CastMemberType.createByCode(2)).build(),
-      AAA: faker
-        .withName('AAA')
-        .withType(CastMemberType.createByCode(1))
-        .build(),
-      AaA: faker
-        .withName('AaA')
-        .withType(CastMemberType.createByCode(1))
-        .build(),
-      b: faker.withName('b').withType(CastMemberType.createByCode(2)).build(),
-      c: faker.withName('c').withType(CastMemberType.createByCode(2)).build(),
+      a: CastMember.fake().anActor().withName('a').build(),
+      AAA: CastMember.fake().aDirector().withName('AAA').build(),
+      AaA: CastMember.fake().aDirector().withName('AaA').build(),
+      b: CastMember.fake().anActor().withName('b').build(),
+      c: CastMember.fake().anActor().withName('c').build(),
     };
 
     const arrange = [

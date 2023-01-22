@@ -1,3 +1,5 @@
+const FC_MICRO_VIDEOS_PATH =
+  '<rootDir>/../../../node_modules/@fc/micro-videos/dist';
 export default {
   displayName: {
     name: 'nestjs',
@@ -23,16 +25,15 @@ export default {
   },
   testEnvironment: 'node',
   moduleNameMapper: {
-    '@fc/micro\\-videos/(.*)$':
-      '<rootDir>/../../../node_modules/@fc/micro-videos/dist/$1',
+    '@fc/micro\\-videos/(.*)$': `${FC_MICRO_VIDEOS_PATH}/$1`,
     // '#seedwork/domain':
     //   '<rootDir>/../../node_modules/@fc/micro-videos/dist/@seedwork/domain/index.js',
-    '#seedwork/(.*)$':
-      '<rootDir>/../../../node_modules/@fc/micro-videos/dist/@seedwork/$1',
+    // '#seedwork/(.*)$':
+    //   '<rootDir>/../../../node_modules/@fc/micro-videos/dist/@seedwork/$1',
     // '#category/domain':
     //   '<rootDir>/../../node_modules/@fc/micro-videos/dist/category/domain.index.js',
-    '#category/(.*)$':
-      '<rootDir>/../../../node_modules/@fc/micro-videos/dist/category/$1',
+    // '#category/(.*)$':
+    //   '<rootDir>/../../../node_modules/@fc/micro-videos/dist/category/$1',
   },
   // setupFilesAfterEnv: ['../@core/src/@seedwork/domain/tests/jest.ts'],
 };
