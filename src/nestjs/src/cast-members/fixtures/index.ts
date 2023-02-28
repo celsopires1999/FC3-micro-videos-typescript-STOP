@@ -21,6 +21,8 @@ export class CastMemberFixture {
 
   static arrangeInvalidRequest() {
     const faker = CastMember.fake().aCastMember();
+    const name = faker.name;
+    const type = faker.type.value;
     const defaultExpected = {
       statusCode: 422,
       error: 'Unprocessable Entity',
@@ -28,18 +30,24 @@ export class CastMemberFixture {
 
     return [
       {
-        label: 'EMPTY',
-        send_data: { type: faker.type.value },
+        label: 'BODY EMPTY',
+        send_data: {},
         expected: {
-          message: ['name should not be empty', 'name must be a string'],
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'type should not be empty',
+            'type must be an integer number',
+            'type must be one of the following values: 1, 2',
+          ],
           ...defaultExpected,
         },
       },
       {
         label: 'NAME UNDEFINED',
         send_data: {
-          name: faker.withInvalidNameEmpty(undefined).name,
-          type: faker.type.value,
+          name: undefined,
+          type,
         },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
@@ -50,7 +58,7 @@ export class CastMemberFixture {
         label: 'NAME NULL',
         send_data: {
           name: faker.withInvalidNameEmpty(null).name,
-          type: faker.type.value,
+          type,
         },
         expected: {
           message: ['name should not be empty', 'name must be a string'],
@@ -61,71 +69,7 @@ export class CastMemberFixture {
         label: 'NAME EMPTY',
         send_data: {
           name: faker.withInvalidNameEmpty('').name,
-          type: faker.type.value,
-        },
-        expected: {
-          message: ['name should not be empty'],
-          ...defaultExpected,
-        },
-      },
-    ];
-  }
-
-  static arrangeForEntityValidationError() {
-    const faker = CastMember.fake().aCastMember();
-    const defaultExpected = {
-      statusCode: 422,
-      error: 'Unprocessable Entity',
-    };
-
-    return [
-      {
-        label: 'EMPTY',
-        send_data: { type: faker.type.value },
-        expected: {
-          message: [
-            'name should not be empty',
-            'name must be a string',
-            'name must be shorter than or equal to 255 characters',
-          ],
-          ...defaultExpected,
-        },
-      },
-      {
-        label: 'NAME UNDEFINED',
-        send_data: {
-          name: faker.withInvalidNameEmpty(undefined).name,
-          type: faker.type.value,
-        },
-        expected: {
-          message: [
-            'name should not be empty',
-            'name must be a string',
-            'name must be shorter than or equal to 255 characters',
-          ],
-          ...defaultExpected,
-        },
-      },
-      {
-        label: 'NAME NULL',
-        send_data: {
-          name: faker.withInvalidNameEmpty(null).name,
-          type: faker.type.value,
-        },
-        expected: {
-          message: [
-            'name should not be empty',
-            'name must be a string',
-            'name must be shorter than or equal to 255 characters',
-          ],
-          ...defaultExpected,
-        },
-      },
-      {
-        label: 'NAME EMPTY',
-        send_data: {
-          name: faker.withInvalidNameEmpty('').name,
-          type: faker.type.value,
+          type,
         },
         expected: {
           message: ['name should not be empty'],
@@ -136,10 +80,164 @@ export class CastMemberFixture {
         label: 'NAME TOO LONG',
         send_data: {
           name: faker.withInvalidNameTooLong().name,
-          type: faker.type.value,
+          type,
         },
         expected: {
           message: ['name must be shorter than or equal to 255 characters'],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'TYPE UNDEFINED',
+        send_data: {
+          name,
+          type: undefined,
+        },
+        expected: {
+          message: [
+            'type should not be empty',
+            'type must be an integer number',
+            'type must be one of the following values: 1, 2',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'TYPE EMPTY',
+        send_data: {
+          name,
+          type: faker.withInvalidTypeEmpty(''),
+        },
+        expected: {
+          message: [
+            'type must be an integer number',
+            'type must be one of the following values: 1, 2',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'TYPE INVALID',
+        send_data: {
+          name,
+          type: faker.withInvalidTypeNotACastMemberType('fake'),
+        },
+        expected: {
+          message: [
+            'type must be an integer number',
+            'type must be one of the following values: 1, 2',
+          ],
+          ...defaultExpected,
+        },
+      },
+    ];
+  }
+
+  static arrangeForEntityValidationError() {
+    const faker = CastMember.fake().aCastMember();
+    const name = faker.name;
+    const type = faker.type.value;
+    const defaultExpected = {
+      statusCode: 422,
+      error: 'Unprocessable Entity',
+    };
+
+    return [
+      {
+        label: 'BODY EMPTY',
+        send_data: {},
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+            'Invalid cast member type: undefined',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME UNDEFINED',
+        send_data: {
+          name: undefined,
+          type,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME NULL',
+        send_data: {
+          name: faker.withInvalidNameEmpty(null).name,
+          type,
+        },
+        expected: {
+          message: [
+            'name should not be empty',
+            'name must be a string',
+            'name must be shorter than or equal to 255 characters',
+          ],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME EMPTY',
+        send_data: {
+          name: faker.withInvalidNameEmpty('').name,
+          type,
+        },
+        expected: {
+          message: ['name should not be empty'],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'NAME TOO LONG',
+        send_data: {
+          name: faker.withInvalidNameTooLong().name,
+          type,
+        },
+        expected: {
+          message: ['name must be shorter than or equal to 255 characters'],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'TYPE UNDEFINED',
+        send_data: {
+          name,
+          type: undefined,
+        },
+        expected: {
+          message: ['Invalid cast member type: undefined'],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'TYPE EMPTY',
+        send_data: {
+          name,
+          type: faker.withInvalidTypeEmpty('').type,
+        },
+        expected: {
+          message: ['Invalid cast member type: '],
+          ...defaultExpected,
+        },
+      },
+      {
+        label: 'TYPE INVALID',
+        send_data: {
+          name,
+          type: faker.withInvalidTypeNotACastMemberType('fake').type,
+        },
+        expected: {
+          message: ['Invalid cast member type: fake'],
           ...defaultExpected,
         },
       },

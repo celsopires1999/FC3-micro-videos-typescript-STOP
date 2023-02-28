@@ -40,7 +40,7 @@ export namespace CastMemberSequelize {
     @Column({ allowNull: false, type: DataType.STRING(255) })
     declare name: string;
 
-    @Column({ allowNull: false, type: DataType.INTEGER() })
+    @Column({ allowNull: false, type: DataType.SMALLINT() })
     declare type: Types;
 
     @Column({ allowNull: false, type: DataType.DATE(3) })
