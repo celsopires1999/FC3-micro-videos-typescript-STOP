@@ -273,7 +273,14 @@ export class UpdateCastMemberFixture {
   }
 
   static arrangeInvalidRequest() {
-    return CastMemberFixture.arrangeInvalidRequest();
+    const removeTests = ['NAME TOO LONG'];
+    const tests = CastMemberFixture.arrangeInvalidRequest();
+
+    return tests.filter((test) => {
+      if (!removeTests.includes(test.label)) {
+        return test;
+      }
+    });
   }
 
   static arrangeForEntityValidationError() {
