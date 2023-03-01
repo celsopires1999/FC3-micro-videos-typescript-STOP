@@ -442,14 +442,13 @@ export class ListCastMembersFixture {
           per_page: 2,
         },
       },
-      //
       {
         send_data: {
           page: 1,
           per_page: 2,
           sort: 'name',
           sort_dir: 'desc' as SortDirection,
-          filter: { type: 2 },
+          filter: { type: Types.ACTOR },
         },
         expected: {
           items: [entitiesMap.c.toJSON(), entitiesMap.b.toJSON()],
@@ -459,14 +458,13 @@ export class ListCastMembersFixture {
           per_page: 2,
         },
       },
-      //
       {
         send_data: {
           page: 1,
           per_page: 2,
           sort: 'name',
           sort_dir: 'desc' as SortDirection,
-          filter: { name: 'aa', type: 1 },
+          filter: { name: 'aa', type: Types.DIRECTOR },
         },
         expected: {
           items: [entitiesMap.AaA.toJSON(), entitiesMap.AAA.toJSON()],
@@ -476,7 +474,6 @@ export class ListCastMembersFixture {
           per_page: 2,
         },
       },
-      //
     ];
 
     return { arrange, entitiesMap };

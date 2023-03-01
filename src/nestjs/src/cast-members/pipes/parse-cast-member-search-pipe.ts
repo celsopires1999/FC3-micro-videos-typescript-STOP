@@ -22,6 +22,9 @@ export class ParseCastMemberSearchPipe
     let filter = undefined;
 
     if (value?.name || value?.type) {
+      if (value?.type && !isNaN(+value.type)) {
+        value.type = +value.type;
+      }
       filter = {
         ...(value?.name && { name: value.name }),
         ...(value?.type && { type: value.type }),
