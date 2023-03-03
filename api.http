@@ -45,10 +45,10 @@ Content-Type: application/json
 GET http://localhost:3000/cast-members
 
 ### Buscar por type ###
-GET http://localhost:3000/cast-members?type=2&page=1&per_page=15
+GET http://localhost:3000/cast-members?filter[type]=2&page=1&per_page=15
 
 ### Buscar por name e type ###
-GET http://localhost:3000/cast-members?name=MaRiA&type=1&page=1&per_page=15
+GET http://localhost:3000/cast-members?filter[name]=MaRiA&filter[type]=1&page=1&per_page=15
 
 ### Ler inexistente com id válido ###
 GET http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab999
@@ -61,12 +61,12 @@ POST http://localhost:3000/cast-members
 Content-Type: application/json
 
 {
-    "name": "Maria Doe",
-    "type": 1
+    "name": "John Doe",
+    "type": 2
 }
 
 ### alterar cast member ###
-PUT http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
+PUT http://localhost:3000/cast-members/f860becb-7b84-40f7-86f0-abae52da2b1b
 Content-Type: application/json
 
 {
@@ -83,5 +83,5 @@ Content-Type: application/json
 }
 
 ### excluir ###
-DELETE http://localhost:3000/cast-members/17b1a2ec-15aa-4f89-ab68-495d157ab8c9
+DELETE http://localhost:3000/cast-members/908573a1-ff94-4b0c-867c-7043d1a0fa16
 Content-Type: application/json

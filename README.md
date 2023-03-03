@@ -34,6 +34,13 @@ npm run test:cov -- --runInBand --detectOpenHandles
 npm run start:dev
 ```
 
+- Executar migrações para criar tabelas no banco dev
+
+```bash
+npm run migrate -w nestjs up
+npm run migrate -w nestjs down -- --to 0
+```
+
 - Endpoints disponíveis
 
 ```bash
