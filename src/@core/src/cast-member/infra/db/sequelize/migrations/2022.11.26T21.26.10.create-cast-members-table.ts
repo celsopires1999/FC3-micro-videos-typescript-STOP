@@ -13,7 +13,7 @@ export const up: MigrationFn<Sequelize> = async ({ context: sequelize }) => {
       allowNull: false,
     },
     type: {
-      type: DataTypes.INTEGER(),
+      type: DataTypes.SMALLINT(),
       allowNull: false,
     },
     created_at: { type: DataTypes.DATE(3), allowNull: false },

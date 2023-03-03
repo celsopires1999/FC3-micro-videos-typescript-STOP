@@ -1,4 +1,4 @@
-import { CastMemberRepository } from "#cast-member/domain";
+import { CastMemberRepository, Types } from "#cast-member/domain";
 import {
   PaginationOutputDto,
   PaginationOutputMapper,
@@ -15,7 +15,7 @@ export namespace ListCastMembersUseCase {
     constructor(private castMemberRepo: CastMemberRepository.Repository) {}
 
     async execute(input: Input): Promise<Output> {
-      const params = new CastMemberRepository.SearchParams(input);
+      const params = CastMemberRepository.SearchParams.create(input);
       const searchResult = await this.castMemberRepo.search(params);
 
       return this.toOutput(searchResult);
@@ -28,7 +28,10 @@ export namespace ListCastMembersUseCase {
     }
   }
 
-  export type Input = SearchInputDto<CastMemberRepository.Filter>;
+  export type Input = SearchInputDto<{
+    name?: string;
+    type?: Types;
+  }>;
 
   export type Output = PaginationOutputDto<CastMemberOutput>;
 }

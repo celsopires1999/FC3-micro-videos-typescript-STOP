@@ -118,7 +118,6 @@ describe('CategoriesController (e2e)', () => {
           expect(res.body.data).toStrictEqual({
             id: serialized.id,
             created_at: serialized.created_at,
-            ...send_data,
             ...expected,
           });
         },

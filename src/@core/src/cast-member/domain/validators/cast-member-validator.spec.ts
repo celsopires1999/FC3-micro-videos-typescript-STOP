@@ -1,5 +1,5 @@
 import { CastMemberProperties } from "../entities/cast-member";
-import CastMemberType from "../entities/cast-member-type.vo";
+import { CastMemberType } from "../value-objects/cast-member-type.vo";
 import CastMemberValidatorFactory, {
   CastMemberRules,
   CastMemberValidator,
@@ -62,7 +62,7 @@ describe("CastMemberValidator Tests", () => {
         },
         message: {
           type: [
-            "type must be an instance of CastMemberType",
+            `type must be an instance of ${CastMemberType.name}`,
             "type should not be empty",
             "type must be a non-empty object",
           ],
@@ -74,7 +74,7 @@ describe("CastMemberValidator Tests", () => {
         },
         message: {
           type: [
-            "type must be an instance of CastMemberType",
+            `type must be an instance of ${CastMemberType.name}`,
             "type must be a non-empty object",
           ],
         },
@@ -84,14 +84,14 @@ describe("CastMemberValidator Tests", () => {
           type: new Stub("item", 10),
         },
         message: {
-          type: ["type must be an instance of CastMemberType"],
+          type: [`type must be an instance of ${CastMemberType.name}`],
         },
       },
       {
         data: { type: 5 as any },
         message: {
           type: [
-            "type must be an instance of CastMemberType",
+            `type must be an instance of ${CastMemberType.name}`,
             "type must be a non-empty object",
           ],
         },
@@ -114,10 +114,10 @@ describe("CastMemberValidator Tests", () => {
 
   describe("valid cases for fields", () => {
     const arrange: CastMemberProperties[] = [
-      { name: "some name", type: CastMemberType.createDirector() },
+      { name: "some name", type: CastMemberType.createADirector() },
       {
         name: "some name",
-        type: CastMemberType.createActor(),
+        type: CastMemberType.createAnActor(),
         created_at: new Date(),
       },
     ];

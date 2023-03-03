@@ -1,9 +1,9 @@
 import {
-  Model,
-  Table,
   Column,
-  PrimaryKey,
   DataType,
+  Model,
+  PrimaryKey,
+  Table,
 } from "sequelize-typescript";
 
 import { SequelizeModelFactory } from "#seedwork/infra/sequelize/sequelize-model-factory";
@@ -12,13 +12,14 @@ import {
   CastMember,
   CastMemberRepository as CastMemberRepositoryContract,
   CastMemberType,
+  Types,
 } from "#cast-member/domain";
 import {
-  NotFoundError,
-  UniqueEntityId,
   EntityValidationError,
   LoadEntityError,
+  NotFoundError,
   SortDirection,
+  UniqueEntityId,
 } from "#seedwork/domain";
 import { literal, Op } from "sequelize";
 
@@ -26,7 +27,7 @@ export namespace CastMemberSequelize {
   type CastMemberModelProps = {
     id: string;
     name: string;
-    type: number;
+    type: Types;
     created_at: Date;
   };
 
@@ -39,8 +40,8 @@ export namespace CastMemberSequelize {
     @Column({ allowNull: false, type: DataType.STRING(255) })
     declare name: string;
 
-    @Column({ allowNull: false, type: DataType.INTEGER() })
-    declare type: number;
+    @Column({ allowNull: false, type: DataType.SMALLINT() })
+    declare type: Types;
 
     @Column({ allowNull: false, type: DataType.DATE(3) })
     declare created_at: Date;
@@ -52,7 +53,7 @@ export namespace CastMemberSequelize {
         () => ({
           id: chance.guid({ version: 4 }),
           name: chance.word(),
-          type: chance.integer({ min: 1, max: 2 }),
+          type: chance.integer({ min: 1, max: 2 }) as Types,
           created_at: chance.date(),
         })
       );
@@ -117,13 +118,13 @@ export namespace CastMemberSequelize {
       return [[sort, sort_dir]];
     }
 
-    private formatFilter(filter: { name?: string; type?: number }) {
+    private formatFilter(filter: { name?: string; type?: CastMemberType }) {
       if (filter?.name && filter?.type) {
         return {
           where: {
             [Op.and]: [
               { name: { [Op.like]: `%${filter.name}%` } },
-              { type: { [Op.eq]: filter.type } },
+              { type: { [Op.eq]: filter.type.value } },
             ],
           },
         };
@@ -132,7 +133,7 @@ export namespace CastMemberSequelize {
         return { where: { name: { [Op.like]: `%${filter.name}%` } } };
       }
       if (filter?.type) {
-        return { where: { type: { [Op.eq]: filter.type } } };
+        return { where: { type: { [Op.eq]: filter.type.value } } };
       }
       return null;
     }
@@ -181,15 +182,14 @@ export namespace CastMemberSequelize {
 
   export class CastMemberModelMapper {
     static toEntity(model: CastMemberModel): CastMember {
-      const { id, type, ...otherData } = model.toJSON();
+      const { id, ...otherData } = model.toJSON();
+      const [type, errorCastMemberType] = CastMemberType.create(otherData.type);
 
       try {
-        return new CastMember(
-          { type: CastMemberType.createByCode(type), ...otherData },
-          new UniqueEntityId(id)
-        );
+        return new CastMember({ ...otherData, type }, new UniqueEntityId(id));
       } catch (e) {
         if (e instanceof EntityValidationError) {
+          e.setFromError("type", errorCastMemberType);
           throw new LoadEntityError(e.error);
         }
 

@@ -1,14 +1,14 @@
 import CastMember, { CastMemberProperties } from "./../cast-member";
 import { omit } from "lodash";
 import UniqueEntityId from "#seedwork/domain/value-objects/unique-entity-id.vo";
-import CastMemberType from "../cast-member-type.vo";
+import { CastMemberType } from "../../value-objects/cast-member-type.vo";
 
 describe("CastMember Unit Test", () => {
   beforeEach(() => {
     CastMember.validate = jest.fn();
   });
   test("constructor of castMember", () => {
-    const type = CastMemberType.createActor();
+    const type = CastMemberType.createAnActor();
     let castMember = new CastMember({
       name: "John Doe",
       type,
@@ -38,7 +38,7 @@ describe("CastMember Unit Test", () => {
       props: CastMemberProperties;
       id?: UniqueEntityId;
     };
-    const type = CastMemberType.createActor();
+    const type = CastMemberType.createAnActor();
     const arrange: CastMemberData[] = [
       { props: { name: "John Doe", type } },
       { props: { name: "John Doe", type }, id: null },
@@ -53,7 +53,7 @@ describe("CastMember Unit Test", () => {
   });
 
   test("getter and setter of name prop", () => {
-    const type = CastMemberType.createActor();
+    const type = CastMemberType.createAnActor();
     const castMember = new CastMember({ name: "John Doe", type });
     expect(castMember.name).toBe("John Doe");
 
@@ -62,7 +62,7 @@ describe("CastMember Unit Test", () => {
   });
 
   test("getter and setter of type prop", () => {
-    const type = CastMemberType.createActor();
+    const type = CastMemberType.createAnActor();
     const castMember = new CastMember({ name: "John Doe", type });
     expect(castMember.type).toStrictEqual(type);
     expect(castMember.type.equals(type)).toBeTruthy();
@@ -72,7 +72,7 @@ describe("CastMember Unit Test", () => {
   });
 
   test("setter of created_at prop", () => {
-    const type = CastMemberType.createActor();
+    const type = CastMemberType.createAnActor();
     const created_at = new Date();
     let castMember = new CastMember({
       name: "John Doe",
@@ -84,13 +84,13 @@ describe("CastMember Unit Test", () => {
   });
 
   it("should update a castMember", () => {
-    let type = CastMemberType.createActor();
+    let type = CastMemberType.createAnActor();
     const castMember = new CastMember({
       name: "John Doe",
       type,
     });
     const created_at = castMember.created_at;
-    type = CastMemberType.createDirector();
+    type = CastMemberType.createADirector();
 
     castMember.update("Mary Doe", type);
     expect(CastMember.validate).toHaveBeenCalledTimes(2);
@@ -106,13 +106,13 @@ describe("CastMember Unit Test", () => {
   it("should converte to JSON", () => {
     const castMember = new CastMember({
       name: "John Doe",
-      type: CastMemberType.createActor(),
+      type: CastMemberType.createAnActor(),
     });
 
     expect(castMember.toJSON()).toEqual({
       id: castMember.id,
       name: castMember.name,
-      type: castMember.type.code,
+      type: castMember.type.value,
       created_at: castMember.created_at,
     });
   });

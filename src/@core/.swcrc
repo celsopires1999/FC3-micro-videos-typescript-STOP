@@ -5,6 +5,7 @@
       "decorators": true
     },
     "baseUrl": "./src",
+    "keepClassNames": true,
     "paths": {
       "#seedwork/*": ["./@seedwork/*"],
       "#category/*": ["./category/*"],

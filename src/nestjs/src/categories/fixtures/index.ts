@@ -14,28 +14,35 @@ export class CategoryFixture {
       .build();
     return [
       {
-        send_data: { name: faker.name },
+        send_data: { name: faker.name, description: null, is_active: true },
         expected: {
+          name: faker.name,
           description: null,
           is_active: true,
         },
       },
       {
-        send_data: { name: faker.name, description: null },
+        send_data: { name: faker.name, description: null, is_active: true },
         expected: {
+          name: faker.name,
+          description: null,
           is_active: true,
         },
       },
       {
-        send_data: { name: faker.name, is_active: true },
+        send_data: { name: faker.name, description: null, is_active: true },
         expected: {
+          name: faker.name,
           description: null,
+          is_active: true,
         },
       },
       {
-        send_data: { name: faker.name, is_active: false },
+        send_data: { name: faker.name, description: null, is_active: false },
         expected: {
+          name: faker.name,
           description: null,
+          is_active: false,
         },
       },
       {
@@ -44,7 +51,11 @@ export class CategoryFixture {
           description: faker.description,
           is_active: true,
         },
-        expected: {},
+        expected: {
+          name: faker.name,
+          description: faker.description,
+          is_active: true,
+        },
       },
       {
         send_data: {
@@ -52,7 +63,11 @@ export class CategoryFixture {
           description: faker.description,
           is_active: false,
         },
-        expected: {},
+        expected: {
+          name: faker.name,
+          description: faker.description,
+          is_active: false,
+        },
       },
     ];
   }

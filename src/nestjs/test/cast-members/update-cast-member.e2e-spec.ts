@@ -58,7 +58,7 @@ describe('CastMembersController (e2e)', () => {
         {
           label: 'INVALID',
           id: 'fake id',
-          send_data: { name: faker.name, type: faker.type.code },
+          send_data: { name: faker.name, type: faker.type.value },
           expected: {
             statusCode: 422,
             error: 'Unprocessable Entity',
@@ -68,7 +68,7 @@ describe('CastMembersController (e2e)', () => {
         {
           label: 'NOT FOUND',
           id: 'd0ba5077-fb6d-406f-bd05-8c521ba9425a',
-          send_data: { name: faker.name, type: faker.type.code },
+          send_data: { name: faker.name, type: faker.type.value },
           expected: {
             statusCode: 404,
             error: 'Not Found',
@@ -121,7 +121,6 @@ describe('CastMembersController (e2e)', () => {
           expect(res.body.data).toStrictEqual({
             id: serialized.id,
             created_at: serialized.created_at,
-            ...send_data,
             ...expected,
           });
         },

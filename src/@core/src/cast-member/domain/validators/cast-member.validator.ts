@@ -9,7 +9,7 @@ import {
 } from "class-validator";
 import ClassValidatorFields from "../../../@seedwork/domain/validators/class-validator-fields";
 import { CastMemberProperties } from "../entities/cast-member";
-import CastMemberType from "../entities/cast-member-type.vo";
+import { CastMemberType } from "../value-objects/cast-member-type.vo";
 
 export class CastMemberRules {
   @MaxLength(255)
@@ -19,6 +19,7 @@ export class CastMemberRules {
 
   @IsNotEmptyObject()
   @IsNotEmpty()
+  //@ts-expect-error - the constructor must be private
   @IsInstance(CastMemberType)
   type: CastMemberType;
 

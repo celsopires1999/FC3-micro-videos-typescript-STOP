@@ -1,7 +1,7 @@
-import { CastMemberFakeBuilder } from "../cast-member-fake-builder";
-import { Chance } from "chance";
 import { UniqueEntityId } from "#seedwork/domain";
-import CastMemberType from "../cast-member-type.vo";
+import { Chance } from "chance";
+import { CastMemberType } from "../../value-objects/cast-member-type.vo";
+import { CastMemberFakeBuilder } from "../cast-member-fake-builder";
 
 describe("CastMemberFakeBuilder Unit Tests", () => {
   describe("unique_entity_id prop", () => {
@@ -154,7 +154,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       expect($this).toBeInstanceOf(CastMemberFakeBuilder);
       expect(faker["_type"]).toBeNull();
 
-      const actor = CastMemberType.createActor();
+      const actor = CastMemberType.createAnActor();
       faker.withType(actor);
       expect(faker["_type"]).toEqual(actor);
 
@@ -168,27 +168,27 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
     it("should pass an index to type factory", () => {
       faker.withType((index) =>
         index % 2 === 0
-          ? CastMemberType.createDirector()
-          : CastMemberType.createActor()
+          ? CastMemberType.createADirector()
+          : CastMemberType.createAnActor()
       );
       const castMember = faker.build();
       expect(
-        castMember.type.equals(CastMemberType.createDirector())
+        castMember.type.equals(CastMemberType.createADirector())
       ).toBeTruthy();
 
       const fakerMany = CastMemberFakeBuilder.theCastMembers(2);
       fakerMany.withType((index) =>
         index % 2 === 0
-          ? CastMemberType.createDirector()
-          : CastMemberType.createActor()
+          ? CastMemberType.createADirector()
+          : CastMemberType.createAnActor()
       );
       const castMembers = fakerMany.build();
 
       expect(
-        castMembers[0].type.equals(CastMemberType.createDirector())
+        castMembers[0].type.equals(CastMemberType.createADirector())
       ).toBeTruthy();
       expect(
-        castMembers[1].type.equals(CastMemberType.createActor())
+        castMembers[1].type.equals(CastMemberType.createAnActor())
       ).toBeTruthy();
     });
 
@@ -276,7 +276,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       const unique_entity_id = new UniqueEntityId();
       castMember = CastMemberFakeBuilder.aCastMember()
         .withName("some name")
-        .withType(CastMemberType.createDirector())
+        .withType(CastMemberType.createADirector())
         .withCreatedAt(created_at)
         .withUniqueEntityId(unique_entity_id)
         .build();
@@ -284,7 +284,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       expect(castMember.id).toBe(unique_entity_id.value);
       expect(castMember.name).toBe("some name");
       expect(
-        castMember.type.equals(CastMemberType.createDirector())
+        castMember.type.equals(CastMemberType.createADirector())
       ).toBeTruthy();
       expect(castMember.created_at).toStrictEqual(created_at);
     });
@@ -303,7 +303,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       const unique_entity_id = new UniqueEntityId();
       castMembers = CastMemberFakeBuilder.theCastMembers(2)
         .withName("some name")
-        .withType(CastMemberType.createActor())
+        .withType(CastMemberType.createAnActor())
         .withCreatedAt(created_at)
         .withUniqueEntityId(unique_entity_id)
         .build();
@@ -313,7 +313,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
         expect(castMember.id).toBe(unique_entity_id.value);
         expect(castMember.name).toBe("some name");
         expect(
-          castMember.type.equals(CastMemberType.createActor())
+          castMember.type.equals(CastMemberType.createAnActor())
         ).toBeTruthy();
         expect(castMember.created_at).toStrictEqual(created_at);
       });
