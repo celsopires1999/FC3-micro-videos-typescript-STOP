@@ -1,4 +1,4 @@
-import Entity from "../../../@seedwork/domain/entity/entity";
+import AggregateRoot from "#seedwork/domain/entity/aggregate-root";
 import { EntityValidationError } from "../../../@seedwork/domain/errors/validation-error";
 import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 import CategoryValidatorFactory from "../validators/category.validator";
@@ -13,7 +13,7 @@ export type CategoryProperties = {
 
 export type CategoryPropsJson = Required<{ id: string } & CategoryProperties>;
 
-export class Category extends Entity<
+export class Category extends AggregateRoot<
   UniqueEntityId,
   CategoryProperties,
   CategoryPropsJson
