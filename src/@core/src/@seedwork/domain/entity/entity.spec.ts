@@ -9,7 +9,15 @@ type StubEntityProps = {
 
 type StubEntityJsonProps = Required<{ id: string } & StubEntityProps>;
 
-class StubEntity extends Entity<StubEntityProps, StubEntityJsonProps> {
+class StubEntity extends Entity<
+  UniqueEntityId,
+  StubEntityProps,
+  StubEntityJsonProps
+> {
+  constructor(public readonly props: StubEntityProps, id?: UniqueEntityId) {
+    super(props, id || new UniqueEntityId());
+  }
+
   toJSON(): StubEntityJsonProps {
     return {
       id: this.id.toString(),
@@ -24,7 +32,7 @@ describe("Entity Unit Tests", () => {
     const arrange = { prop1: "prop1 value", prop2: 123 };
     const entity = new StubEntity(arrange);
     expect(entity.props).toStrictEqual(arrange);
-    expect(entity.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+    expect(entity.entityId).toBeInstanceOf(UniqueEntityId);
     expect(uuidValidate(entity.id)).toBeTruthy();
   });
 
@@ -32,8 +40,8 @@ describe("Entity Unit Tests", () => {
     const arrange = { prop1: "prop1 value", prop2: 123 };
     const uniqueEntityId = new UniqueEntityId();
     const entity = new StubEntity(arrange, uniqueEntityId);
-    expect(entity.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
-    expect(entity.uniqueEntityId).toBe(uniqueEntityId);
+    expect(entity.entityId).toBeInstanceOf(UniqueEntityId);
+    expect(entity.entityId).toBe(uniqueEntityId);
     expect(entity.id).toBe(uniqueEntityId.value);
   });
 

@@ -1,3 +1,4 @@
+import { UniqueEntityId } from "#seedwork/domain/value-objects";
 import Entity from "../../entity/entity";
 import { InMemorySearchableRepository } from "../in-memory-repository";
 import { SearchParams, SearchResult } from "../repository-contracts";
@@ -9,7 +10,14 @@ type StubEntityProps = {
 
 type StubEntityJsonProps = Required<{ id: string } & StubEntityProps>;
 
-class StubEntity extends Entity<StubEntityProps, StubEntityJsonProps> {
+class StubEntity extends Entity<
+  UniqueEntityId,
+  StubEntityProps,
+  StubEntityJsonProps
+> {
+  constructor(public readonly props: StubEntityProps, id?: UniqueEntityId) {
+    super(props, id || new UniqueEntityId());
+  }
   toJSON(): StubEntityJsonProps {
     return {
       id: this.id,

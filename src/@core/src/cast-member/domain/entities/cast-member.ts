@@ -16,15 +16,16 @@ export type CastMemberPropsJson = Required<
 > & { type: Types };
 
 export class CastMember extends Entity<
+  UniqueEntityId,
   CastMemberProperties,
   CastMemberPropsJson
 > {
   constructor(
     public readonly props: CastMemberProperties,
-    id?: UniqueEntityId
+    entityId?: UniqueEntityId
   ) {
     CastMember.validate(props);
-    super(props, id);
+    super(props, entityId ?? new UniqueEntityId());
     this.type = this.props.type;
     this.created_at = this.props.created_at;
   }

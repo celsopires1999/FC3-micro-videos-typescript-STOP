@@ -65,7 +65,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
     let entityFound = await repository.findById(entity.id);
     expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
 
-    entityFound = await repository.findById(entity.uniqueEntityId);
+    entityFound = await repository.findById(entity.entityId);
     expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
   });
 

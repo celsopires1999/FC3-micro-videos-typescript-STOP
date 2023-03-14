@@ -1,3 +1,4 @@
+import { UniqueEntityId } from "#seedwork/domain/value-objects";
 import Entity from "../../entity/entity";
 import NotFoundError from "../../errors/not-found.error";
 import { InMemoryRepository } from "../in-memory-repository";
@@ -9,7 +10,15 @@ type StubEntityProps = {
 
 type StubEntityJsonProps = Required<{ id: string } & StubEntityProps>;
 
-class StubEntity extends Entity<StubEntityProps, StubEntityJsonProps> {
+class StubEntity extends Entity<
+  UniqueEntityId,
+  StubEntityProps,
+  StubEntityJsonProps
+> {
+  constructor(public readonly props: StubEntityProps, id?: UniqueEntityId) {
+    super(props, id || new UniqueEntityId());
+  }
+
   toJSON(): StubEntityJsonProps {
     return {
       id: this.id.toString(),
@@ -58,7 +67,7 @@ describe("InMemoryRepository Unit Tests", () => {
     let entityFound = await repository.findById(entity.id);
     expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
 
-    entityFound = await repository.findById(entity.uniqueEntityId);
+    entityFound = await repository.findById(entity.entityId);
     expect(entity.toJSON()).toStrictEqual(entityFound.toJSON());
   });
 
@@ -83,7 +92,7 @@ describe("InMemoryRepository Unit Tests", () => {
 
     const entityUpdated = new StubEntity(
       { name: "new name", price: 20 },
-      entity.uniqueEntityId
+      entity.entityId
     );
     await repository.update(entityUpdated);
 
@@ -111,7 +120,7 @@ describe("InMemoryRepository Unit Tests", () => {
     expect(repository.items).toHaveLength(0);
 
     await repository.insert(entity);
-    await repository.delete(entity.uniqueEntityId);
+    await repository.delete(entity.entityId);
     expect(repository.items).toHaveLength(0);
   });
 });

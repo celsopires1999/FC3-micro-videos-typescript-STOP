@@ -36,7 +36,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       expect(faker.unique_entity_id).toBe(uniqueEntityId);
 
       const category = faker.build();
-      expect(category.uniqueEntityId).toStrictEqual(uniqueEntityId);
+      expect(category.entityId).toStrictEqual(uniqueEntityId);
     });
 
     it("should pass index to unique_entity_id factory", () => {
@@ -267,7 +267,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
 
     it("should create a cast member", () => {
       let castMember = CastMemberFakeBuilder.aCastMember().build();
-      expect(castMember.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+      expect(castMember.entityId).toBeInstanceOf(UniqueEntityId);
       expect(typeof castMember.name === "string").toBeTruthy();
       expect(castMember.type).toBeInstanceOf(CastMemberType);
       expect(castMember.created_at).toBeInstanceOf(Date);
@@ -280,7 +280,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
         .withCreatedAt(created_at)
         .withUniqueEntityId(unique_entity_id)
         .build();
-      expect(castMember.uniqueEntityId).toBe(unique_entity_id);
+      expect(castMember.entityId).toBe(unique_entity_id);
       expect(castMember.id).toBe(unique_entity_id.value);
       expect(castMember.name).toBe("some name");
       expect(
@@ -293,7 +293,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       let castMembers = CastMemberFakeBuilder.theCastMembers(2).build();
 
       castMembers.forEach((castMember) => {
-        expect(castMember.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+        expect(castMember.entityId).toBeInstanceOf(UniqueEntityId);
         expect(typeof castMember.name === "string").toBeTruthy();
         expect(castMember.type).toBeInstanceOf(CastMemberType);
         expect(castMember.created_at).toBeInstanceOf(Date);
@@ -309,7 +309,7 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
         .build();
 
       castMembers.forEach((castMember) => {
-        expect(castMember.uniqueEntityId).toBe(unique_entity_id);
+        expect(castMember.entityId).toBe(unique_entity_id);
         expect(castMember.id).toBe(unique_entity_id.value);
         expect(castMember.name).toBe("some name");
         expect(

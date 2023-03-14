@@ -35,7 +35,7 @@ describe("CategoryFakeBuilder Unit Tests", () => {
       expect(faker.unique_entity_id).toBe(uniqueEntityId);
 
       const category = faker.build();
-      expect(category.uniqueEntityId).toStrictEqual(uniqueEntityId);
+      expect(category.entityId).toStrictEqual(uniqueEntityId);
     });
 
     it("should pass index to unique_entity_id factory", () => {
@@ -284,7 +284,7 @@ describe("CategoryFakeBuilder Unit Tests", () => {
 
     it("should create a category", () => {
       let category = CategoryFakeBuilder.aCategory().build();
-      expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+      expect(category.entityId).toBeInstanceOf(UniqueEntityId);
       expect(typeof category.name === "string").toBeTruthy();
       expect(typeof category.description === "string").toBeTruthy();
       expect(category.is_active).toBeTruthy();
@@ -299,7 +299,7 @@ describe("CategoryFakeBuilder Unit Tests", () => {
         .withCreatedAt(created_at)
         .withUniqueEntityId(unique_entity_id)
         .build();
-      expect(category.uniqueEntityId).toBe(unique_entity_id);
+      expect(category.entityId).toBe(unique_entity_id);
       expect(category.id).toBe(unique_entity_id.value);
       expect(category.name).toBe("some name");
       expect(category.description).toBe("some description");
@@ -311,7 +311,7 @@ describe("CategoryFakeBuilder Unit Tests", () => {
       let categories = CategoryFakeBuilder.theCategories(2).build();
 
       categories.forEach((category) => {
-        expect(category.uniqueEntityId).toBeInstanceOf(UniqueEntityId);
+        expect(category.entityId).toBeInstanceOf(UniqueEntityId);
         expect(typeof category.name === "string").toBeTruthy();
         expect(typeof category.description === "string").toBeTruthy();
         expect(category.is_active).toBeTruthy();
@@ -329,7 +329,7 @@ describe("CategoryFakeBuilder Unit Tests", () => {
         .build();
 
       categories.forEach((category) => {
-        expect(category.uniqueEntityId).toBe(unique_entity_id);
+        expect(category.entityId).toBe(unique_entity_id);
         expect(category.id).toBe(unique_entity_id.value);
         expect(category.name).toBe("some name");
         expect(category.description).toBe("some description");
