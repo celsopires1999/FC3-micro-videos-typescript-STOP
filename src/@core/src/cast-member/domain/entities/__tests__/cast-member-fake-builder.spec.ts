@@ -1,53 +1,53 @@
-import { UniqueEntityId } from "#seedwork/domain";
 import { Chance } from "chance";
 import { CastMemberType } from "../../value-objects/cast-member-type.vo";
+import { CastMemberId } from "../cast-member";
 import { CastMemberFakeBuilder } from "../cast-member-fake-builder";
 
 describe("CastMemberFakeBuilder Unit Tests", () => {
-  describe("unique_entity_id prop", () => {
+  describe("entity_id prop", () => {
     const faker = CastMemberFakeBuilder.aCastMember();
 
-    it("should throw an error when unique_entity_id has not been set", () => {
-      expect(() => faker["getValue"]("unique_entity_id")).toThrow(
+    it("should throw an error when entity_id has not been set", () => {
+      expect(() => faker["getValue"]("entity_id")).toThrow(
         new Error(
-          `Property unique_entity_id does not have a factory, use "with" method instead`
+          `Property entity_id does not have a factory, use "with" method instead`
         )
       );
-      expect(() => faker.unique_entity_id).toThrow(
+      expect(() => faker.entity_id).toThrow(
         new Error(
-          `Property unique_entity_id does not have a factory, use "with" method instead`
+          `Property entity_id does not have a factory, use "with" method instead`
         )
       );
     });
 
     it("should be undefined", () => {
-      expect(faker["_unique_entity_id"]).toBeUndefined();
+      expect(faker["_entity_id"]).toBeUndefined();
     });
 
-    test("withUniqueEntityId", () => {
-      const uniqueEntityId = new UniqueEntityId();
-      const $this = faker.withUniqueEntityId(uniqueEntityId);
+    test("withEntityId", () => {
+      const castMemberId = new CastMemberId();
+      const $this = faker.withEntityId(castMemberId);
       expect($this).toBeInstanceOf(CastMemberFakeBuilder);
-      expect(faker["_unique_entity_id"]).toBe(uniqueEntityId);
+      expect(faker["_entity_id"]).toBe(castMemberId);
 
-      faker.withUniqueEntityId(() => uniqueEntityId);
-      expect(faker["_unique_entity_id"]()).toBe(uniqueEntityId);
+      faker.withEntityId(() => castMemberId);
+      expect(faker["_entity_id"]()).toBe(castMemberId);
 
-      expect(faker.unique_entity_id).toBe(uniqueEntityId);
+      expect(faker.entity_id).toBe(castMemberId);
 
       const category = faker.build();
-      expect(category.entityId).toStrictEqual(uniqueEntityId);
+      expect(category.entityId).toStrictEqual(castMemberId);
     });
 
     it("should pass index to unique_entity_id factory", () => {
-      let mockFactory = jest.fn().mockReturnValue(new UniqueEntityId());
-      faker.withUniqueEntityId(mockFactory);
+      let mockFactory = jest.fn().mockReturnValue(new CastMemberId());
+      faker.withEntityId(mockFactory);
       faker.build();
       expect(mockFactory).toHaveBeenCalledWith(0);
 
-      mockFactory = jest.fn().mockReturnValue(new UniqueEntityId());
+      mockFactory = jest.fn().mockReturnValue(new CastMemberId());
       const fakerMany = CastMemberFakeBuilder.theCastMembers(2);
-      fakerMany.withUniqueEntityId(mockFactory);
+      fakerMany.withEntityId(mockFactory);
       fakerMany.build();
 
       expect(mockFactory).toHaveBeenCalledWith(0);
@@ -267,18 +267,18 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
 
     it("should create a cast member", () => {
       let castMember = CastMemberFakeBuilder.aCastMember().build();
-      expect(castMember.entityId).toBeInstanceOf(UniqueEntityId);
+      expect(castMember.entityId).toBeInstanceOf(CastMemberId);
       expect(typeof castMember.name === "string").toBeTruthy();
       expect(castMember.type).toBeInstanceOf(CastMemberType);
       expect(castMember.created_at).toBeInstanceOf(Date);
 
       const created_at = new Date();
-      const unique_entity_id = new UniqueEntityId();
+      const unique_entity_id = new CastMemberId();
       castMember = CastMemberFakeBuilder.aCastMember()
         .withName("some name")
         .withType(CastMemberType.createADirector())
         .withCreatedAt(created_at)
-        .withUniqueEntityId(unique_entity_id)
+        .withEntityId(unique_entity_id)
         .build();
       expect(castMember.entityId).toBe(unique_entity_id);
       expect(castMember.id).toBe(unique_entity_id.value);
@@ -293,19 +293,19 @@ describe("CastMemberFakeBuilder Unit Tests", () => {
       let castMembers = CastMemberFakeBuilder.theCastMembers(2).build();
 
       castMembers.forEach((castMember) => {
-        expect(castMember.entityId).toBeInstanceOf(UniqueEntityId);
+        expect(castMember.entityId).toBeInstanceOf(CastMemberId);
         expect(typeof castMember.name === "string").toBeTruthy();
         expect(castMember.type).toBeInstanceOf(CastMemberType);
         expect(castMember.created_at).toBeInstanceOf(Date);
       });
 
       const created_at = new Date();
-      const unique_entity_id = new UniqueEntityId();
+      const unique_entity_id = new CastMemberId();
       castMembers = CastMemberFakeBuilder.theCastMembers(2)
         .withName("some name")
         .withType(CastMemberType.createAnActor())
         .withCreatedAt(created_at)
-        .withUniqueEntityId(unique_entity_id)
+        .withEntityId(unique_entity_id)
         .build();
 
       castMembers.forEach((castMember) => {

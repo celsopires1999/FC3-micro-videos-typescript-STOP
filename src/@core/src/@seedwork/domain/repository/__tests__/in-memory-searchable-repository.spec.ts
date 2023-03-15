@@ -1,3 +1,4 @@
+import AggregateRoot from "#seedwork/domain/entity/aggregate-root";
 import { UniqueEntityId } from "#seedwork/domain/value-objects";
 import Entity from "../../entity/entity";
 import { InMemorySearchableRepository } from "../in-memory-repository";
@@ -10,7 +11,7 @@ type StubEntityProps = {
 
 type StubEntityJsonProps = Required<{ id: string } & StubEntityProps>;
 
-class StubEntity extends Entity<
+class StubEntity extends AggregateRoot<
   UniqueEntityId,
   StubEntityProps,
   StubEntityJsonProps
@@ -27,7 +28,10 @@ class StubEntity extends Entity<
   }
 }
 
-class StubInMemorySearchableRepository extends InMemorySearchableRepository<StubEntity> {
+class StubInMemorySearchableRepository extends InMemorySearchableRepository<
+  StubEntity,
+  UniqueEntityId
+> {
   sortableFields: string[] = ["name"];
 
   protected async applyFilter(

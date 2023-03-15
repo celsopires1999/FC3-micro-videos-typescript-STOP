@@ -1,3 +1,4 @@
+import AggregateRoot from "#seedwork/domain/entity/aggregate-root";
 import { UniqueEntityId } from "#seedwork/domain/value-objects";
 import Entity from "../../entity/entity";
 import NotFoundError from "../../errors/not-found.error";
@@ -10,7 +11,7 @@ type StubEntityProps = {
 
 type StubEntityJsonProps = Required<{ id: string } & StubEntityProps>;
 
-class StubEntity extends Entity<
+class StubEntity extends AggregateRoot<
   UniqueEntityId,
   StubEntityProps,
   StubEntityJsonProps
@@ -27,7 +28,10 @@ class StubEntity extends Entity<
     };
   }
 }
-class StubInMemoryRepository extends InMemoryRepository<StubEntity> {}
+class StubInMemoryRepository extends InMemoryRepository<
+  StubEntity,
+  UniqueEntityId
+> {}
 
 describe("InMemoryRepository Unit Tests", () => {
   let repository: StubInMemoryRepository;

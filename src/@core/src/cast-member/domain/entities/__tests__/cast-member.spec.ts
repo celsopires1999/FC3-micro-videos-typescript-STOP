@@ -1,7 +1,9 @@
-import CastMember, { CastMemberProperties } from "./../cast-member";
 import { omit } from "lodash";
-import UniqueEntityId from "#seedwork/domain/value-objects/unique-entity-id.vo";
 import { CastMemberType } from "../../value-objects/cast-member-type.vo";
+import CastMember, {
+  CastMemberId,
+  CastMemberProperties,
+} from "./../cast-member";
 
 describe("CastMember Unit Test", () => {
   beforeEach(() => {
@@ -36,19 +38,19 @@ describe("CastMember Unit Test", () => {
   describe("id prop", () => {
     type CastMemberData = {
       props: CastMemberProperties;
-      id?: UniqueEntityId;
+      id?: CastMemberId;
     };
     const type = CastMemberType.createAnActor();
     const arrange: CastMemberData[] = [
       { props: { name: "John Doe", type } },
       { props: { name: "John Doe", type }, id: null },
       { props: { name: "John Doe", type }, id: undefined },
-      { props: { name: "John Doe", type }, id: new UniqueEntityId() },
+      { props: { name: "John Doe", type }, id: new CastMemberId() },
     ];
     test.each(arrange)("%#) when props are %j", (item) => {
       const castMember = new CastMember(item.props, item.id as any);
       expect(castMember.id).not.toBeNull();
-      expect(castMember.entityId).toBeInstanceOf(UniqueEntityId);
+      expect(castMember.entityId).toBeInstanceOf(CastMemberId);
     });
   });
 

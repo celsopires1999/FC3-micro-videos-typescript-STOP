@@ -1,6 +1,6 @@
-import { Category } from "#category/domain";
-import { LoadEntityError, UniqueEntityId } from "#seedwork/domain";
+import { Category, CategoryId } from "#category/domain";
 import { CategorySequelize } from "#category/infra";
+import { LoadEntityError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 
 const { CategoryModel, CategoryModelMapper } = CategorySequelize;
@@ -65,7 +65,7 @@ describe("CategoryMapper Integration Test", () => {
           is_active: false,
           created_at,
         },
-        new UniqueEntityId("312cffad-1938-489e-a706-643dc9a3cfd3")
+        new CategoryId("312cffad-1938-489e-a706-643dc9a3cfd3")
       ).toJSON()
     );
   });

@@ -15,17 +15,19 @@ export type CastMemberPropsJson = Required<
   { id: string } & Omit<CastMemberProperties, "type">
 > & { type: Types };
 
+export class CastMemberId extends UniqueEntityId {}
+
 export class CastMember extends AggregateRoot<
-  UniqueEntityId,
+  CastMemberId,
   CastMemberProperties,
   CastMemberPropsJson
 > {
   constructor(
     public readonly props: CastMemberProperties,
-    entityId?: UniqueEntityId
+    entityId?: CastMemberId
   ) {
     CastMember.validate(props);
-    super(props, entityId ?? new UniqueEntityId());
+    super(props, entityId ?? new CastMemberId());
     this.type = this.props.type;
     this.created_at = this.props.created_at;
   }

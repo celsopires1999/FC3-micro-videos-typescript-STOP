@@ -1,52 +1,52 @@
-import { CategoryFakeBuilder } from "../category-fake-builder";
 import { Chance } from "chance";
-import { UniqueEntityId } from "#seedwork/domain";
+import { CategoryId } from "../category";
+import { CategoryFakeBuilder } from "../category-fake-builder";
 
 describe("CategoryFakeBuilder Unit Tests", () => {
-  describe("unique_entity_id prop", () => {
+  describe("entity_id prop", () => {
     const faker = CategoryFakeBuilder.aCategory();
 
-    it("should throw an error when unique_entity_id has not been set", () => {
-      expect(() => faker["getValue"]("unique_entity_id")).toThrow(
+    it("should throw an error when entity_id has not been set", () => {
+      expect(() => faker["getValue"]("entity_id")).toThrow(
         new Error(
-          `Property unique_entity_id does not have a factory, use "with" method instead`
+          `Property entity_id does not have a factory, use "with" method instead`
         )
       );
-      expect(() => faker.unique_entity_id).toThrow(
+      expect(() => faker.entity_id).toThrow(
         new Error(
-          `Property unique_entity_id does not have a factory, use "with" method instead`
+          `Property entity_id does not have a factory, use "with" method instead`
         )
       );
     });
 
     it("should be undefined", () => {
-      expect(faker["_unique_entity_id"]).toBeUndefined();
+      expect(faker["_entity_id"]).toBeUndefined();
     });
 
-    test("withUniqueEntityId", () => {
-      const uniqueEntityId = new UniqueEntityId();
-      const $this = faker.withUniqueEntityId(uniqueEntityId);
+    test("withEntityId", () => {
+      const categoryId = new CategoryId();
+      const $this = faker.withEntityId(categoryId);
       expect($this).toBeInstanceOf(CategoryFakeBuilder);
-      expect(faker["_unique_entity_id"]).toBe(uniqueEntityId);
+      expect(faker["_entity_id"]).toBe(categoryId);
 
-      faker.withUniqueEntityId(() => uniqueEntityId);
-      expect(faker["_unique_entity_id"]()).toBe(uniqueEntityId);
+      faker.withEntityId(() => categoryId);
+      expect(faker["_entity_id"]()).toBe(categoryId);
 
-      expect(faker.unique_entity_id).toBe(uniqueEntityId);
+      expect(faker.entity_id).toBe(categoryId);
 
       const category = faker.build();
-      expect(category.entityId).toStrictEqual(uniqueEntityId);
+      expect(category.entityId).toStrictEqual(categoryId);
     });
 
-    it("should pass index to unique_entity_id factory", () => {
-      let mockFactory = jest.fn().mockReturnValue(new UniqueEntityId());
-      faker.withUniqueEntityId(mockFactory);
+    it("should pass index to entity_id factory", () => {
+      let mockFactory = jest.fn().mockReturnValue(new CategoryId());
+      faker.withEntityId(mockFactory);
       faker.build();
       expect(mockFactory).toHaveBeenCalledWith(0);
 
-      mockFactory = jest.fn().mockReturnValue(new UniqueEntityId());
+      mockFactory = jest.fn().mockReturnValue(new CategoryId());
       const fakerMany = CategoryFakeBuilder.theCategories(2);
-      fakerMany.withUniqueEntityId(mockFactory);
+      fakerMany.withEntityId(mockFactory);
       fakerMany.build();
 
       expect(mockFactory).toHaveBeenCalledWith(0);
@@ -284,23 +284,23 @@ describe("CategoryFakeBuilder Unit Tests", () => {
 
     it("should create a category", () => {
       let category = CategoryFakeBuilder.aCategory().build();
-      expect(category.entityId).toBeInstanceOf(UniqueEntityId);
+      expect(category.entityId).toBeInstanceOf(CategoryId);
       expect(typeof category.name === "string").toBeTruthy();
       expect(typeof category.description === "string").toBeTruthy();
       expect(category.is_active).toBeTruthy();
       expect(category.created_at).toBeInstanceOf(Date);
 
       const created_at = new Date();
-      const unique_entity_id = new UniqueEntityId();
+      const entity_id = new CategoryId();
       category = CategoryFakeBuilder.aCategory()
         .withName("some name")
         .withDescription("some description")
         .deactivate()
         .withCreatedAt(created_at)
-        .withUniqueEntityId(unique_entity_id)
+        .withEntityId(entity_id)
         .build();
-      expect(category.entityId).toBe(unique_entity_id);
-      expect(category.id).toBe(unique_entity_id.value);
+      expect(category.entityId).toBe(entity_id);
+      expect(category.id).toBe(entity_id.value);
       expect(category.name).toBe("some name");
       expect(category.description).toBe("some description");
       expect(category.is_active).toBeFalsy();
@@ -311,7 +311,7 @@ describe("CategoryFakeBuilder Unit Tests", () => {
       let categories = CategoryFakeBuilder.theCategories(2).build();
 
       categories.forEach((category) => {
-        expect(category.entityId).toBeInstanceOf(UniqueEntityId);
+        expect(category.entityId).toBeInstanceOf(CategoryId);
         expect(typeof category.name === "string").toBeTruthy();
         expect(typeof category.description === "string").toBeTruthy();
         expect(category.is_active).toBeTruthy();
@@ -319,18 +319,18 @@ describe("CategoryFakeBuilder Unit Tests", () => {
       });
 
       const created_at = new Date();
-      const unique_entity_id = new UniqueEntityId();
+      const entity_id = new CategoryId();
       categories = CategoryFakeBuilder.theCategories(2)
         .withName("some name")
         .withDescription("some description")
         .deactivate()
         .withCreatedAt(created_at)
-        .withUniqueEntityId(unique_entity_id)
+        .withEntityId(entity_id)
         .build();
 
       categories.forEach((category) => {
-        expect(category.entityId).toBe(unique_entity_id);
-        expect(category.id).toBe(unique_entity_id.value);
+        expect(category.entityId).toBe(entity_id);
+        expect(category.id).toBe(entity_id.value);
         expect(category.name).toBe("some name");
         expect(category.description).toBe("some description");
         expect(category.is_active).toBeFalsy();

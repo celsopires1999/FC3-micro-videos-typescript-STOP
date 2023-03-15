@@ -1,6 +1,6 @@
-import { Category, CategoryRepository } from "#category/domain";
+import { Category, CategoryId, CategoryRepository } from "#category/domain";
 import { CategorySequelize } from "#category/infra";
-import { NotFoundError, UniqueEntityId } from "#seedwork/domain";
+import { NotFoundError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import _chance from "chance";
 
@@ -98,9 +98,7 @@ describe("CategorySequelizeRepository Integration Tests", () => {
     );
 
     await expect(
-      repository.delete(
-        new UniqueEntityId("e712d467-7625-437c-9803-9ba0c6b499b0")
-      )
+      repository.delete(new CategoryId("e712d467-7625-437c-9803-9ba0c6b499b0"))
     ).rejects.toThrow(
       new NotFoundError(
         `Entity not found using ID e712d467-7625-437c-9803-9ba0c6b499b0`
@@ -167,7 +165,7 @@ describe("CategorySequelizeRepository Integration Tests", () => {
               is_active: i.is_active,
               created_at: i.created_at,
             },
-            new UniqueEntityId(i.id)
+            new CategoryId(i.id)
           )
       );
 

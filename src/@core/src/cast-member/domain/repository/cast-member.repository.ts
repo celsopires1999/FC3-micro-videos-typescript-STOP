@@ -1,4 +1,4 @@
-import { CastMember } from "#cast-member/domain";
+import { CastMember, CastMemberId } from "#cast-member/domain";
 import {
   SearchableRepositoryInterface,
   SearchParams as DefaultSearchParams,
@@ -84,6 +84,7 @@ export namespace CastMemberRepository {
   export interface Repository
     extends SearchableRepositoryInterface<
       CastMember,
+      CastMemberId,
       Filter,
       SearchParams,
       SearchResult

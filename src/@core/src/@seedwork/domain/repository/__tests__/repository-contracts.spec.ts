@@ -1,3 +1,5 @@
+import AggregateRoot from "#seedwork/domain/entity/aggregate-root";
+import { UniqueEntityId } from "#seedwork/domain/value-objects";
 import Entity from "../../entity/entity";
 import { SearchParams, SearchResult } from "../repository-contracts";
 
@@ -225,12 +227,13 @@ describe("Search Unit Tests", () => {
     });
 
     test("Generics on Entity and Filter", () => {
-      class FakeEntity extends Entity {
+      class FakeEntity extends AggregateRoot {
         constructor(
           public readonly name: string,
-          public readonly price: number
+          public readonly price: number,
+          entityId?: UniqueEntityId
         ) {
-          super({});
+          super({}, entityId ?? new UniqueEntityId());
         }
         toJSON(): Required<any> {
           return {

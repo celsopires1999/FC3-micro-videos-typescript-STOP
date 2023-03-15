@@ -1,22 +1,22 @@
 import {
-  Model,
-  Table,
   Column,
-  PrimaryKey,
   DataType,
+  Model,
+  PrimaryKey,
+  Table,
 } from "sequelize-typescript";
 
 import { SequelizeModelFactory } from "#seedwork/infra/sequelize/sequelize-model-factory";
 
 import {
   Category,
+  CategoryId,
   CategoryRepository as CategoryRepositoryContract,
 } from "#category/domain";
 import {
-  NotFoundError,
-  UniqueEntityId,
   EntityValidationError,
   LoadEntityError,
+  NotFoundError,
   SortDirection,
 } from "#seedwork/domain";
 import { literal, Op } from "sequelize";
@@ -124,7 +124,7 @@ export namespace CategorySequelize {
       await this.categoryModel.bulkCreate(entities.map((e) => e.toJSON()));
     }
 
-    async findById(id: string | UniqueEntityId): Promise<Category> {
+    async findById(id: string | CategoryId): Promise<Category> {
       const _id = `${id}`;
       const model = await this._get(_id);
       return CategoryModelMapper.toEntity(model);
@@ -142,7 +142,7 @@ export namespace CategorySequelize {
       });
     }
 
-    async delete(id: string | UniqueEntityId): Promise<void> {
+    async delete(id: string | CategoryId): Promise<void> {
       const _id = `${id}`;
       await this._get(_id);
 
@@ -163,7 +163,7 @@ export namespace CategorySequelize {
       const { id, ...otherData } = model.toJSON();
 
       try {
-        return new Category(otherData, new UniqueEntityId(id));
+        return new Category(otherData, new CategoryId(id));
       } catch (e) {
         if (e instanceof EntityValidationError) {
           throw new LoadEntityError(e.error);

@@ -1,11 +1,12 @@
 import {
   CastMember,
   CastMemberFakeBuilder,
+  CastMemberId,
   CastMemberRepository,
   CastMemberType,
 } from "#cast-member/domain";
 import { CastMemberSequelize } from "#cast-member/infra";
-import { NotFoundError, UniqueEntityId } from "#seedwork/domain";
+import { NotFoundError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import _chance from "chance";
 
@@ -111,7 +112,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
 
     await expect(
       repository.delete(
-        new UniqueEntityId("e712d467-7625-437c-9803-9ba0c6b499b0")
+        new CastMemberId("e712d467-7625-437c-9803-9ba0c6b499b0")
       )
     ).rejects.toThrow(
       new NotFoundError(
@@ -181,7 +182,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
               type: CastMemberType.createADirector(),
               created_at: i.created_at,
             },
-            new UniqueEntityId(i.id)
+            new CastMemberId(i.id)
           )
       );
 

@@ -1,6 +1,6 @@
-import { CastMember, CastMemberType } from "#cast-member/domain";
-import { LoadEntityError, UniqueEntityId } from "#seedwork/domain";
+import { CastMember, CastMemberId, CastMemberType } from "#cast-member/domain";
 import { CastMemberSequelize } from "#cast-member/infra";
+import { LoadEntityError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 
 const { CastMemberModel, CastMemberModelMapper } = CastMemberSequelize;
@@ -82,7 +82,7 @@ describe("CastMemberMapper Integration Test", () => {
           type: CastMemberType.createADirector(),
           created_at,
         },
-        new UniqueEntityId("312cffad-1938-489e-a706-643dc9a3cfd3")
+        new CastMemberId("312cffad-1938-489e-a706-643dc9a3cfd3")
       ).toJSON()
     );
   });
