@@ -58,7 +58,11 @@ export class CastMember extends AggregateRoot<
   }
 
   update(name: string, type: CastMemberType) {
-    CastMember.validate({ name, type });
+    CastMember.validate({
+      ...this.props,
+      name,
+      type,
+    });
     this.name = name;
     this.type = type;
   }

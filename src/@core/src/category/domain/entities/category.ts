@@ -65,7 +65,11 @@ export class Category extends AggregateRoot<
   }
 
   update(name: string, description: string) {
-    Category.validate({ name, description });
+    Category.validate({
+      ...this.props,
+      name,
+      description,
+    });
     this.name = name;
     this.description = description;
   }
