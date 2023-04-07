@@ -1,3 +1,4 @@
+import { CategoryId } from "#category/domain";
 import { Chance } from "chance";
 import { Genre, GenreId } from "./genre";
 
@@ -5,9 +6,9 @@ type PropOrFactory<T> = T | ((index: number) => T);
 
 export class GenreFakeBuilder<TBuild = any> {
   private _entity_id = undefined; // auto generated in entity
-  private _name: PropOrFactory<string> = (index) => this.chance.word();
-  private _is_active: PropOrFactory<boolean> = (index) => true;
-  private _categories_id = undefined; // auto generated in entity
+  private _name: PropOrFactory<string> = (_index) => this.chance.word();
+  private _is_active: PropOrFactory<boolean> = (_index) => true;
+  private _categories_id: PropOrFactory<CategoryId>[] = [];
   private _created_at = undefined; // auto generated in entity
 
   private countObjs: number;
@@ -52,6 +53,16 @@ export class GenreFakeBuilder<TBuild = any> {
     return this;
   }
 
+  withCategoryId(valueOrFactory: PropOrFactory<CategoryId>) {
+    this._categories_id.push(valueOrFactory);
+    return this;
+  }
+
+  withInvalidCategoryId() {
+    this._categories_id.push("fake id" as any);
+    return this;
+  }
+
   activate() {
     this._is_active = true;
     return this;
@@ -78,19 +89,20 @@ export class GenreFakeBuilder<TBuild = any> {
   }
 
   build(): TBuild {
-    const genres = new Array(this.countObjs).fill(undefined).map(
-      (_, index) =>
-        new Genre(
-          {
-            name: this.callFactory(this._name, index),
-            categories_id: this.callFactory(this._categories_id, index),
-            is_active: this.callFactory(this._is_active, index),
-            ...(this._created_at && {
-              created_at: this.callFactory(this._created_at, index),
-            }),
-          },
-          this._entity_id && this.callFactory(this._entity_id, index)
-        )
+    const genres = new Array(this.countObjs).fill(undefined).map((_, index) =>
+      Genre.create(
+        {
+          name: this.callFactory(this._name, index),
+          categories_id: this._categories_id.length
+            ? this.callFactory(this._categories_id, index)
+            : [new CategoryId()],
+          is_active: this.callFactory(this._is_active, index),
+          ...(this._created_at && {
+            created_at: this.callFactory(this._created_at, index),
+          }),
+        },
+        !this._entity_id ? undefined : this.callFactory(this._entity_id, index)
+      )
     );
 
     return this.countObjs === 1 ? (genres[0] as any) : genres;
@@ -102,6 +114,10 @@ export class GenreFakeBuilder<TBuild = any> {
 
   get name() {
     return this.getValue("name");
+  }
+
+  get categories_id() {
+    return this.getValue("categories_id");
   }
 
   get is_active() {
