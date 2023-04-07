@@ -1,8 +1,10 @@
 import { CategoryId } from "#category/domain/entities/category";
+import { Distinct } from "#seedwork/domain/validators/rules/distinct.rule";
 import { IterableNotEmpty } from "#seedwork/domain/validators/rules/iterable-not-empty.rule";
 import {
   IsBoolean,
   IsDate,
+  IsInstance,
   IsNotEmpty,
   IsOptional,
   IsString,
@@ -17,6 +19,8 @@ export class GenreRules {
   @IsNotEmpty()
   name: string;
 
+  @Distinct((a: CategoryId, b: CategoryId) => a.value === b.value)
+  @IsInstance(CategoryId, { each: true })
   @IterableNotEmpty()
   categories_id: Map<string, CategoryId>;
 
