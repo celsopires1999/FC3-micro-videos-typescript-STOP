@@ -15,7 +15,11 @@
     "#cast-member/application": "./dist/cast-member/application/index.js",
     "#cast-member/domain": "./dist/cast-member/domain/index.js",
     "#cast-member/infra": "./dist/cast-member/infra/index.js",
-    "#cast-member/*": "./dist/cast-member/*.js"
+    "#cast-member/*": "./dist/cast-member/*.js",
+    "#genre/application": "./dist/genre/application/index.js",
+    "#genre/domain": "./dist/genre/domain/index.js",
+    "#genre/infra": "./dist/genre/infra/index.js",
+    "#genre/*": "./dist/genre/*.js"
   },
   "exports": {
     "./@seedwork/application": "./dist/@seedwork/application/index.js",
@@ -26,7 +30,10 @@
     "./category/infra": "./dist/category/infra/index.js",
     "./cast-member/application": "./dist/cast-member/application/index.js",
     "./cast-member/domain": "./dist/cast-member/domain/index.js",
-    "./cast-member/infra": "./dist/cast-member/infra/index.js"
+    "./cast-member/infra": "./dist/cast-member/infra/index.js",
+    "./genre/application": "./dist/genre/application/index.js",
+    "./genre/domain": "./dist/genre/domain/index.js",
+    "./genre/infra": "./dist/genre/infra/index.js"
   },
   "typesVersions": {
     ">=4.0": {
@@ -56,6 +63,15 @@
       ],
       "cast-member/infra": [
         "./dist/cast-member/infra/index.d.ts"
+      ],
+      "genre/application": [
+        "./dist/genre/application/index.d.ts"
+      ],
+      "genre/domain": [
+        "./dist/genre/domain/index.d.ts"
+      ],
+      "genre/infra": [
+        "./dist/genre/infra/index.d.ts"
       ]
     }
   },

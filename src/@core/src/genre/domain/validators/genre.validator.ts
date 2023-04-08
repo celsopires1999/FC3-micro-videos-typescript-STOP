@@ -32,8 +32,8 @@ export class GenreRules {
   @IsOptional()
   created_at: Date;
 
-  constructor({ name, is_active, created_at }: GenreProperties) {
-    Object.assign(this, { name, is_active, created_at });
+  constructor({ name, categories_id, is_active, created_at }: GenreProperties) {
+    Object.assign(this, { name, categories_id, is_active, created_at });
   }
 }
 

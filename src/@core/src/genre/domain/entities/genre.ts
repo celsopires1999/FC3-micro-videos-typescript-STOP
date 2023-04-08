@@ -1,5 +1,6 @@
 import { CategoryId } from "#category/domain";
 import AggregateRoot from "#seedwork/domain/entity/aggregate-root";
+import { cloneDeep } from "lodash";
 import { EntityValidationError } from "../../../@seedwork/domain/errors/validation-error";
 import UniqueEntityId from "../../../@seedwork/domain/value-objects/unique-entity-id.vo";
 import GenreValidatorFactory from "../validators/genre.validator";
@@ -13,7 +14,7 @@ export type GenreProperties = {
 };
 
 export type GenreCreateCommand = Omit<GenreProperties, "categories_id"> & {
-  categories_id: string[];
+  categories_id: string[] | CategoryId[];
 };
 
 export type GenrePropsJson = Required<
@@ -38,9 +39,14 @@ export class Genre extends AggregateRoot<
 
   static create(props: GenreCreateCommand, id?: GenreId) {
     const categories_id = new Map<string, CategoryId>();
-    props.categories_id.forEach((id) =>
-      categories_id.set(id, new CategoryId(id))
-    );
+    props.categories_id.forEach((categoryId) => {
+      categories_id.set(
+        categoryId instanceof CategoryId ? categoryId.value : categoryId,
+        categoryId instanceof CategoryId
+          ? categoryId
+          : new CategoryId(categoryId)
+      );
+    });
     return new Genre({ ...props, categories_id }, id);
   }
 
@@ -86,15 +92,31 @@ export class Genre extends AggregateRoot<
   }
 
   addCategoryId(categoryId: CategoryId) {
-    this.props.categories_id.set(categoryId.value, categoryId);
+    const categoriesId = cloneDeep(this.props.categories_id);
+    categoriesId.set(categoryId.value, categoryId);
+
+    Genre.validate({
+      ...this.props,
+      categories_id: categoriesId,
+    });
+
+    this.categories_id = categoriesId;
   }
 
   removeCategoryId(categoryId: CategoryId) {
-    this.props.categories_id.delete(categoryId.value);
+    const categoriesId = cloneDeep(this.props.categories_id);
+    categoriesId.delete(categoryId.value);
+
+    Genre.validate({
+      ...this.props,
+      categories_id: categoriesId,
+    });
+
+    this.categories_id = categoriesId;
   }
 
   updateCategoriesId(newCategoriesId: CategoryId[]) {
-    if (!newCategoriesId.length) {
+    if (!Array.isArray(newCategoriesId) || !newCategoriesId.length) {
       return;
     }
 
@@ -109,28 +131,31 @@ export class Genre extends AggregateRoot<
     this.categories_id = categoriesId;
   }
 
-  // serve para rastrear adicionados e removidos
-  // poderíamos usar essa técnica registrando em duas variáveis as categorias excluídas e incluídas
-  // para que no repositório fossem feitas apenas as operações de exclusão e exclusão referente às mudanças
-  // outra forma seria a exclusão e a inclusão de todas as categorias
   syncCategories(newCategoriesId: CategoryId[]) {
     if (!newCategoriesId.length) {
       return;
     }
 
-    this.categories_id.forEach((category_id) => {
+    const categoriesId = cloneDeep(this.props.categories_id);
+
+    categoriesId.forEach((categoryId) => {
       const notExists = !newCategoriesId.find((newCategoryId) =>
-        newCategoryId.equals(category_id)
+        newCategoryId.equals(categoryId)
       );
       if (notExists) {
-        this.categories_id.delete(category_id.value);
+        categoriesId.delete(categoryId.value);
       }
     });
 
     newCategoriesId.forEach((categoryId) =>
-      this.categories_id.set(categoryId.value, categoryId)
+      categoriesId.set(categoryId.value, categoryId)
     );
-    Genre.validate(this.props);
+    Genre.validate({
+      ...this.props,
+      categories_id: categoriesId,
+    });
+
+    this.categories_id = categoriesId;
   }
 
   static validate(props: GenreProperties) {
@@ -154,7 +179,7 @@ export class Genre extends AggregateRoot<
       id: this.id.toString(),
       name: this.name,
       categories_id: Array.from(this.props.categories_id.values()).map(
-        (categoryId) => categoryId.id
+        (categoryId) => categoryId.value
       ),
       is_active: this.is_active,
       created_at: this.created_at,

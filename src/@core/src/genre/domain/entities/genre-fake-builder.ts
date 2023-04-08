@@ -139,9 +139,15 @@ export class GenreFakeBuilder<TBuild = any> {
     return this.callFactory(this[privateProp], 0);
   }
 
-  private callFactory(propOrFactory: PropOrFactory<any>, index: number) {
-    return typeof propOrFactory === "function"
-      ? propOrFactory(index)
-      : propOrFactory;
+  private callFactory(factoryOrValue: PropOrFactory<any>, index: number) {
+    if (typeof factoryOrValue === "function") {
+      return factoryOrValue(index);
+    }
+
+    if (factoryOrValue instanceof Array) {
+      return factoryOrValue.map((value) => this.callFactory(value, index));
+    }
+
+    return factoryOrValue;
   }
 }

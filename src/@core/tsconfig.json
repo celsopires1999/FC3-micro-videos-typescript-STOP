@@ -5,7 +5,8 @@
     "paths": {
       "#seedwork/*": ["./@seedwork/*"],
       "#category/*": ["./category/*"],
-      "#cast-member/*": ["./cast-member/*"]
+      "#cast-member/*": ["./cast-member/*"],
+      "#genre/*": ["./genre/*"]
     },
     "outDir": "./dist",
     "sourceMap": true,
