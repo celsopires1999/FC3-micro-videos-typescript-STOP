@@ -1,3 +1,4 @@
+import { CategoryId } from "#category/domain";
 import { Either } from "./either";
 
 describe("Either Unit Tests", () => {
@@ -120,5 +121,38 @@ describe("Either Unit Tests", () => {
     expect(newEither3.isFail()).toBeTruthy();
     expect(newEither3.ok).toBeNull();
     expect(newEither3.error).toBe(1);
+  });
+
+  test("ok, map, chainEach and safe methods", () => {
+    let [validIds, errorIds] = callEither(["true-id", "fake-id", "invalid-id"]);
+    expect(validIds).toBeNull();
+    expect(errorIds).toBeInstanceOf(Array);
+    expect(errorIds.length).toBe(2);
+    expect(errorIds[0]).toBeInstanceOf(Error);
+    expect(errorIds[1]).toBeInstanceOf(Error);
+
+    [validIds, errorIds] = callEither(["true-id"]);
+    expect(validIds).toBeInstanceOf(Array);
+    expect(validIds.length).toBe(1);
+    expect(validIds[0]).toBe("true-id");
+    expect(errorIds).toBeNull();
+
+    [validIds, errorIds] = callEither(undefined);
+    expect(validIds).toEqual([]);
+    expect(errorIds).toBeNull();
+
+    function callEither(ids: any) {
+      return Either.ok(ids)
+        .map((value) => value || [])
+        .chainEach((value: any) =>
+          Either.safe(() =>
+            value !== "true-id"
+              ? (() => {
+                  throw new Error("Invalid id");
+                })()
+              : value
+          )
+        );
+    }
   });
 });

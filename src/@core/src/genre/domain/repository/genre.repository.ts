@@ -1,17 +1,18 @@
-import { CastMember, CastMemberId } from "#cast-member/domain";
+import { CategoryId } from "#category/domain";
+import { Genre, GenreId } from "#genre/domain";
 import {
   SearchableRepositoryInterface,
   SearchParams as DefaultSearchParams,
   SearchProps,
   SearchResult as DefaultSearchResult,
   SearchValidationError,
+  Either,
 } from "#seedwork/domain";
-import { CastMemberType, Types } from "../value-objects/cast-member-type.vo";
 
-export namespace CastMemberRepository {
+export namespace GenreRepository {
   export type Filter = {
     name?: string;
-    type?: CastMemberType;
+    categories_id?: CategoryId[];
   };
 
   export class SearchParams extends DefaultSearchParams<Filter> {
@@ -22,17 +23,23 @@ export namespace CastMemberRepository {
       props: Omit<SearchProps<Filter>, "filter"> & {
         filter?: {
           name?: string;
-          type?: Types;
+          categories_id?: CategoryId[] | string[];
         };
       } = {}
     ) {
-      const [type, errorCastMemberType] = props.filter?.type
-        ? CastMemberType.create(props.filter.type).asArray()
-        : [null, null];
+      const [categoriesId, errorCategoriesId] = Either.ok(
+        props.filter.categories_id
+      )
+        .map((value) => value || [])
+        .chainEach((value) =>
+          Either.safe(() =>
+            value instanceof CategoryId ? value : new CategoryId(value)
+          )
+        );
 
-      if (errorCastMemberType) {
+      if (errorCategoriesId) {
         const error = new SearchValidationError();
-        error.setFromError("type", errorCastMemberType);
+        error.setFromError("categories_id", errorCategoriesId);
         throw error;
       }
 
@@ -40,7 +47,7 @@ export namespace CastMemberRepository {
         ...props,
         filter: {
           name: props.filter?.name || null,
-          type: type,
+          categories_id: categoriesId,
         },
       });
     }
@@ -57,14 +64,14 @@ export namespace CastMemberRepository {
 
       const filter = {
         ...(_value.name && { name: `${_value?.name}` }),
-        ...(_value.type && { type: _value.type }),
+        ...(_value.categories_id && { categories_id: _value.categories_id }),
       };
 
       this._filter = Object.keys(filter).length === 0 ? null : filter;
     }
   }
 
-  export class SearchResult extends DefaultSearchResult<CastMember, Filter> {
+  export class SearchResult extends DefaultSearchResult<Genre, Filter> {
     toJSON() {
       const props = super.toJSON();
       return {
@@ -83,8 +90,8 @@ export namespace CastMemberRepository {
 
   export interface Repository
     extends SearchableRepositoryInterface<
-      CastMember,
-      CastMemberId,
+      Genre,
+      GenreId,
       Filter,
       SearchParams,
       SearchResult
@@ -93,4 +100,4 @@ export namespace CastMemberRepository {
   }
 }
 
-export default CastMemberRepository;
+export default GenreRepository;

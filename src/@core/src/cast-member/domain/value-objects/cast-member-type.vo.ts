@@ -20,11 +20,12 @@ class CastMemberType extends ValueObject<Types> {
   static create(
     value: Types
   ): Either<CastMemberType, InvalidCastMemberTypeError> {
-    try {
-      return Either.ok(new CastMemberType(value));
-    } catch (error) {
-      return Either.fail(error);
-    }
+    // try {
+    //   return Either.ok(new CastMemberType(value));
+    // } catch (error) {
+    //   return Either.fail(error);
+    // }
+    return Either.safe(() => new CastMemberType(value));
   }
 
   private validate() {
@@ -35,11 +36,11 @@ class CastMemberType extends ValueObject<Types> {
   }
 
   static createADirector() {
-    return CastMemberType.create(Types.DIRECTOR).getOk();
+    return CastMemberType.create(Types.DIRECTOR).ok;
   }
 
   static createAnActor() {
-    return CastMemberType.create(Types.ACTOR).getOk();
+    return CastMemberType.create(Types.ACTOR).ok;
   }
 }
 

@@ -43,7 +43,9 @@
     "donjayamanne.githistory",
     "eamodio.gitlens",
     "vivaxy.vscode-conventional-commits",
-    "orta.vscode-jest"
+    "orta.vscode-jest",
+    "WallabyJs.quokka-vscode",
+    "amazonwebservices.aws-toolkit-vscode"
   ]
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
