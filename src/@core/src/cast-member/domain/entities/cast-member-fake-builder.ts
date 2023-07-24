@@ -8,9 +8,7 @@ export class CastMemberFakeBuilder<TBuild = any> {
   private _entity_id = undefined; // auto generated in entity
   private _name: PropOrFactory<string> = (index) => this.chance.word();
   private _type: PropOrFactory<CastMemberType> = (index) =>
-    CastMemberType.create(
-      this.chance.integer({ min: 1, max: 2 }) as Types
-    ).getOk();
+    CastMemberType.create(this.chance.integer({ min: 1, max: 2 }) as Types).ok;
   private _created_at = undefined; // auto generated in entity
 
   private countObjs: number;
