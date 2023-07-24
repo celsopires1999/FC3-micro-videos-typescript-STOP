@@ -28,7 +28,7 @@ export namespace GenreRepository {
       } = {}
     ) {
       const [categoriesId, errorCategoriesId] = Either.ok(
-        props.filter.categories_id
+        props.filter?.categories_id
       )
         .map((value) => value || [])
         .chainEach((value) =>
@@ -47,7 +47,7 @@ export namespace GenreRepository {
         ...props,
         filter: {
           name: props.filter?.name || null,
-          categories_id: categoriesId,
+          categories_id: props.filter?.categories_id ? categoriesId : null,
         },
       });
     }
