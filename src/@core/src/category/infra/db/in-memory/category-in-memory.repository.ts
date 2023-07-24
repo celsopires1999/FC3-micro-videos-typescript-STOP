@@ -35,6 +35,10 @@ export class CategoryInMemoryRepository
       ? super.applySort(items, "created_at", "desc")
       : super.applySort(items, sort, sort_dir);
   }
+
+  getEntity(): new (...args: any[]) => Category {
+    return Category;
+  }
 }
 
 export default CategoryInMemoryRepository;

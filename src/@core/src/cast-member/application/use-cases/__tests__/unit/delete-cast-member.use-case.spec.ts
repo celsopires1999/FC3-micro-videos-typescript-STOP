@@ -1,5 +1,5 @@
 import { DeleteCastMemberUseCase } from "#cast-member/application";
-import { CastMemberFakeBuilder } from "#cast-member/domain";
+import { CastMember, CastMemberFakeBuilder } from "#cast-member/domain";
 import { CastMemberInMemoryRepository } from "#cast-member/infra";
 import { NotFoundError } from "#seedwork/domain";
 
@@ -13,7 +13,7 @@ describe("DeleteCastMemberUseCase Unit Tests", () => {
   });
   it("should throw an error when id is not found", async () => {
     await expect(useCase.execute({ id: "fake-id" })).rejects.toThrow(
-      new NotFoundError("Entity not found using ID fake-id")
+      new NotFoundError("fake-id", CastMember)
     );
   });
 

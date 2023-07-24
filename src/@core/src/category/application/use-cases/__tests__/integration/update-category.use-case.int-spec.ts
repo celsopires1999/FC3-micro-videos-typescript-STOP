@@ -22,9 +22,7 @@ describe("UpdateCategoryUseCase Integration Tests", () => {
         id: "fake id",
         name: "fake name",
       })
-    ).rejects.toThrowError(
-      new NotFoundError("Entity not found using ID fake id")
-    );
+    ).rejects.toThrowError(new NotFoundError("fake id", Category));
   });
 
   it("should update category", async () => {

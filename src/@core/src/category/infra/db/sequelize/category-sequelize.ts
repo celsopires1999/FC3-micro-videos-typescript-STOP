@@ -153,8 +153,12 @@ export namespace CategorySequelize {
 
     private async _get(id: string): Promise<CategoryModel> {
       return this.categoryModel.findByPk(id, {
-        rejectOnEmpty: new NotFoundError(`Entity not found using ID ${id}`),
+        rejectOnEmpty: new NotFoundError(id, Category),
       });
+    }
+
+    getEntity(): new (...args: any[]) => Category {
+      return Category;
     }
   }
 

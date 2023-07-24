@@ -2,6 +2,7 @@ import { CategorySequelize } from "#category/infra";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
 import { DeleteCategoryUseCase } from "#category/application";
 import { NotFoundError } from "#seedwork/domain";
+import { Category } from "#category/domain";
 
 const { CategoryModel, CategoryRepository } = CategorySequelize;
 
@@ -18,7 +19,7 @@ beforeEach(() => {
 describe("DeleteCategoryUseCase Integration Tests", () => {
   it("should throw an error on delete when category not found", async () => {
     await expect(useCase.execute({ id: "fake Id" })).rejects.toThrowError(
-      new NotFoundError("Entity not found using ID fake Id")
+      new NotFoundError("fake Id", Category)
     );
   });
   it("should delete a category", async () => {

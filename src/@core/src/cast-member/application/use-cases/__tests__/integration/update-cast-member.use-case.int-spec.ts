@@ -23,9 +23,7 @@ describe("UpdateCastMemberUseCase Integration Tests", () => {
         name: "fake name",
         type: 1,
       })
-    ).rejects.toThrowError(
-      new NotFoundError("Entity not found using ID fake id")
-    );
+    ).rejects.toThrowError(new NotFoundError("fake id", CastMember));
   });
 
   it("should throw a generic error", async () => {

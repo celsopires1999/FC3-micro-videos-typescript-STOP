@@ -12,6 +12,7 @@ export interface RepositoryInterface<
   findAll(): Promise<E[]>;
   update(entity: E): Promise<void>;
   delete(id: string | EntityId): Promise<void>;
+  getEntity(): new (...args: any[]) => E;
 }
 
 export type SortDirection = "asc" | "desc";

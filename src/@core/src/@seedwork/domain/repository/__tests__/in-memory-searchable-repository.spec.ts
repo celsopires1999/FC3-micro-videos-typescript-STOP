@@ -32,6 +32,9 @@ class StubInMemorySearchableRepository extends InMemorySearchableRepository<
   StubEntity,
   UniqueEntityId
 > {
+  getEntity(): new (...args: any[]) => StubEntity {
+    throw new Error("Method not implemented.");
+  }
   sortableFields: string[] = ["name"];
 
   protected async applyFilter(

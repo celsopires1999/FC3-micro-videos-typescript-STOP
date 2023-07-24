@@ -1,5 +1,5 @@
 import { GetCastMemberUseCase } from "#cast-member/application";
-import { CastMemberFakeBuilder } from "#cast-member/domain";
+import { CastMember, CastMemberFakeBuilder } from "#cast-member/domain";
 import { CastMemberSequelize } from "#cast-member/infra";
 import { NotFoundError } from "#seedwork/domain";
 import { setupSequelize } from "#seedwork/infra/testing/helpers/db";
@@ -18,7 +18,7 @@ beforeEach(() => {
 describe("GetCastMemberUseCase Integration Tests", () => {
   it("should throw an error when cast member not found", async () => {
     await expect(useCase.execute({ id: "fake id" })).rejects.toThrowError(
-      new NotFoundError("Entity not found using ID fake id")
+      new NotFoundError("fake id", CastMember)
     );
   });
 

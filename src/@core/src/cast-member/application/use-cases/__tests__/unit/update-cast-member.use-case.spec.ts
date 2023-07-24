@@ -49,7 +49,7 @@ describe("UpdateCastMemberUseCase Unit Tests", () => {
     it("should throw an error when id is not found", async () => {
       await expect(
         useCase.execute({ id: "fake-id", name: "fake", type: 1 })
-      ).rejects.toThrow(new NotFoundError("Entity not found using ID fake-id"));
+      ).rejects.toThrow(new NotFoundError("fake-id", CastMember));
     });
 
     it("should throw a generic error", async () => {

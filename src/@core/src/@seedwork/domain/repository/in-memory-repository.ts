@@ -65,10 +65,12 @@ export abstract class InMemoryRepository<
   protected async _get(_id: string): Promise<E> {
     const item = this.items.find((i) => i.id === _id);
     if (!item) {
-      throw new NotFoundError(`Entity not found using ID ${_id}`);
+      throw new NotFoundError(_id, this.getEntity());
     }
     return item;
   }
+
+  abstract getEntity(): new (...args: any[]) => E;
 }
 
 export abstract class InMemorySearchableRepository<

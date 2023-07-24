@@ -2,6 +2,7 @@ import {
   CreateCategoryUseCase,
   GetCategoryUseCase,
 } from "#category/application";
+import { Category } from "#category/domain";
 import { CategoryInMemoryRepository } from "#category/infra";
 import { NotFoundError } from "#seedwork/domain";
 
@@ -16,7 +17,7 @@ beforeEach(() => {
 describe("GetCategoryUseCase Unit Tests", () => {
   it("should throw an error when id is not found", async () => {
     await expect(useCase.execute({ id: "fake-id" })).rejects.toThrow(
-      new NotFoundError("Entity not found using ID fake-id")
+      new NotFoundError("fake-id", Category)
     );
   });
 

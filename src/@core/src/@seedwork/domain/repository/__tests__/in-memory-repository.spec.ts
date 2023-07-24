@@ -1,6 +1,5 @@
 import AggregateRoot from "#seedwork/domain/entity/aggregate-root";
 import { UniqueEntityId } from "#seedwork/domain/value-objects";
-import Entity from "../../entity/entity";
 import NotFoundError from "../../errors/not-found.error";
 import { InMemoryRepository } from "../in-memory-repository";
 
@@ -31,7 +30,11 @@ class StubEntity extends AggregateRoot<
 class StubInMemoryRepository extends InMemoryRepository<
   StubEntity,
   UniqueEntityId
-> {}
+> {
+  getEntity(): new (...args: any[]) => StubEntity {
+    return StubEntity;
+  }
+}
 
 describe("InMemoryRepository Unit Tests", () => {
   let repository: StubInMemoryRepository;
@@ -53,14 +56,12 @@ describe("InMemoryRepository Unit Tests", () => {
 
   it("should throw an error when entity has not been found", async () => {
     await expect(repository.findById("fake id")).rejects.toThrow(
-      new NotFoundError("Entity not found using ID fake id")
+      new NotFoundError("fake id", StubEntity)
     );
     await expect(
       repository.findById("312cffad-1938-489e-a706-643dc9a3cfd3")
     ).rejects.toThrow(
-      new NotFoundError(
-        "Entity not found using ID 312cffad-1938-489e-a706-643dc9a3cfd3"
-      )
+      new NotFoundError("312cffad-1938-489e-a706-643dc9a3cfd3", StubEntity)
     );
   });
 
@@ -86,7 +87,7 @@ describe("InMemoryRepository Unit Tests", () => {
   it("should throw an error on update when entity has not been found", async () => {
     const entity = new StubEntity({ name: "some name", price: 10 });
     await expect(repository.update(entity)).rejects.toThrow(
-      new NotFoundError(`Entity not found using ID ${entity.id}`)
+      new NotFoundError(entity.id, StubEntity)
     );
   });
 
@@ -105,14 +106,12 @@ describe("InMemoryRepository Unit Tests", () => {
 
   it("should throw an error on delete when entity has not been found", async () => {
     await expect(repository.delete("fake id")).rejects.toThrow(
-      new NotFoundError("Entity not found using ID fake id")
+      new NotFoundError("fake id", StubEntity)
     );
     await expect(
       repository.delete("312cffad-1938-489e-a706-643dc9a3cfd3")
     ).rejects.toThrow(
-      new NotFoundError(
-        "Entity not found using ID 312cffad-1938-489e-a706-643dc9a3cfd3"
-      )
+      new NotFoundError("312cffad-1938-489e-a706-643dc9a3cfd3", StubEntity)
     );
   });
 

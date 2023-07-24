@@ -175,8 +175,12 @@ export namespace CastMemberSequelize {
 
     private async _get(id: string): Promise<CastMemberModel> {
       return this.categoryModel.findByPk(id, {
-        rejectOnEmpty: new NotFoundError(`Entity not found using ID ${id}`),
+        rejectOnEmpty: new NotFoundError(id, CastMember),
       });
+    }
+
+    getEntity(): new (...args: any[]) => CastMember {
+      return CastMember;
     }
   }
 

@@ -46,6 +46,10 @@ export class CastMemberInMemoryRepository
       ? super.applySort(items, "created_at", "desc")
       : super.applySort(items, sort, sort_dir);
   }
+
+  getEntity(): new (...args: any[]) => CastMember {
+    return CastMember;
+  }
 }
 
 export default CastMemberInMemoryRepository;

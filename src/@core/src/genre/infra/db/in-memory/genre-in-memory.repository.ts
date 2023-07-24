@@ -7,10 +7,6 @@ export class GenreInMemoryRepository
   extends InMemorySearchableRepository<Genre, GenreId, GenreRepository.Filter>
   implements GenreRepository.Repository
 {
-  getEntity(): new (...args: any[]) => Genre {
-    return Genre;
-  }
-
   sortableFields: string[] = ["name", "created_at"];
 
   async exists(name: string): Promise<boolean> {
@@ -47,6 +43,10 @@ export class GenreInMemoryRepository
     return !sort
       ? super.applySort(items, "created_at", "desc")
       : super.applySort(items, sort, sort_dir);
+  }
+
+  getEntity(): new (...args: any[]) => Genre {
+    return Genre;
   }
 }
 

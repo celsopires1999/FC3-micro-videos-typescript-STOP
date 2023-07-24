@@ -45,14 +45,12 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
 
   it("should throw an error when entity has not been found", async () => {
     await expect(repository.findById("fake id")).rejects.toThrow(
-      new NotFoundError("Entity not found using ID fake id")
+      new NotFoundError("fake id", CastMember)
     );
     await expect(
       repository.findById("312cffad-1938-489e-a706-643dc9a3cfd3")
     ).rejects.toThrow(
-      new NotFoundError(
-        "Entity not found using ID 312cffad-1938-489e-a706-643dc9a3cfd3"
-      )
+      new NotFoundError("312cffad-1938-489e-a706-643dc9a3cfd3", CastMember)
     );
   });
 
@@ -87,7 +85,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
       .withType(CastMemberType.createAnActor())
       .build();
     await expect(repository.update(entity)).rejects.toThrow(
-      new NotFoundError(`Entity not found using ID ${entity.id}`)
+      new NotFoundError(entity.id, CastMember)
     );
   });
 
@@ -107,7 +105,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
 
   it("should throw error on delete when cast member is not found", async () => {
     await expect(repository.delete("fake id")).rejects.toThrow(
-      new NotFoundError(`Entity not found using ID fake id`)
+      new NotFoundError(`fake id`, CastMember)
     );
 
     await expect(
@@ -115,9 +113,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
         new CastMemberId("e712d467-7625-437c-9803-9ba0c6b499b0")
       )
     ).rejects.toThrow(
-      new NotFoundError(
-        `Entity not found using ID e712d467-7625-437c-9803-9ba0c6b499b0`
-      )
+      new NotFoundError(`e712d467-7625-437c-9803-9ba0c6b499b0`, CastMember)
     );
   });
 
@@ -127,7 +123,7 @@ describe("CastMemberSequelizeRepository Integration Tests", () => {
     await repository.delete(entity.id);
 
     await expect(repository.findById(entity.id)).rejects.toThrow(
-      new NotFoundError(`Entity not found using ID ${entity.id}`)
+      new NotFoundError(entity.id, CastMember)
     );
   });
 
