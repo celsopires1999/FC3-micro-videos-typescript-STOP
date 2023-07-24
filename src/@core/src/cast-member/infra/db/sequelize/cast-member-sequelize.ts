@@ -187,7 +187,9 @@ export namespace CastMemberSequelize {
   export class CastMemberModelMapper {
     static toEntity(model: CastMemberModel): CastMember {
       const { id, ...otherData } = model.toJSON();
-      const [type, errorCastMemberType] = CastMemberType.create(otherData.type);
+      const [type, errorCastMemberType] = CastMemberType.create(
+        otherData.type
+      ).asArray();
 
       try {
         return new CastMember({ ...otherData, type }, new CastMemberId(id));
