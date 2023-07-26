@@ -15,6 +15,10 @@ export interface RepositoryInterface<
   getEntity(): new (...args: any[]) => E;
 }
 
+export interface UnitOfWorkInterface {
+  getTransaction(): any;
+}
+
 export type SortDirection = "asc" | "desc";
 
 export type SearchProps<Filter = string> = {
